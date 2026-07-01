@@ -1,15 +1,23 @@
 function Input({
+  id,
+  name,
   type = "text",
   placeholder,
   value,
+  checked,
   onChange,
+  autoComplete,
 }) {
   return (
     <input
+      id={id}
+      name={name}
       type={type}
       placeholder={placeholder}
-      value={value}
+      value={type === "checkbox" ? undefined : value}
+      checked={type === "checkbox" ? checked : undefined}
       onChange={onChange}
+      autoComplete={autoComplete}
       className="
         w-full
         px-5
