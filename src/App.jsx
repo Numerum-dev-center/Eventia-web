@@ -4,15 +4,18 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 
+import { Outlet, Navigate } from "react-router-dom";
+
+
 import HomePage from "./pages/HomePage";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
 
-import OrganizerDashboard from "./pages/organizer/OrganizerDashboard";
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminLayout from "./components/ui/admin/adminLayout";
+import AdminLayout from "./components/layout/adminLayout";
 
 
 import AdminEvents from "./pages/admin/AdminEvents";
@@ -22,6 +25,29 @@ import AdminReversements from "./pages/admin/AdminReversements";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminAuditLog from "./pages/admin/AdminAuditLog";
 import AdminSettings from "./pages/admin/AdminSettings";
+
+
+
+
+import OrganizerLayout from "./components/layout/organizerLayout";
+import Dashboard from "./pages/organizer/OrganizerDashboard";
+import EventsList from "./pages/organizer/EventsList";
+import EventsCreate from "./pages/organizer/EventsCreate";
+import EventsEdit from "./pages/organizer/EventsEdit";
+import Participants from "./pages/organizer/EventsParticipants";
+import Sessions from "./pages/organizer/Sessions";
+import Stats from "./pages/organizer/Stats";
+import Finances from "./pages/organizer/Finances";
+import EventsFinances from "./pages/organizer/EventsFinances";
+import Scan from "./pages/organizer/Scan";
+import AccessLog from "./pages/organizer/AccessLog";
+import EventsDetails from "./pages/organizer/EventsDetails";
+import OrganizerSettings from "./pages/organizer/OrganizerSettings";
+
+
+
+
+
 
 
 
@@ -38,57 +64,107 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
 
-        <Route path="/organizerdashboard" element={<OrganizerDashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         
         
         
-        <Route path="/admin" element={<AdminLayout />}>
-
-  <Route
-    path="dashboard"
-    element={<AdminDashboard />}
-  />
-
-  <Route
-    path="events"
-    element={<AdminEvents />}
-  />
-
-  <Route
-    path="billets"
-    element={<AdminBillets />}
-  />
-
-  <Route
-    path="commissions"
-    element={<AdminCommissions />}
-  />
-
-  <Route
-    path="reversements"
-    element={<AdminReversements />}
-  />
-
-  <Route
-    path="reports"
-    element={<AdminReports />}
-  />
-
-  <Route
-    path="audit-log"
-    element={<AdminAuditLog />}
-  />
-
-  <Route
-    path="settings"
-    element={<AdminSettings />}
-  />
-
+       <Route path="/admin" element={<AdminLayout />}>
+  <Route index element={<Navigate to="dashboard" replace />} />
+  <Route path="dashboard" element={<AdminDashboard />} />
+  <Route path="events" element={<AdminEvents />} />
+  <Route path="billets" element={<AdminBillets />} />
+  <Route path="commissions" element={<AdminCommissions />} />
+  <Route path="reversements" element={<AdminReversements />} />
+  <Route path="reports" element={<AdminReports />} />
+  <Route path="audit-log" element={<AdminAuditLog />} />
+  <Route path="settings" element={<AdminSettings />} />
 </Route>
 
+<Route path="/organizer" element={<OrganizerLayout />}>
+  <Route index element={<Navigate to="dashboard" replace />} />
 
+  <Route path="dashboard" element={<Dashboard />} />
+
+  {/* Liste des événements */}
+  <Route path="events" element={<EventsList />} />
+
+  {/* Création */}
+  <Route path="events/create" element={<EventsCreate />} />
+
+  {/* Détail événement */}
+  <Route path="events/:id" element={<EventsDetails />} />
+
+  {/* Actions d'un événement */}
+  <Route path="events/:id/edit" element={<EventsEdit />} />
+
+  <Route
+    path="events/:id/participants"
+    element={<Participants />}
+  />
+
+  <Route
+    path="events/:id/sessions"
+    element={<Sessions />}
+  />
+
+  <Route
+    path="events/:id/stats"
+    element={<Stats />}
+  />
+
+  <Route
+    path="events/:id/finance"
+    element={<EventsFinances />}
+  />
+
+  <Route
+    path="events/:id/scan"
+    element={<Scan />}
+  />
+
+  <Route
+    path="events/:id/access"
+    element={<AccessLog />}
+  />
+
+  {/* Finance globale */}
+  <Route
+    path="finance"
+    element={<Finances />}
+  />
+
+
+  <Route
+  path="settings"
+  element={<OrganizerSettings />}
+/>
+</Route>
 
         
 

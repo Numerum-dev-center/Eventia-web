@@ -16,6 +16,8 @@ Wallet
 import StatCard from "../../components/ui/StatCard";
 import RevenueChart from "../../components/ui/RevenueChart";
 
+import TicketPieChart from "../../components/ui/TicketPieChart";
+
 
 
 import {
@@ -120,6 +122,7 @@ return (
     </div>
 
     <RevenueChart data={dashboard.chart} />
+    <TicketPieChart data={dashboard.chart} />
   </>
 );
 }
