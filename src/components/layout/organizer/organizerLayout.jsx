@@ -1,5 +1,5 @@
-import DashboardLayout from "./DashboardLayout";
-import { organizerMenu } from "./menu/organizerMenu";
+import DashboardLayout from "../DashboardLayout";
+import { organizerMenu } from "../menu/organizer/organizerMenu";
 
 function OrganizerLayout() {
   return (

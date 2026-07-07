@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 
-import eventImage from "../../assets/im-land.jpg";
+
 
 function EventsList() {
   const events = [

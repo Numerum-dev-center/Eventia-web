@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import eventImage from "../../assets/im-land.jpg";
+import eventImage from "../../assets/organizer/im-land.jpg";
 import { FcGoogle } from "react-icons/fc";
 
 import Button from "../../components/ui/Button";

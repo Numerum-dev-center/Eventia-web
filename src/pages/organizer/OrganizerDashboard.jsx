@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import TicketPieChart from "../../components/ui/TicketPieChart";
+import TicketPieChart from "../../components/organizer/TicketPieChart";
 
-import CalendarWidget from "../../components/ui/Calender";
+import CalendarWidget from "../../components/ui/Calander";
 import { Link } from "react-router-dom";
 
 import {
@@ -14,10 +14,10 @@ import {
   Wallet,
 } from "lucide-react";
 
-import StatCard from "../../components/ui/StatCard";
-import RevenueChart from "../../components/ui/RevenueChart";
+import StatCard from "../../components/organizer/StatCard";
+import RevenueChart from "../../components/organizer/RevenueChart";
 
-import EventCard from "../../components/ui/Card";
+import EventCard from "../../components/organizer/EventsCard";
 
 
 import { getOrganizerDashboard } from "../../services/organizerService";

@@ -14,22 +14,12 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 
 
 
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminLayout from "./components/layout/adminLayout";
-
-
-import AdminEvents from "./pages/admin/AdminEvents";
-import AdminBillets from "./pages/admin/AdminBillets";
-import AdminCommissions from "./pages/admin/AdminCommissions";
-import AdminReversements from "./pages/admin/AdminReversements";
-import AdminReports from "./pages/admin/AdminReports";
-import AdminAuditLog from "./pages/admin/AdminAuditLog";
-import AdminSettings from "./pages/admin/AdminSettings";
 
 
 
 
-import OrganizerLayout from "./components/layout/organizerLayout";
+
+import OrganizerLayout from "./components/layout/organizer/organizerLayout";
 import Dashboard from "./pages/organizer/OrganizerDashboard";
 import EventsList from "./pages/organizer/EventsList";
 import EventsCreate from "./pages/organizer/EventsCreate";
@@ -94,17 +84,8 @@ function App() {
         
         
         
-       <Route path="/admin" element={<AdminLayout />}>
-  <Route index element={<Navigate to="dashboard" replace />} />
-  <Route path="dashboard" element={<AdminDashboard />} />
-  <Route path="events" element={<AdminEvents />} />
-  <Route path="billets" element={<AdminBillets />} />
-  <Route path="commissions" element={<AdminCommissions />} />
-  <Route path="reversements" element={<AdminReversements />} />
-  <Route path="reports" element={<AdminReports />} />
-  <Route path="audit-log" element={<AdminAuditLog />} />
-  <Route path="settings" element={<AdminSettings />} />
-</Route>
+       
+
 
 <Route path="/organizer" element={<OrganizerLayout />}>
   <Route index element={<Navigate to="dashboard" replace />} />

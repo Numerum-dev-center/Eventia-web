@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Mail, ArrowLeft } from "lucide-react";
+import {  ArrowLeft } from "lucide-react";
 
-import eventImage from "../../assets/im-land.jpg";
+import eventImage from "../../assets/organizer/im-land.jpg";
 
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
