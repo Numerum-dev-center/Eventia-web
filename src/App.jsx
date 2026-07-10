@@ -35,7 +35,7 @@ import EventsDetails from "./pages/organizer/EventsDetails";
 import OrganizerSettings from "./pages/organizer/OrganizerSettings";
 
 
-
+import { useEffect, useState } from "react";
 
 
 
@@ -44,6 +44,33 @@ import OrganizerSettings from "./pages/organizer/OrganizerSettings";
 
 
 function App() {
+
+
+
+  
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
+  
+
+
+
+
+
+
+
+
   return (
   
       <Routes>

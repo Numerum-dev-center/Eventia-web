@@ -3,6 +3,12 @@ import { useState } from "react";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 
+
+import { ImagePlus } from "lucide-react";
+
+
+
+
 function EventsCreate() {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
@@ -15,6 +21,7 @@ function EventsCreate() {
 
   const [errors, setErrors] = useState({});
 
+ 
   const validate = () => {
     const newErrors = {};
 
@@ -132,6 +139,12 @@ function EventsCreate() {
               }
             />
 
+           
+
+            
+            
+            
+
             {errors.location && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.location}
@@ -196,48 +209,67 @@ function EventsCreate() {
 
         {/* Image */}
         <div className="mt-6">
+  <label className="block mb-2 font-medium">
+    Photo de l'événement
+  </label>
 
-          <label className="block mb-2 font-medium">
-            Photo de l'événement
-          </label>
+  <label
+    className="
+      w-full
+      h-72
+      border-2
+      border-dashed
+      border-gray-300
+      rounded-2xl
+      flex
+      flex-col
+      items-center
+      justify-center
+      cursor-pointer
+      hover:border-orange-500
+      transition
+      overflow-hidden
+    "
+  >
+    {!image ? (
+      <>
+        <ImagePlus
+          size={50}
+          className="text-gray-400 mb-3"
+        />
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) =>
-              setImage(e.target.files[0])
-            }
-            className="
-              w-full
-              border
-              border-gray-300
-              rounded-xl
-              p-3
-            "
-          />
+        <p className="text-gray-500">
+          Ajouter une image
+        </p>
+      </>
+    ) : (
+      <img
+        src={URL.createObjectURL(image)}
+        alt="Visualisation"
+        className="
+          w-full
+          h-full
+          object-cover
+        "
+      />
+    )}
 
-          {errors.image && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.image}
-            </p>
-          )}
+    <input
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={(e) =>
+        setImage(e.target.files[0])
+      }
+    />
+  </label>
 
-          {image && (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Visualisation"
-              className="
-                mt-4
-                w-full
-                h-64
-                object-cover
-                rounded-xl
-                border
-              "
-            />
-          )}
-
-        </div>
+  {errors.image && (
+    <p className="text-red-500 text-sm mt-2">
+      {errors.image}
+    </p>
+  )}
+</div>
 
         {/* Description */}
         <div className="mt-6">

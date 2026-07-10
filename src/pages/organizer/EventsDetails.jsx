@@ -23,6 +23,9 @@ function EventDetails() {
         Détail événement
       </h1>
 
+
+      
+
       <div className="bg-white rounded-xl p-6 shadow">
 
         <div className="space-y-4">
