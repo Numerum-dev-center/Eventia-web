@@ -8,6 +8,7 @@ import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import SocialButton from "../../components/ui/SocialButton";
 import { login } from "../../services/authService"; // à créer, voir plus bas
+import { setStoredAuth } from "../../services/authSession";
 
 function Login() {
   const navigate = useNavigate();
@@ -41,35 +42,40 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
+  const validationError = validate();
+
+  if (validationError) {
+    setError(validationError);
+    return;
+  }
+
+  setLoading(true);
+  setError("");
+
+  try {
+    const response = login({
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password,
+    });
+
+    const authState = setStoredAuth({
+      token: response.data.token,
+      user: response.data.user,
+    });
+
+    if (authState.user.role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/organizer/dashboard");
     }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await login({
-        email: formData.email.trim().toLowerCase(),
-        password: formData.password,
-      });
-
-      // À adapter selon ce que ton backend renvoie
-      localStorage.setItem("token", response.data.token);
-
-      navigate("/dashboard");
-    } catch (err) {
-      setError(
-        err?.response?.data?.message || "Email ou mot de passe incorrect."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">

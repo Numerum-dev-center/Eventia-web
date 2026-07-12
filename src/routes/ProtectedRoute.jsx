@@ -1,10 +1,17 @@
 import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children }) {
-  const isAuthenticated = false; // à remplacer plus tard
+import { getUserRole, isAuthenticated } from "../services/authSession";
 
-  if (!isAuthenticated) {
+function ProtectedRoute({ children, allowedRoles = [] }) {
+  const authenticated = isAuthenticated();
+  const userRole = getUserRole();
+
+  if (!authenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/forbidden" replace />;
   }
 
   return children;

@@ -11,10 +11,15 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import AccessDenied from "./pages/AccessDenied";
+import AdminLayout from "./components/layout/admin/AdminLayout";
 
-
-
-
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import Users from "./pages/admin/Users";
+import Events from "./pages/admin/Events";
+import Finances from "./pages/admin/Finances";
+import Reports from "./pages/admin/Reports";
+import Settings from "./pages/admin/Settings";
 
 
 
@@ -27,7 +32,6 @@ import EventsEdit from "./pages/organizer/EventsEdit";
 import Participants from "./pages/organizer/EventsParticipants";
 import Sessions from "./pages/organizer/Sessions";
 import Stats from "./pages/organizer/Stats";
-import Finances from "./pages/organizer/Finances";
 import EventsFinances from "./pages/organizer/EventsFinances";
 import Scan from "./pages/organizer/Scan";
 import AccessLog from "./pages/organizer/AccessLog";
@@ -81,7 +85,16 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
 
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route
+          path="dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="forbidden" element={<AccessDenied />} />
 
 
 
@@ -114,66 +127,180 @@ function App() {
        
 
 
-<Route path="/organizer" element={<OrganizerLayout />}>
+        <Route
+          path="/organizer"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+              <OrganizerLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="dashboard" replace />} />
+
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Liste des événements */}
+          <Route
+            path="events"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <EventsList />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Création */}
+          <Route
+            path="events/create"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <EventsCreate />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Détail événement */}
+          <Route
+            path="events/:id"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <EventsDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Actions d'un événement */}
+          <Route
+            path="events/:id/edit"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <EventsEdit />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="events/:id/participants"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <Participants />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="events/:id/sessions"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <Sessions />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="events/:id/stats"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <Stats />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="events/:id/finance"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <EventsFinances />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="events/:id/scan"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <Scan />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="events/:id/access"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <AccessLog />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Finance globale */}
+          <Route
+            path="finance"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <Finances />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="settings"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "organisateur"]}>
+                <OrganizerSettings />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        <Route
+    path="/admin/*"
+    element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminLayout />
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/organizer/*"
+    element={
+        <ProtectedRoute allowedRoles={["organisateur"]}>
+            <OrganizerLayout />
+        </ProtectedRoute>
+    }
+/>
+
+
+<Route
+  path="/admin"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminLayout />
+    </ProtectedRoute>
+  }
+>
   <Route index element={<Navigate to="dashboard" replace />} />
 
-  <Route path="dashboard" element={<Dashboard />} />
+  <Route path="dashboard" element={<AdminDashboard />} />
 
-  {/* Liste des événements */}
-  <Route path="events" element={<EventsList />} />
+  <Route path="users" element={<Users />} />
 
-  {/* Création */}
-  <Route path="events/create" element={<EventsCreate />} />
+  <Route path="events" element={<Events />} />
 
-  {/* Détail événement */}
-  <Route path="events/:id" element={<EventsDetails />} />
+  <Route path="finance" element={<Finances />} />
 
-  {/* Actions d'un événement */}
-  <Route path="events/:id/edit" element={<EventsEdit />} />
+  <Route path="reports" element={<Reports />} />
 
-  <Route
-    path="events/:id/participants"
-    element={<Participants />}
-  />
-
-  <Route
-    path="events/:id/sessions"
-    element={<Sessions />}
-  />
-
-  <Route
-    path="events/:id/stats"
-    element={<Stats />}
-  />
-
-  <Route
-    path="events/:id/finance"
-    element={<EventsFinances />}
-  />
-
-  <Route
-    path="events/:id/scan"
-    element={<Scan />}
-  />
-
-  <Route
-    path="events/:id/access"
-    element={<AccessLog />}
-  />
-
-  {/* Finance globale */}
-  <Route
-    path="finance"
-    element={<Finances />}
-  />
-
-
-  <Route
-  path="settings"
-  element={<OrganizerSettings />}
-/>
+  <Route path="settings" element={<Settings />} />
 </Route>
-
         
 
 

@@ -1,27 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import { getEventById } from "../../data/eventsData";
+
+import {
+  geocodeOpenStreetMapPlace,
+  searchOpenStreetMapPlaces,
+} from "../../services/openStreetMapService";
 
 function EventsEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Simulation des données récupérées
-  const [title, setTitle] = useState("DevFest 2026");
-  const [date, setDate] = useState("2026-08-12");
-  const [location, setLocation] = useState("Lomé");
-  const [tickets, setTickets] = useState("1000");
-  const [price, setPrice] = useState("5000");
-  const [category, setCategory] = useState("Technologie");
+  const currentEvent = getEventById(id);
+
+  const [title, setTitle] = useState(currentEvent?.title || "");
+  const [date, setDate] = useState(currentEvent?.date || "");
+  const [location, setLocation] = useState(currentEvent?.location || "");
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationDetails, setLocationDetails] = useState(currentEvent || null);
+  const [tickets, setTickets] = useState(currentEvent?.tickets || "");
+  const [price, setPrice] = useState(currentEvent?.price || "");
+  const [category, setCategory] = useState(currentEvent?.category || "");
   const [description, setDescription] = useState(
-    "Grand événement dédié au numérique et à l'innovation."
+    currentEvent?.description || ""
   );
 
   const [image, setImage] = useState(null);
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const query = location.trim();
+
+    if (query.length < 3) {
+      return undefined;
+    }
+
+    const timeoutId = setTimeout(async () => {
+      setLocationLoading(true);
+
+      try {
+        const places = await searchOpenStreetMapPlaces(query);
+        setLocationSuggestions(places);
+      } catch {
+        setLocationSuggestions([]);
+      } finally {
+        setLocationLoading(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(timeoutId);
+  }, [location]);
+
+  const handleSelectLocation = (place) => {
+    setLocation(place.formattedAddress);
+    setLocationDetails(place);
+    setLocationSuggestions([]);
+    setErrors((currentErrors) => {
+      const rest = { ...currentErrors };
+      delete rest.location;
+      return rest;
+    });
+  };
+
+  const handleLocationChange = (event) => {
+    const value = event.target.value;
+
+    setLocation(value);
+    setLocationDetails(null);
+
+    if (value.trim().length < 3) {
+      setLocationSuggestions([]);
+      setLocationLoading(false);
+    }
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -58,16 +114,42 @@ function EventsEdit() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) return;
+
+    let resolvedLocation = locationDetails;
+
+    if (!resolvedLocation || resolvedLocation.formattedAddress !== location) {
+      try {
+        resolvedLocation = await geocodeOpenStreetMapPlace(location);
+      } catch {
+        resolvedLocation = null;
+      }
+    }
+
+    if (!resolvedLocation) {
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        location:
+          "Impossible de trouver ce lieu sur OpenStreetMap. Précisez davantage.",
+      }));
+      return;
+    }
+
+    setLocation(resolvedLocation.formattedAddress);
+    setLocationDetails(resolvedLocation);
 
     const updatedEvent = {
       id,
       title,
       date,
-      location,
+      location: resolvedLocation.formattedAddress,
+      coordinates: {
+        latitude: resolvedLocation.latitude,
+        longitude: resolvedLocation.longitude,
+      },
       tickets,
       price,
       category,
@@ -83,6 +165,22 @@ function EventsEdit() {
   const handleCancel = () => {
     navigate(-1);
   };
+
+  if (!currentEvent) {
+    return (
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">
+          Modifier l'événement
+        </h1>
+
+        <div className="bg-white rounded-2xl shadow p-6">
+          <p className="text-gray-600">
+            Cet événement est introuvable.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -134,10 +232,34 @@ function EventsEdit() {
             <Input
               placeholder="Lieu"
               value={location}
-              onChange={(e) =>
-                setLocation(e.target.value)
-              }
+              onChange={handleLocationChange}
             />
+
+            {locationLoading && (
+              <p className="text-sm text-gray-500 mt-2">
+                Recherche de lieux sur OpenStreetMap...
+              </p>
+            )}
+
+            {locationSuggestions.length > 0 && (
+              <div className="mt-2 border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+                {locationSuggestions.map((place) => (
+                  <button
+                    key={place.id}
+                    type="button"
+                    onClick={() => handleSelectLocation(place)}
+                    className="w-full text-left px-4 py-3 hover:bg-orange-50 transition border-b border-gray-100 last:border-b-0"
+                  >
+                    <span className="block font-medium text-gray-900">
+                      {place.formattedAddress}
+                    </span>
+                    <span className="block text-xs text-gray-500 mt-1">
+                      {place.latitude.toFixed(5)}, {place.longitude.toFixed(5)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
 
             {errors.location && (
               <p className="text-red-500 text-sm mt-1">

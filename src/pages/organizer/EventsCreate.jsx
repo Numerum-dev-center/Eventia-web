@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
@@ -6,13 +7,24 @@ import Button from "../../components/ui/Button";
 
 import { ImagePlus } from "lucide-react";
 
+import {
+  geocodeOpenStreetMapPlace,
+  searchOpenStreetMapPlaces,
+} from "../../services/openStreetMapService";
+import { addEvent } from "../../data/eventsData";
+
 
 
 
 function EventsCreate() {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationDetails, setLocationDetails] = useState(null);
   const [tickets, setTickets] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
@@ -20,6 +32,52 @@ function EventsCreate() {
   const [image, setImage] = useState(null);
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const query = location.trim();
+
+    if (query.length < 3) {
+      return undefined;
+    }
+
+    const timeoutId = setTimeout(async () => {
+      setLocationLoading(true);
+
+      try {
+        const places = await searchOpenStreetMapPlaces(query);
+        setLocationSuggestions(places);
+      } catch {
+        setLocationSuggestions([]);
+      } finally {
+        setLocationLoading(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(timeoutId);
+  }, [location]);
+
+  const handleSelectLocation = (place) => {
+    setLocation(place.formattedAddress);
+    setLocationDetails(place);
+    setLocationSuggestions([]);
+    setErrors((currentErrors) => {
+      const rest = { ...currentErrors };
+      delete rest.location;
+      return rest;
+    });
+  };
+
+  const handleLocationChange = (event) => {
+    const value = event.target.value;
+
+    setLocation(value);
+    setLocationDetails(null);
+
+    if (value.trim().length < 3) {
+      setLocationSuggestions([]);
+      setLocationLoading(false);
+    }
+  };
 
  
   const validate = () => {
@@ -60,25 +118,52 @@ function EventsCreate() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) return;
 
+    let resolvedLocation = locationDetails;
+
+    if (!resolvedLocation || resolvedLocation.formattedAddress !== location) {
+      try {
+        resolvedLocation = await geocodeOpenStreetMapPlace(location);
+      } catch {
+        resolvedLocation = null;
+      }
+    }
+
+    if (!resolvedLocation) {
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        location:
+          "Impossible de trouver ce lieu sur OpenStreetMap. Précisez davantage.",
+      }));
+      return;
+    }
+
+    setLocation(resolvedLocation.formattedAddress);
+    setLocationDetails(resolvedLocation);
+
     const eventData = {
       title,
       date,
-      location,
+      location: resolvedLocation.formattedAddress,
+      coordinates: {
+        latitude: resolvedLocation.latitude,
+        longitude: resolvedLocation.longitude,
+      },
+      capacity: Number(tickets),
       tickets,
       price,
       category,
       description,
-      image,
+      image: URL.createObjectURL(image),
     };
 
-    console.log(eventData);
+    const createdEvent = addEvent(eventData);
 
-    alert("Événement créé avec succès !");
+    navigate(`/organizer/events/${createdEvent.id}`);
   };
 
   return (
@@ -134,16 +219,34 @@ function EventsCreate() {
             <Input
               placeholder="Lieu"
               value={location}
-              onChange={(e) =>
-                setLocation(e.target.value)
-              }
+              onChange={handleLocationChange}
             />
 
-           
+            {locationLoading && (
+              <p className="text-sm text-gray-500 mt-2">
+                Recherche de lieux sur OpenStreetMap...
+              </p>
+            )}
 
-            
-            
-            
+            {locationSuggestions.length > 0 && (
+              <div className="mt-2 border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+                {locationSuggestions.map((place) => (
+                  <button
+                    key={place.id}
+                    type="button"
+                    onClick={() => handleSelectLocation(place)}
+                    className="w-full text-left px-4 py-3 hover:bg-orange-50 transition border-b border-gray-100 last:border-b-0"
+                  >
+                    <span className="block font-medium text-gray-900">
+                      {place.formattedAddress}
+                    </span>
+                    <span className="block text-xs text-gray-500 mt-1">
+                      {place.latitude.toFixed(5)}, {place.longitude.toFixed(5)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
 
             {errors.location && (
               <p className="text-red-500 text-sm mt-1">

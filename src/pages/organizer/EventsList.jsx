@@ -1,17 +1,12 @@
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 
+import { getEvents } from "../../data/eventsData";
+
 
 
 function EventsList() {
-  const events = [
-    {
-      id: 1,
-      title: "DevFest 2026",
-      date: "12/08/2026",
-      location: "Lomé",
-    },
-  ];
+  const events = getEvents();
 
   return (
     <div>
@@ -48,7 +43,9 @@ function EventsList() {
               {event.title}
             </h2>
 
-            <p>{event.date}</p>
+            <p>
+              {new Date(event.date).toLocaleDateString("fr-FR")}
+            </p>
             <p>{event.location}</p>
 
             <Link

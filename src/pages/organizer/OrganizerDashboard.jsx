@@ -15,10 +15,12 @@ import StatCard from "../../components/organizer/StatCard";
 import EventCard from "../../components/organizer/EventsCard";
 
 import { getOrganizerDashboard } from "../../services/organizerService";
+import { getEvents } from "../../data/eventsData";
 
 function Dashboard() {
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
+  const events = getEvents();
 
   const [activeMetric, setActiveMetric] = useState("revenue");
   
@@ -109,9 +111,9 @@ function Dashboard() {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              <EventCard />
-              <EventCard />
-              <EventCard />
+              {events.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
             </div>
           </div>
 
@@ -124,7 +126,7 @@ function Dashboard() {
             Événements à venir
           </h2>
 
-          <EventCard />
+          <EventCard event={events[0]} />
 
           <CalendarWidget />
 

@@ -1,20 +1,48 @@
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import {
+  BadgeCheck,
+  Banknote,
+  ShoppingCart,
+  Ticket,
+  Users,
+} from "lucide-react";
+
+import { getEventById } from "../../data/eventsData";
+import StatCard from "../../components/organizer/StatCard";
+
+const formatCurrency = (value) =>
+  new Intl.NumberFormat("fr-FR").format(value) + " FCFA";
 
 function EventDetails() {
 
   const { id } = useParams();
+  const event = getEventById(id);
 
-  const event = {
-    title: "DevFest 2026",
-    date: "12/08/2026",
-    location: "Lomé",
-    capacity: 1000,
-    category: "Technologie",
-    price: 5000,
-    description:
-      "Grand évènement tech du Togo",
-  };
+  const totalTickets = Number(event?.capacity || event?.tickets || 0);
+  const ticketsSold = event?.ticketsSold ?? 0;
+  const orders = event?.orders ?? 0;
+  const checkins = event?.checkins ?? 0;
+  const revenue = event?.revenue ?? ticketsSold * Number(event?.price || 0);
+  const remainingTickets = Math.max(totalTickets - ticketsSold, 0);
+  const occupancyRate =
+    totalTickets > 0 ? Math.round((ticketsSold / totalTickets) * 100) : 0;
+
+  if (!event) {
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-4">
+          Détail événement
+        </h1>
+
+        <div className="bg-white rounded-xl p-6 shadow">
+          <p className="text-gray-600">
+            Cet événement est introuvable.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -23,10 +51,56 @@ function EventDetails() {
         Détail événement
       </h1>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+        <StatCard
+          title="Commandes"
+          value={orders}
+          icon={<ShoppingCart size={28} />}
+        />
+
+        <StatCard
+          title="Tickets vendus"
+          value={ticketsSold}
+          icon={<Ticket size={28} />}
+        />
+
+        <StatCard
+          title="Check-ins"
+          value={checkins}
+          icon={<BadgeCheck size={28} />}
+        />
+
+        <StatCard
+          title="Revenus"
+          value={formatCurrency(revenue)}
+          icon={<Banknote size={28} />}
+        />
+      </div>
+
 
       
 
       <div className="bg-white rounded-xl p-6 shadow">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
+            <p className="text-sm text-gray-500">Places restantes</p>
+            <p className="text-2xl font-bold mt-1 flex items-center gap-2">
+              <Users size={20} />
+              {remainingTickets}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
+            <p className="text-sm text-gray-500">Taux de remplissage</p>
+            <p className="text-2xl font-bold mt-1">{occupancyRate}%</p>
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
+            <p className="text-sm text-gray-500">Prix du ticket</p>
+            <p className="text-2xl font-bold mt-1">{formatCurrency(event.price)}</p>
+          </div>
+        </div>
 
         <div className="space-y-4">
 
@@ -39,7 +113,7 @@ function EventDetails() {
           <p>
             <strong>Date :</strong>
             {" "}
-            {event.date}
+            {new Date(event.date).toLocaleDateString("fr-FR")}
           </p>
 
           <p>
@@ -70,6 +144,20 @@ function EventDetails() {
             <strong>Description :</strong>
             {" "}
             {event.description}
+          </p>
+
+          {event.coordinates && (
+            <p>
+              <strong>Coordonnées :</strong>
+              {" "}
+              {event.coordinates.latitude}, {event.coordinates.longitude}
+            </p>
+          )}
+
+          <p>
+            <strong>Capacité restante :</strong>
+            {" "}
+            {remainingTickets}
           </p>
 
         </div>

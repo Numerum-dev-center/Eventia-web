@@ -1,15 +1,9 @@
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import eventImage from "../../assets/organizer/im-land.jpg";
+import { eventsData } from "../../data/eventsData";
 
 export default function EventCard({
-  event = {
-    id: 1,
-    title: "Concert Afro Night",
-    location: "Lomé, Togo",
-    category: "Musique",
-    image: eventImage,
-  },
+  event = eventsData[0],
 }) {
   return (
     <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">

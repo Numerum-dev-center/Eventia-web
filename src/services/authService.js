@@ -1,12 +1,50 @@
-import axios from "axios";
+import { usersData } from "../data/usersData";
 
-const API_URL = import.meta.env.VITE_API_URL; // ou process.env selon ton setup
+export const login = ({ email, password }) => {
+  const user = usersData.find(
+    (u) =>
+      u.email.toLowerCase() === email.toLowerCase() &&
+      u.password === password
+  );
 
-const api = axios.create({
-  baseURL: API_URL,
-});
+  if (!user) {
+    throw new Error("Email ou mot de passe incorrect.");
+  }
 
-export const login = (credentials) => api.post("/auth/login", credentials);
-export const register = (data) => api.post("/auth/register", data);
-export const forgotPassword = (data) => api.post("/auth/forgot-password", data);
-export const resetPassword = (data) => api.post("/auth/reset-password", data);
+  return {
+    data: {
+      token: "fake-jwt-token",
+      user,
+    },
+  };
+};
+
+export const register = (userData) => {
+  usersData.push({
+    id: String(Date.now()),
+    ...userData,
+    role: "organisateur",
+  });
+
+  return {
+    data: {
+      message: "Compte créé avec succès.",
+    },
+  };
+};
+
+export const forgotPassword = () => {
+  return {
+    data: {
+      message: "Fonction non disponible en mode local.",
+    },
+  };
+};
+
+export const resetPassword = () => {
+  return {
+    data: {
+      message: "Fonction non disponible en mode local.",
+    },
+  };
+};
