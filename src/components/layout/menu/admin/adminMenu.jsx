@@ -96,6 +96,20 @@ export const adminMenu = [
         icon: Wallet,
         path: "/admin/finance/revenue",
       },
+
+
+
+      {
+    title: "Commissions",
+    icon: BadgePercent,
+    path: "/admin/commissions",
+  },
+
+
+
+
+
+
       {
         title: "Remboursements",
         icon: Wallet,
@@ -105,9 +119,9 @@ export const adminMenu = [
   },
 
   {
-    title: "Commissions",
+    title: "Journals d'activité",
     icon: BadgePercent,
-    path: "/admin/commissions",
+    path: "/admin/Journals",
   },
 
   {

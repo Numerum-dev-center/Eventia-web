@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   CalendarDays,
   PlusCircle,
+  QrCode,
   Wallet,
   Settings,
 } from "lucide-react";
@@ -24,6 +25,13 @@ export const organizerMenu = [
     title: "Finances",
     icon: Wallet,
     path: "/organizer/finance",
+  },
+
+
+  {
+    title: "Scanner QR",
+    icon: QrCode,
+    path: "/organizer/Scan",
   },
 
   {

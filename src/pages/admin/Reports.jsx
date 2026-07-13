@@ -8,7 +8,7 @@ function Reports() {
         <FileText size={32} className="text-purple-600" />
 
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-dark">
             Rapports
           </h1>
 
@@ -18,8 +18,8 @@ function Reports() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
-        <ul className="space-y-3 text-gray-600 dark:text-gray-300">
+      <div className="bg-white dark:bg-whyte-500 rounded-2xl shadow p-6">
+        <ul className="space-y-3 text-dark-600 dark:text-dark-300">
           <li>📄 Rapport des ventes</li>
           <li>📄 Rapport des revenus</li>
           <li>📄 Rapport des utilisateurs</li>

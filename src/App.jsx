@@ -17,7 +17,7 @@ import AdminLayout from "./components/layout/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Users from "./pages/admin/Users";
 import Events from "./pages/admin/Events";
-import Finances from "./pages/admin/Finances";
+import Finances from "./pages/admin/AFinances";
 import Reports from "./pages/admin/Reports";
 import Settings from "./pages/admin/Settings";
 
@@ -37,6 +37,9 @@ import Scan from "./pages/organizer/Scan";
 import AccessLog from "./pages/organizer/AccessLog";
 import EventsDetails from "./pages/organizer/EventsDetails";
 import OrganizerSettings from "./pages/organizer/OrganizerSettings";
+
+
+
 
 
 import { useEffect, useState } from "react";
