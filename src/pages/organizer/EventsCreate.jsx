@@ -21,6 +21,15 @@ function EventsCreate() {
 
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
+
+
+
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+
+
+
+
   const [location, setLocation] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -113,6 +122,14 @@ function EventsCreate() {
         "Veuillez ajouter une image pour l'événement";
     }
 
+    if (!startTime) {
+  newErrors.startTime = "L'heure de début est obligatoire";
+}
+
+if (!endTime) {
+  newErrors.endTime = "L'heure de fin est obligatoire";
+}
+
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -159,6 +176,8 @@ function EventsCreate() {
       category,
       description,
       image: URL.createObjectURL(image),
+      startTime,
+      endTime,
     };
 
     const createdEvent = addEvent(eventData);
@@ -213,6 +232,43 @@ function EventsCreate() {
               </p>
             )}
           </div>
+
+
+
+
+
+
+          {/* Heure de début */}
+<div>
+  <Input
+    type="time"
+    placeholder={"l'heure de debut"}
+    value={startTime}
+    onChange={(e) => setStartTime(e.target.value)}
+  />
+
+  {errors.startTime && (
+    <p className="text-red-500 text-sm mt-1">
+      {errors.startTime}
+    </p>
+  )}
+</div>
+
+{/* Heure de fin */}
+<div>
+  <Input
+    type="time"
+    placeholder="l'heure de fin"
+    value={endTime}
+    onChange={(e) => setEndTime(e.target.value)}
+  />
+
+  {errors.endTime && (
+    <p className="text-red-500 text-sm mt-1">
+      {errors.endTime}
+    </p>
+  )}
+</div>
 
           {/* Lieu */}
           <div>

@@ -7,6 +7,8 @@ export let eventsData = [
     id: "1",
     title: "DevFest 2026",
     date: "2026-08-12",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Lomé, Togo",
     coordinates: {
       latitude: 6.1319,
@@ -27,6 +29,8 @@ export let eventsData = [
     id: "2",
     title: "Concert Afro Night",
     date: "2026-09-05",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Lomé, Togo",
     coordinates: {
       latitude: 6.1746,
@@ -47,6 +51,8 @@ export let eventsData = [
     id: "3",
     title: "Summit Innovation 2026",
     date: "2026-10-18",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Cotonou, Bénin",
     coordinates: {
       latitude: 6.3703,
@@ -67,6 +73,8 @@ export let eventsData = [
     id: "4",
     title: "DevFest 2026",
     date: "2026-08-12",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Lomé, Togo",
     coordinates: {
       latitude: 6.1319,
@@ -87,6 +95,8 @@ export let eventsData = [
     id: "5",
     title: "DevFest 2026",
     date: "2026-08-12",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Lomé, Togo",
     coordinates: {
       latitude: 6.1319,
@@ -107,6 +117,8 @@ export let eventsData = [
     id: "6",
     title: "DevFest 2026",
     date: "2026-08-12",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Lomé, Togo",
     coordinates: {
       latitude: 6.1319,
@@ -127,6 +139,8 @@ export let eventsData = [
     id: "7",
     title: "DevFest 2026",
     date: "2026-08-12",
+    startTime: "09:00",
+    endTime: "17:00",
     location: "Lomé, Togo",
     coordinates: {
       latitude: 6.1319,

@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {
   BadgeCheck,
-  Banknote,
   ShoppingCart,
   Ticket,
   Users,
+  UsersRound,
 } from "lucide-react";
 
 import { getEventById } from "../../data/eventsData";
@@ -53,28 +53,24 @@ function EventDetails() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
         <StatCard
-          title="Commandes"
-          value={orders}
+          title="Tickets vendus"
+          value={ticketsSold}
           icon={<ShoppingCart size={28} />}
         />
 
         <StatCard
-          title="Tickets vendus"
-          value={ticketsSold}
+          title="Tickets restants"
+          value={remainingTickets}
           icon={<Ticket size={28} />}
-        />
-
-        <StatCard
-          title="Check-ins"
-          value={checkins}
-          icon={<BadgeCheck size={28} />}
         />
 
         <StatCard
           title="Revenus"
           value={formatCurrency(revenue)}
-          icon={<Banknote size={28} />}
+          icon={<BadgeCheck size={28} />}
         />
+
+        
       </div>
 
 
@@ -92,14 +88,27 @@ function EventDetails() {
           </div>
 
           <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
-            <p className="text-sm text-gray-500">Taux de remplissage</p>
-            <p className="text-2xl font-bold mt-1">{occupancyRate}%</p>
-          </div>
-
-          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
             <p className="text-sm text-gray-500">Prix du ticket</p>
             <p className="text-2xl font-bold mt-1">{formatCurrency(event.price)}</p>
           </div>
+
+          <div className="rounded-2xl border border-gray-100 p-4 bg-whyte-50 flex items-center justify-center">
+  <Link
+    to={`/organizer/events/${id}/billets`}
+    className="
+      flex items-center gap-2
+      bg-gray-600
+      text-white
+      px-5 py-3
+      rounded-lg
+      hover:bg-gray-700
+      transition
+    "
+  >
+    <UsersRound size={20} />
+    Voir les billets
+  </Link>
+</div>
         </div>
 
         <div className="space-y-4">
@@ -114,6 +123,19 @@ function EventDetails() {
             <strong>Date :</strong>
             {" "}
             {new Date(event.date).toLocaleDateString("fr-FR")}
+          </p>
+
+
+          <p>
+            <strong>Heure de début :</strong>
+            {" "}
+            {event.startTime}
+          </p>
+
+          <p>
+            <strong>Heure de fin :</strong>
+            {" "}
+            {event.endTime}
           </p>
 
           <p>
@@ -162,32 +184,47 @@ function EventDetails() {
 
         </div>
 
-        <div className="flex gap-4 mt-8">
+        <div className="flex flex-wrap gap-4 mt-8">
 
-          <Link
-            to={`/organizer/events/${id}/edit`}
-            className="
-              bg-blue-500
-              text-white
-              px-4 py-2
-              rounded-lg
-            "
-          >
-            Modifier
-          </Link>
+  <Link
+    to={`/organizer/events/${id}/edit`}
+    className="
+      bg-blue-500
+      text-white
+      px-4 py-2
+      rounded-lg
+      hover:bg-blue-600
+    "
+  >
+    Modifier
+  </Link>
 
-          <button
-            className="
-              bg-red-500
-              text-white
-              px-4 py-2
-              rounded-lg
-            "
-          >
-            Supprimer
-          </button>
+  <Link
+    to={`/organizer/events/${id}/billets`}
+    className="
+      bg-gray-600
+      text-white
+      px-4 py-2
+      rounded-lg
+      hover:bg-gray-700
+    "
+  >
+    Billets
+  </Link>
 
-        </div>
+  <button
+    className="
+      bg-red-500
+      text-white
+      px-4 py-2
+      rounded-lg
+      hover:bg-red-600
+    "
+  >
+    Supprimer
+  </button>
+
+</div>
 
       </div>
 
