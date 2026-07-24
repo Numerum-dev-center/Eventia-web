@@ -10,9 +10,14 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
-    return <Navigate to="/forbidden" replace />;
-  }
+  if (
+  allowedRoles.length > 0 &&
+  !allowedRoles
+    .map(role => role.toLowerCase())
+    .includes(userRole?.toLowerCase())
+) {
+  return <Navigate to="/forbidden" replace />;
+}
 
   return children;
 }

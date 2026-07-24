@@ -54,39 +54,48 @@ function Login() {
   setLoading(true);
   setError("");
 
- try {
-  const response = await login({
-    email: formData.email.trim().toLowerCase(),
-    motDePasse: formData.password,
-  });
-
-  
-
-
-
+  try {
+    const response = await login({
+      email: formData.email.trim().toLowerCase(),
+      motDePasse: formData.password,
+    });
 
     const authState = setStoredAuth({
-  token: response.token,
-  user: response.user,
-});
+      token: response.accessToken,
+      user: {
+        email: response.email,
+        role: response.role,
+      },
+    });
 
-    
-const role = authState.user.role?.toLowerCase();
+    const role = authState.user.role
+  ?.trim()
+  .toLowerCase();
 
+console.log("ROLE =", role);
 
-if (role === "admin") {
-  navigate("/admin/dashboard", { replace: true });
-} else if (role === "organisateur") {
-  navigate("/organizer/dashboard", { replace: true });
+switch (role) {
+  case "admin":
+    navigate("/admin/dashboard", { replace: true });
+    break;
 
+  case "organisateur":
+    navigate("/organizer/dashboard", { replace: true });
+    break;
+
+  default:
+    setError(`Rôle non reconnu : ${role}`);
 }
   } catch (err) {
-    setError(err.message);
+    setError(
+      err.response?.data?.message ||
+      err.message ||
+      "Erreur de connexion"
+    );
   } finally {
     setLoading(false);
   }
 };
-
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="w-full max-w-6xl bg-white rounded-2xl overflow-hidden shadow-2xl grid md:grid-cols-2">
