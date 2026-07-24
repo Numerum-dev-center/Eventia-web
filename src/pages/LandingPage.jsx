@@ -1,4 +1,4 @@
-import Navbar from "../components/landing/Navbar";
+import NavBar from "../components/landing/NavBar";
 
 import Hero from "../components/landing/Hero";
 import Features from "../components/landing/Features";
@@ -11,14 +11,14 @@ import CTA from "../components/landing/CTA";
 import Footer from "../components/landing/Footer";
 
 
-function HomePage() {
+function LandingPage() {
 
   return (
 
     <div className="bg-[#F8F4EC]">
 
 
-      <Navbar />
+      <NavBar />
 
 
       <main>
@@ -59,4 +59,4 @@ function HomePage() {
 }
 
 
-export default HomePage;
+export default LandingPage;

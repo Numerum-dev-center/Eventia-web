@@ -7,7 +7,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import { Outlet, Navigate } from "react-router-dom";
 
 
-import HomePage from "./pages/HomePage";
+
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";

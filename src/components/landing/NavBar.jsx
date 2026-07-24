@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 
 import Button from "../ui/Button";
 
-function Navbar() {
+function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -144,4 +144,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default NavBar;
