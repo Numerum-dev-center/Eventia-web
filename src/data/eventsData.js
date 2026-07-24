@@ -15,6 +15,7 @@ export let eventsData = [
       longitude: 1.2228,
     },
     capacity: 1000,
+    status: "PUBLISHED",
     tickets: "1000",
     orders: 246,
     ticketsSold: 682,
@@ -37,6 +38,7 @@ export let eventsData = [
       longitude: 1.2316,
     },
     capacity: 800,
+    status: "PUBLISHED",
     tickets: "800",
     orders: 184,
     ticketsSold: 509,
@@ -59,6 +61,7 @@ export let eventsData = [
       longitude: 2.3912,
     },
     capacity: 1500,
+    status: "PUBLISHED",
     tickets: "1500",
     orders: 302,
     ticketsSold: 1120,
@@ -81,6 +84,7 @@ export let eventsData = [
       longitude: 1.2228,
     },
     capacity: 1000,
+    status: "PUBLISHED",
     tickets: "1000",
     orders: 246,
     ticketsSold: 682,
@@ -103,6 +107,7 @@ export let eventsData = [
       longitude: 1.2228,
     },
     capacity: 1000,
+    status: "PUBLISHED",
     tickets: "1000",
     orders: 246,
     ticketsSold: 682,
@@ -157,6 +162,9 @@ export let eventsData = [
     description: "Grand évènement tech du Togo",
     image: eventImage,
   },
+
+
+  
 ];
 
 export const getEvents = () => eventsData;

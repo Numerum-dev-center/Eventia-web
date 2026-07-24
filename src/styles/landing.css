@@ -1,0 +1,16 @@
+.hero {
+  min-height: 100vh;
+  background: #4f46e5;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}

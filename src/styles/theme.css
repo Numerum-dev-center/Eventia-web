@@ -1,5 +1,16 @@
 @import "tailwindcss";
+html {
+  scroll-behavior: smooth;
+}
 
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
 
 
 

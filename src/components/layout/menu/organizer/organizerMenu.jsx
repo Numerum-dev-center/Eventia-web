@@ -5,6 +5,8 @@ import {
   QrCode,
   Wallet,
   Settings,
+  BarChart3,
+  BadgePercent,
 } from "lucide-react";
 
 export const organizerMenu = [
@@ -15,9 +17,47 @@ export const organizerMenu = [
   },
 
   {
-    title: "Mes événements",
+    title: "Evénements",
     icon: CalendarDays,
-    path: "/organizer/events",
+
+
+    children: [
+      {
+        title: "Mes événements",
+        icon: CalendarDays,
+        path: "/organizer/events",
+      },
+      {
+        title: "Stats",
+        icon: BarChart3,
+        path: "/organizer/events/stats",
+      },
+      {
+        title: "Billets",
+        icon: BadgePercent,
+        path: "/organizer/events/tickets",
+      },
+      {
+        title: "Scan",
+        icon: QrCode,
+        path: "/organizer/events/scan",
+      },
+
+      {
+        title: "Acces",
+        icon: PlusCircle,
+        path: "/organizer/events/access",
+      }
+    ],
+
+
+
+
+
+
+
+
+
   },
 
   

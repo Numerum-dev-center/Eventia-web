@@ -54,22 +54,32 @@ function Login() {
   setLoading(true);
   setError("");
 
-  try {
-    const response = login({
-      email: formData.email.trim().toLowerCase(),
-      password: formData.password,
-    });
+ try {
+  const response = await login({
+    email: formData.email.trim().toLowerCase(),
+    motDePasse: formData.password,
+  });
+
+  
+
+
+
 
     const authState = setStoredAuth({
-      token: response.data.token,
-      user: response.data.user,
-    });
+  token: response.token,
+  user: response.user,
+});
 
-    if (authState.user.role === "admin") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/organizer/dashboard");
-    }
+    
+const role = authState.user.role?.toLowerCase();
+
+
+if (role === "admin") {
+  navigate("/admin/dashboard", { replace: true });
+} else if (role === "organisateur") {
+  navigate("/organizer/dashboard", { replace: true });
+
+}
   } catch (err) {
     setError(err.message);
   } finally {

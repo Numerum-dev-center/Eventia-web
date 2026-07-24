@@ -38,6 +38,7 @@ export const setStoredAuth = ({ token, user }) => {
   if (typeof window === "undefined") {
     return null;
   }
+  
 
   const decodedToken = decodeJwtPayload(token);
   const role =
@@ -71,6 +72,14 @@ export const clearStoredAuth = () => {
   localStorage.removeItem(AUTH_STORAGE_KEY);
   localStorage.removeItem("token");
 };
+
+
+
+export function logout() {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+  localStorage.removeItem("token");
+}
+
 
 export const isAuthenticated = () => Boolean(getStoredAuth()?.token);
 

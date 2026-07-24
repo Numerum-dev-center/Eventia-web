@@ -1,50 +1,55 @@
-import { usersData } from "../data/usersData";
+import api from "./api/axios";
 
-export const login = ({ email, password }) => {
-  const user = usersData.find(
-    (u) =>
-      u.email.toLowerCase() === email.toLowerCase() &&
-      u.password === password
-  );
-
-  if (!user) {
-    throw new Error("Email ou mot de passe incorrect.");
-  }
-
-  return {
-    data: {
-      token: "fake-jwt-token",
-      user,
-    },
-  };
-};
-
-export const register = (userData) => {
-  usersData.push({
-    id: String(Date.now()),
-    ...userData,
-    role: "organisateur",
+// Connexion
+export const login = async ({ email, motDePasse }) => {
+  const response = await api.post("/auth/connexion", {
+    email,
+    motDePasse,
   });
 
-  return {
-    data: {
-      message: "Compte créé avec succès.",
-    },
-  };
+  return response.data;
 };
 
-export const forgotPassword = () => {
-  return {
-    data: {
-      message: "Fonction non disponible en mode local.",
-    },
-  };
+// Inscription client
+export const register = async ({email, password, confirmPassword}) => {
+  const response = await api.post(
+    "/auth/inscription-organisateur",
+    {email, password, confirmPassword}
+  );
+
+  return response.data;
 };
 
-export const resetPassword = () => {
-  return {
-    data: {
-      message: "Fonction non disponible en mode local.",
-    },
-  };
+
+
+// Deconnexion
+export const logoutApi = async () => {
+  const response = await api.post("/auth/deconnexion");
+  return response.data;
+}
+
+
+
+// Mot de passe oublié
+export const forgotPassword = async (email) => {
+  const response = await api.post(
+    "/auth/forgot-password",
+    { email }
+  );
+
+  return response.data;
+};
+
+// Réinitialisation
+export const resetPassword = async (data) => {
+  const response = await api.post(
+    "/auth/reset-password",
+    data
+  );
+
+
+  
+
+
+  return response.data;
 };

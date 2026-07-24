@@ -41,6 +41,17 @@ import OrganizerSettings from "./pages/organizer/OrganizerSettings";
 
 
 
+import EventsParticipants from "./pages/organizer/EventsParticipants";
+
+
+import LandingPage from "./pages/LandingPage";
+
+
+
+import Activate from "./pages/auth/Activate";
+import AccountActivation from "./pages/auth/AccountActivation";
+
+
 
 import { useEffect, useState } from "react";
 
@@ -81,8 +92,14 @@ function App() {
   return (
   
       <Routes>
-        <Route path="/" element={<HomePage />} />
+
+        <Route path="/account-activation" element={<AccountActivation />} />
+
+        <Route path="/activate" element={<Activate />} />
+        
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+
         <Route path="/register" element={<Register />} />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -196,6 +213,10 @@ function App() {
                 <Participants />
               </ProtectedRoute>
             }
+          />
+          <Route
+          path="events/:id/billets"
+          element={<EventsParticipants />}
           />
 
           <Route

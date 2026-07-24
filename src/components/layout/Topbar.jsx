@@ -1,6 +1,8 @@
 import { Bell, Search, UserCircle } from "lucide-react";
 
-function OrganizerTopbar({ title, subtitle }) {
+import { Link } from "react-router-dom";
+
+function OrganizerTopbar({ title, subtitle, organizer }) {
   return (
     <header className="bg-[#F1EBE7] shadow-sm rounded-xl px-6 py-4 mb-6 flex items-center justify-between">
       
@@ -37,33 +39,40 @@ function OrganizerTopbar({ title, subtitle }) {
         </button>
 
         {/* Profil */}
-        
-<div
+
+
+        <Link
+  to="/organizer/profile"
   className="
-  flex
-  items-center
-  gap-3
-  cursor-pointer
-  bg-orange-50
-  px-4
-  py-2
-  rounded-2xl
+    flex
+    items-center
+    gap-3
+    cursor-pointer
+    bg-orange-50
+    px-4
+    py-2
+    rounded-2xl
+    hover:bg-orange-100
+    transition
   "
 >
+        
+
 
           <UserCircle size={38} className="text-orange-500" />
 
           <div className="hidden sm:block">
             <p className="font-semibold text-gray-800">
               Organisateur
-            </p>
+              </p>
             <p className="text-xs text-gray-500">
-              organizer@eventia.com
-            </p>
+              {organizer?.email}
+              </p>
           </div>
+          </Link>
         </div>
 
-      </div>
+      
     </header>
   );
 }

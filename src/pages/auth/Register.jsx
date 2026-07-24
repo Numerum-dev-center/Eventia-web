@@ -11,7 +11,7 @@ function Register() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullName: "",
+    
     email: "",
     password: "",
     confirmPassword: "",
@@ -27,7 +27,7 @@ function Register() {
 
   const validate = () => {
     if (
-      !formData.fullName.trim() ||
+      
       !formData.email.trim() ||
       !formData.password ||
       !formData.confirmPassword
@@ -52,34 +52,37 @@ function Register() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+  const validationError = validate();
 
-    setLoading(true);
-    setError("");
+  if (validationError) {
+    setError(validationError);
+    return;
+  }
 
-    try {
-      await register({
-        fullName: formData.fullName.trim(),
-        email: formData.email.trim().toLowerCase(),
-        password: formData.password,
-      });
+  setLoading(true);
+  setError("");
 
-      navigate("/login");
-    } catch (err) {
-      setError(
-        err?.response?.data?.message || "Une erreur est survenue lors de l'inscription."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    await register({
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+    });
 
+    // Redirection vers une page informant l'utilisateur
+    navigate("/activate");
+
+  } catch (err) {
+    setError(
+      err?.response?.data?.message ||
+      "Une erreur est survenue lors de l'inscription."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="w-full max-w-6xl bg-white rounded-2xl overflow-hidden shadow-2xl grid md:grid-cols-2">
@@ -101,7 +104,7 @@ function Register() {
             </h2>
             <p className="text-gray-500 mb-10">
               Vous avez déjà un compte ?{" "}
-              <Link to="/login" className="text-orange-500 font-medium hover:underline">
+              <Link to="/Login" className="text-orange-500 font-medium hover:underline">
                 Se connecter
               </Link>
             </p>
@@ -114,18 +117,7 @@ function Register() {
 
             <form className="space-y-5" onSubmit={handleSubmit} noValidate>
 
-              <div>
-                <label htmlFor="fullName" className="sr-only">Nom complet</label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  name="fullName"
-                  placeholder="Nom complet"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  autoComplete="name"
-                />
-              </div>
+              
 
               <div>
                 <label htmlFor="email" className="sr-only">Email</label>

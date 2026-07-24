@@ -111,13 +111,14 @@ function ForgotPassword() {
 
             <div className="mt-8">
               <Link
-                to="/login"
+                to="/Login"
                 className="inline-flex items-center gap-2 text-orange-500 hover:underline font-medium"
               >
                 <ArrowLeft size={18} />
                 Retour à la connexion
               </Link>
             </div>
+
 
           </div>
         </div>
