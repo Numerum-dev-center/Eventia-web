@@ -32,7 +32,7 @@ function AdminFinances() {
     <div className="space-y-6">
       {/* Titre */}
       <div className="flex items-center gap-3">
-        <Wallet size={32} className="text-green-600" />
+        <Wallet size={32} className="text-orange-500" />
 
         <div>
           <h1 className="text-3xl font-bold text-gray-800">

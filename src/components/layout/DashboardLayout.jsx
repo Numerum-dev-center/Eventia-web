@@ -4,6 +4,7 @@ import Topbar from "./Topbar";
 
 function DashboardLayout({ title, menuItems }) {
   
+  
   return (
     <div className="h-screen flex overflow-hidden bg-[#F7F8FC]">
       {/* Sidebar fixe */}

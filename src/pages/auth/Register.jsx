@@ -7,8 +7,12 @@ import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { register } from "../../services/authService";
 
+import { ArrowLeft } from "lucide-react";
+
 function Register() {
   const navigate = useNavigate();
+
+
 
   const [formData, setFormData] = useState({
     
@@ -86,6 +90,7 @@ function Register() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="w-full max-w-6xl bg-white rounded-2xl overflow-hidden shadow-2xl grid md:grid-cols-2">
+        
 
         <div className="relative hidden md:flex items-center justify-center overflow-hidden">
           <div className="absolute -right-32 top-0 h-full w-96 bg-white/10 rounded-l-full" />
@@ -97,7 +102,14 @@ function Register() {
         </div>
 
         <div className="flex items-center justify-center p-8 md:p-14">
+          
           <div className="w-full max-w-md">
+            <Link to="/" className="absolute top-19  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
+            >
+              <ArrowLeft size={22} />
+              <span>Retour à l'accueil</span>
+            </Link>
+            
 
             <h2 className="text-4xl font-bold text-gray-900 mb-3">
               Créer un compte

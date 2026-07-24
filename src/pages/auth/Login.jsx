@@ -10,6 +10,8 @@ import SocialButton from "../../components/ui/SocialButton";
 import { login } from "../../services/authService"; // à créer, voir plus bas
 import { setStoredAuth } from "../../services/authSession";
 
+import { ArrowLeft } from "lucide-react";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -111,7 +113,13 @@ switch (role) {
 
         <div className="flex items-center justify-center p-8 md:p-14">
           <div className="w-full max-w-md">
-            <h1 className="text-5xl font-bold text-gray-800 mb-3">Login</h1>
+
+            <Link to="/" className="absolute top-15  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
+            >
+              <ArrowLeft size={22} />
+              <span>Retour à l'accueil</span>
+            </Link>
+            <h2 className="text-5xl font-bold text-gray-800 mb-3">Login</h2>
 
             <p className="text-gray-500 mb-10">
               Vous n'avez pas de compte ?{" "}
