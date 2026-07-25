@@ -6,7 +6,7 @@ import {
   Users,
 } from "lucide-react";
 
-import Button from "../ui/Button";
+
 
 import heroImage from "../../assets/landing/land1.jpg";
 // Remplace cette image par une capture de ton dashboard
