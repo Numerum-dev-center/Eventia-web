@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, Sparkles, X } from "lucide-react";
 
 import Button from "../ui/Button";
 
@@ -36,7 +36,7 @@ function NavBar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F4EC]/90 backdrop-blur-lg border-b border-gray-200">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B1330]/95 backdrop-blur-lg border-b border-white/10">
 
       <div className="max-w-7xl mx-auto h-20 flex items-center justify-between px-6">
 
@@ -44,8 +44,11 @@ function NavBar() {
 
         <Link
           to="/"
-          className="text-3xl font-bold text-orange-500"
+          className="flex items-center gap-2 text-2xl font-bold text-white"
         >
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500">
+            <Sparkles size={18} className="text-white" />
+          </span>
           Eventia
         </Link>
 
@@ -57,8 +60,7 @@ function NavBar() {
             <a
               key={item.label}
               href={item.href}
-              text-sm
-              className="text-gray-700 hover:text-orange-500 transition"
+              className="text-sm text-slate-300 hover:text-blue-300 transition"
             >
               {item.label}
             </a>
@@ -72,14 +74,14 @@ function NavBar() {
 
           <Link
             to="/login"
-            className="font-medium hover:text-orange-500"
+            className="font-medium text-slate-200 hover:text-blue-300"
           >
             Connexion
           </Link>
 
           <Link
             to="/register"
-            className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-blue-600 transition"
           >
             Inscription
           </Link>
@@ -90,7 +92,7 @@ function NavBar() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden"
+          className="lg:hidden text-white"
         >
           {isOpen ? (
             <X size={24} />
@@ -105,7 +107,7 @@ function NavBar() {
 
       {isOpen && (
 
-        <div className="lg:hidden bg-[#F8F4EC] border-t">
+        <div className="lg:hidden bg-[#0B1330] border-t border-white/10">
 
           <div className="flex flex-col p-6 gap-5">
 
@@ -114,16 +116,15 @@ function NavBar() {
               <a
                 key={item.label}
                 href={item.href}
-                text-sm
                 onClick={() => setIsOpen(false)}
-                className="text-gray-700"
+                className="text-sm text-slate-300"
               >
                 {item.label}
               </a>
 
             ))}
 
-            <Link to="/login">
+            <Link to="/login" className="text-slate-200">
               Connexion
             </Link>
 

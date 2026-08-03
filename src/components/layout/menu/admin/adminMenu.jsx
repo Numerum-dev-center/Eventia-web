@@ -2,17 +2,9 @@ import {
   LayoutDashboard,
   CalendarDays,
   Users,
-  ShieldCheck,
   Wallet,
-  BadgePercent,
   BarChart3,
-  Bell,
   Settings,
-  UserCheck,
-  UserX,
-  CheckCircle,
-  XCircle,
-  Clock,
 } from "lucide-react";
 
 export const adminMenu = [
@@ -21,121 +13,26 @@ export const adminMenu = [
     icon: LayoutDashboard,
     path: "/admin/dashboard",
   },
-
   {
     title: "Événements",
     icon: CalendarDays,
-    children: [
-      {
-        title: "Tous les événements",
-        icon: CalendarDays,
-        path: "/admin/events",
-      },
-      {
-        title: "En attente",
-        icon: Clock,
-        path: "/admin/events/pending",
-      },
-      {
-        title: "Validés",
-        icon: CheckCircle,
-        path: "/admin/events/approved",
-      },
-      {
-        title: "Rejetés",
-        icon: XCircle,
-        path: "/admin/events/rejected",
-      },
-    ],
+    path: "/admin/events",
   },
-
   {
     title: "Utilisateurs",
     icon: Users,
-    children: [
-      {
-        title: "Participants",
-        icon: Users,
-        path: "/admin/users/participants",
-      },
-      {
-        title: "Organisateurs",
-        icon: UserCheck,
-        path: "/admin/users/organizers",
-      },
-      {
-        title: "Administrateurs",
-        icon: ShieldCheck,
-        path: "/admin/users/admins",
-      },
-      {
-        title: "Suspendus",
-        icon: UserX,
-        path: "/admin/users/suspended",
-      },
-    ],
+    path: "/admin/users",
   },
-
-  {
-    title: "Modération",
-    icon: ShieldCheck,
-    path: "/admin/moderation",
-  },
-
   {
     title: "Finances",
     icon: Wallet,
-    children: [
-      {
-        title: "Transactions",
-        icon: Wallet,
-        path: "/admin/finance/transactions",
-      },
-      {
-        title: "Revenus",
-        icon: Wallet,
-        path: "/admin/finance/revenue",
-      },
-
-
-
-      {
-    title: "Commissions",
-    icon: BadgePercent,
-    path: "/admin/commissions",
+    path: "/admin/finance",
   },
-
-
-
-
-
-
-      {
-        title: "Remboursements",
-        icon: Wallet,
-        path: "/admin/finance/refunds",
-      },
-    ],
-  },
-
   {
-    title: "Journals d'activité",
-    icon: BadgePercent,
-    path: "/admin/Journals",
-  },
-
-  {
-    title: "Rapports & Statistiques",
+    title: "Rapports",
     icon: BarChart3,
     path: "/admin/reports",
   },
-
-  {
-    title: "Notifications",
-    icon: Bell,
-    path: "/admin/notifications",
-  },
-
   {
     title: "Paramètres",
     icon: Settings,

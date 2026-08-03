@@ -43,44 +43,12 @@ function EventShowcase() {
       location: "Lomé",
       date: "12 Novembre 2026",
     },
-
-
-
-    {
-      image: concert,
-      category: "Concert",
-      title: "Concert Live",
-      location: "Lomé",
-      date: "15 Août 2026",
-    },
-    {
-      image: conference,
-      category: "Conférence",
-      title: "Tech Conference",
-      location: "Cotonou",
-      date: "22 Septembre 2026",
-    },
-    {
-      image: festival,
-      category: "Festival",
-      title: "Festival Culturel",
-      location: "Accra",
-      date: "05 Octobre 2026",
-    },
-    {
-      image: wedding,
-      category: "Événement privé",
-      title: "Mariage & Réception",
-      location: "Lomé",
-      date: "12 Novembre 2026",
-    },
-  
   ];
 
   return (
     <section
       id="events"
-      className="py-24 bg-[#F8F4EC]"
+      className="py-24 bg-[#EEF1F6]"
     >
       <div className="max-w-7xl mx-auto px-6">
 
@@ -90,7 +58,7 @@ function EventShowcase() {
 
           <div className="max-w-2xl">
 
-            <span className="text-orange-500 font-semibold uppercase tracking-widest">
+            <span className="text-blue-500 font-semibold uppercase tracking-widest">
               Événements
             </span>
 
@@ -109,7 +77,7 @@ function EventShowcase() {
 
           <Link
             to="/register"
-            className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-blue-600"
           >
             Découvrir Eventia
 
@@ -167,8 +135,8 @@ function EventShowcase() {
                 <span
                   className="
                     inline-block
-                    bg-orange-100
-                    text-orange-600
+                    bg-blue-100
+                    text-blue-600
                     text-sm
                     font-semibold
                     px-4

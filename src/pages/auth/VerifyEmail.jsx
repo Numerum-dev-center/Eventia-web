@@ -8,7 +8,7 @@ function VerifyEmail() {
 
         <MailCheck
           size={70}
-          className="mx-auto text-orange-500 mb-6"
+          className="mx-auto text-blue-500 mb-6"
         />
 
         <h1 className="text-3xl font-bold mb-4">
@@ -22,7 +22,7 @@ function VerifyEmail() {
 
         <Link
           to="/login"
-          className="inline-block bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 transition"
+          className="inline-block bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transition"
         >
           Retour à la connexion
         </Link>

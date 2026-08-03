@@ -33,7 +33,7 @@ function Testimonials() {
 
     <section
     id="testimonials"
-    className="py-24 bg-[#F8F4EC]"
+    className="py-24 bg-[#EEF1F6]"
 >
 
       <div className="max-w-7xl mx-auto px-6">
@@ -46,7 +46,7 @@ function Testimonials() {
 
           <span
             className="
-              text-orange-500
+              text-blue-500
               font-semibold
               uppercase
               tracking-widest
@@ -125,7 +125,7 @@ function Testimonials() {
                   <Star
                     key={star}
                     size={18}
-                    className="fill-orange-400 text-orange-400"
+                    className="fill-blue-400 text-blue-400"
                   />
 
                 ))}
@@ -169,11 +169,11 @@ function Testimonials() {
                     w-14
                     h-14
                     rounded-full
-                    bg-orange-100
+                    bg-blue-100
                     flex
                     items-center
                     justify-center
-                    text-orange-500
+                    text-blue-500
                     font-bold
                     text-xl
                   "

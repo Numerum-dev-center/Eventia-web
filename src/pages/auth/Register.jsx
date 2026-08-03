@@ -7,7 +7,7 @@ import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import { register } from "../../services/authService";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, User } from "lucide-react";
 
 function Register() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Register() {
 
 
   const [formData, setFormData] = useState({
-    
+    role: "client",
     email: "",
     password: "",
     confirmPassword: "",
@@ -73,6 +73,7 @@ function Register() {
       email: formData.email.trim().toLowerCase(),
       password: formData.password,
       confirmPassword: formData.confirmPassword,
+      role: formData.role,
     });
 
     // Redirection vers une page informant l'utilisateur
@@ -104,7 +105,7 @@ function Register() {
         <div className="flex items-center justify-center p-8 md:p-14">
           
           <div className="w-full max-w-md">
-            <Link to="/" className="absolute top-19  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
+            <Link to="/" className="absolute top-19  inline-flex items-center gap-2 text-gray-600 hover:text-blue-500 mb-6"
             >
               <ArrowLeft size={22} />
               <span>Retour à l'accueil</span>
@@ -116,7 +117,7 @@ function Register() {
             </h2>
             <p className="text-gray-500 mb-10">
               Vous avez déjà un compte ?{" "}
-              <Link to="/Login" className="text-orange-500 font-medium hover:underline">
+              <Link to="/login" className="text-blue-500 font-medium hover:underline">
                 Se connecter
               </Link>
             </p>
@@ -129,7 +130,32 @@ function Register() {
 
             <form className="space-y-5" onSubmit={handleSubmit} noValidate>
 
-              
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData((prev) => ({ ...prev, role: "client" }))}
+                  className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-semibold text-sm transition ${
+                    formData.role === "client"
+                      ? "border-blue-500 bg-blue-50 text-blue-600"
+                      : "border-gray-200 text-gray-500 hover:border-gray-300"
+                  }`}
+                >
+                  <User size={16} />
+                  Je réserve des billets
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData((prev) => ({ ...prev, role: "organisateur" }))}
+                  className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-semibold text-sm transition ${
+                    formData.role === "organisateur"
+                      ? "border-blue-500 bg-blue-50 text-blue-600"
+                      : "border-gray-200 text-gray-500 hover:border-gray-300"
+                  }`}
+                >
+                  <Calendar size={16} />
+                  J'organise des événements
+                </button>
+              </div>
 
               <div>
                 <label htmlFor="email" className="sr-only">Email</label>

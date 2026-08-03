@@ -1,14 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {
   BadgeCheck,
+  Gauge,
   ShoppingCart,
   Ticket,
   Users,
   UsersRound,
 } from "lucide-react";
 
-import { getEventById } from "../../data/eventsData";
+import { deleteEvent, getEventById } from "../../data/eventsData";
 import StatCard from "../../components/organizer/StatCard";
 
 const formatCurrency = (value) =>
@@ -17,6 +18,7 @@ const formatCurrency = (value) =>
 function EventDetails() {
 
   const { id } = useParams();
+  const navigate = useNavigate();
   const event = getEventById(id);
 
   const totalTickets = Number(event?.capacity || event?.tickets || 0);
@@ -70,7 +72,11 @@ function EventDetails() {
           icon={<BadgeCheck size={28} />}
         />
 
-        
+        <StatCard
+          title="Taux de remplissage"
+          value={`${occupancyRate}%`}
+          icon={<Gauge size={28} />}
+        />
       </div>
 
 
@@ -79,7 +85,7 @@ function EventDetails() {
       <div className="bg-white rounded-xl p-6 shadow">
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-blue-50">
             <p className="text-sm text-gray-500">Places restantes</p>
             <p className="text-2xl font-bold mt-1 flex items-center gap-2">
               <Users size={20} />
@@ -87,12 +93,12 @@ function EventDetails() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-blue-50">
             <p className="text-sm text-gray-500">Prix du ticket</p>
             <p className="text-2xl font-bold mt-1">{formatCurrency(event.price)}</p>
           </div>
 
-          <div className="rounded-2xl border border-gray-100 p-4 bg-whyte-50 flex items-center justify-center">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-blue-50 flex items-center justify-center">
   <Link
     to={`/organizer/events/${id}/billets`}
     className="
@@ -213,6 +219,12 @@ function EventDetails() {
   </Link>
 
   <button
+    onClick={() => {
+      if (window.confirm("Supprimer définitivement cet événement ?")) {
+        deleteEvent(id);
+        navigate("/organizer/events", { replace: true });
+      }
+    }}
     className="
       bg-red-500
       text-white

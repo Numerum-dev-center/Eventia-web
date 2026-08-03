@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { LogOut, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { LogOut, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight, Sparkles } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/authSession";
@@ -41,22 +41,27 @@ const handleLogout = async () => {
     <aside
       className={`
         ${collapsed ? "w-20" : "w-72"}
-        min-h-screen bg-white border-r border-gray-100 flex flex-col
+        min-h-screen bg-[#0B1330] border-r border-white/10 flex flex-col
         transition-all duration-300
       `}
     >
       {/* Logo + bouton réduire */}
-      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+      <div className="p-6 border-b border-white/10 flex items-center justify-between">
         {!collapsed && (
-          <h1 className="text-3xl font-bold text-orange-500 truncate">
-            {title}
-          </h1>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500">
+              <Sparkles size={16} className="text-white" />
+            </span>
+            <h1 className="text-lg font-bold text-white truncate">
+              {title}
+            </h1>
+          </div>
         )}
 
         <button
           onClick={() => setCollapsed(!collapsed)}
           className={`
-            p-2 rounded-xl text-gray-400 hover:bg-orange-50 hover:text-orange-500
+            p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-blue-300
             transition-all
             ${collapsed ? "mx-auto" : ""}
           `}
@@ -92,8 +97,8 @@ const handleLogout = async () => {
                     px-4 py-3 rounded-2xl transition-all
                     ${
                       isParentActive
-                        ? "bg-orange-500 text-white"
-                        : "text-gray-600 hover:bg-orange-50"
+                        ? "bg-blue-500 text-white"
+                        : "text-slate-300 hover:bg-white/5"
                     }
                   `}
                 >
@@ -126,8 +131,8 @@ const handleLogout = async () => {
                               transition-all
                               ${
                                 isActive
-                                  ? "bg-orange-100 text-orange-600 font-semibold"
-                                  : "text-gray-500 hover:bg-gray-50"
+                                  ? "bg-blue-500/15 text-blue-300 font-semibold"
+                                  : "text-slate-400 hover:bg-white/5"
                               }
                             `
                           }
@@ -156,8 +161,8 @@ const handleLogout = async () => {
                   px-4 py-3 mb-2 rounded-2xl transition-all
                   ${
                     isActive
-                      ? "bg-orange-500 text-white font-semibold"
-                      : "text-gray-600 hover:bg-orange-50 hover:text-orange-500"
+                      ? "bg-blue-500 text-white font-semibold"
+                      : "text-slate-300 hover:bg-white/5 hover:text-blue-300"
                   }
                 `
               }
@@ -170,7 +175,7 @@ const handleLogout = async () => {
       </nav>
 
       {/* Déconnexion */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-white/10">
         <button
           onClick={handleLogout}
           title="Déconnexion"
@@ -178,9 +183,9 @@ const handleLogout = async () => {
             w-full flex items-center gap-3
             ${collapsed ? "justify-center" : ""}
             px-4 py-3 rounded-2xl
-            text-gray-600
-            hover:bg-red-50
-            hover:text-red-500
+            text-slate-300
+            hover:bg-red-500/10
+            hover:text-red-300
             transition-all
           `}
         >

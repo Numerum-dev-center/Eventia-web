@@ -114,7 +114,7 @@ switch (role) {
         <div className="flex items-center justify-center p-8 md:p-14">
           <div className="w-full max-w-md">
 
-            <Link to="/" className="absolute top-15  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
+            <Link to="/" className="absolute top-15  inline-flex items-center gap-2 text-gray-600 hover:text-blue-500 mb-6"
             >
               <ArrowLeft size={22} />
               <span>Retour à l'accueil</span>
@@ -123,7 +123,7 @@ switch (role) {
 
             <p className="text-gray-500 mb-10">
               Vous n'avez pas de compte ?{" "}
-              <Link to="/register" className="text-orange-500 font-medium hover:underline">
+              <Link to="/register" className="text-blue-500 font-medium hover:underline">
                 Créer un compte
               </Link>
             </p>
@@ -185,7 +185,13 @@ switch (role) {
             <div className="mt-12 text-center">
               <p className="text-gray-500 mb-5">Ou continuer avec Google</p>
               <div className="flex justify-center">
-                <SocialButton icon={<FcGoogle size={24} />} onClick={() => alert("Google cliqué")}>
+                <SocialButton
+                  icon={<FcGoogle size={24} />}
+                  onClick={() => {
+                    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4090";
+                    window.location.href = `${apiUrl}/auth/google`;
+                  }}
+                >
                   Continuer avec Google
                 </SocialButton>
               </div>

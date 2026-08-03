@@ -14,7 +14,7 @@ function CTA() {
     <section
       className="
         py-24
-        bg-orange-500
+        bg-blue-500
         relative
         overflow-hidden
       "
@@ -76,7 +76,7 @@ function CTA() {
 
           <CalendarPlus
             size={40}
-            className="text-orange-500"
+            className="text-blue-500"
           />
 
         </div>
@@ -106,7 +106,7 @@ function CTA() {
             mt-6
             text-lg
             lg:text-xl
-            text-orange-100
+            text-blue-100
             max-w-3xl
             mx-auto
           "
@@ -136,15 +136,11 @@ function CTA() {
 
           <Link
             to="/register"
-            className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600"
+            className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition"
           >
-
-          
-
             Créer un compte maintenant
-
-            <ArrowRight size={18}/>
-            </Link>
+            <ArrowRight size={18} />
+          </Link>
 
          
 
@@ -161,7 +157,7 @@ function CTA() {
               text-white
               font-semibold
               hover:bg-white
-              hover:text-orange-500
+              hover:text-blue-500
               transition
             "
           >

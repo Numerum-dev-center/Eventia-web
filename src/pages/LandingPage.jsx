@@ -15,7 +15,7 @@ function LandingPage() {
 
   return (
 
-    <div className="bg-[#F8F4EC]">
+    <div className="bg-[#EEF1F6]">
 
 
       <NavBar />

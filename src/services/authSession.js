@@ -84,3 +84,9 @@ export function logout() {
 export const isAuthenticated = () => Boolean(getStoredAuth()?.token);
 
 export const getUserRole = () => getStoredAuth()?.user?.role || null;
+
+export const getUserId = () => {
+  const token = getStoredAuth()?.token;
+  const decoded = decodeJwtPayload(token);
+  return decoded?.sub || null;
+};

@@ -7,7 +7,7 @@ function Activate() {
 
         <MailCheck
           size={70}
-          className="mx-auto text-orange-500 mb-6"
+          className="mx-auto text-blue-500 mb-6"
         />
 
         <h1 className="text-3xl font-bold mb-4">

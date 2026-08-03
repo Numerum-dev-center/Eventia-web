@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 
 import StatCard from "../../components/organizer/StatCard";
+import PageHeader from "../../components/ui/PageHeader";
 import { getAdminFinances } from "../../services/adminService";
 
 function AdminFinances() {
@@ -30,20 +31,13 @@ function AdminFinances() {
 
   return (
     <div className="space-y-6">
-      {/* Titre */}
-      <div className="flex items-center gap-3">
-        <Wallet size={32} className="text-orange-500" />
-
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">
-            Finances
-          </h1>
-
-          <p className="text-gray-500">
-            Revenus, commissions et reversements.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Finances"
+        subtitle="Revenus, commissions et reversements de la plateforme."
+      />
+      <p className="text-xs text-gray-400 -mt-4">
+        Données de démonstration — le backend n'expose pas encore d'endpoint financier global.
+      </p>
 
       {/* Cartes */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

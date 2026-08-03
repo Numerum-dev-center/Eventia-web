@@ -291,7 +291,7 @@ if (!endTime) {
                     key={place.id}
                     type="button"
                     onClick={() => handleSelectLocation(place)}
-                    className="w-full text-left px-4 py-3 hover:bg-orange-50 transition border-b border-gray-100 last:border-b-0"
+                    className="w-full text-left px-4 py-3 hover:bg-blue-50 transition border-b border-gray-100 last:border-b-0"
                   >
                     <span className="block font-medium text-gray-900">
                       {place.formattedAddress}
@@ -385,7 +385,7 @@ if (!endTime) {
       items-center
       justify-center
       cursor-pointer
-      hover:border-orange-500
+      hover:border-blue-500
       transition
       overflow-hidden
     "
@@ -447,10 +447,10 @@ if (!endTime) {
               w-full
               h-40
               border-2
-              border-gray-500
+              border-gray-300
               rounded-2xl
               p-4
-              focus:border-orange-500
+              focus:border-blue-500
               outline-none
             "
           />

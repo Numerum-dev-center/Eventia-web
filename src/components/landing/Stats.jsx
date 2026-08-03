@@ -32,7 +32,7 @@ function Stats() {
 
 
   return (
-    <section className="py-24 bg-orange-500">
+    <section className="py-24 bg-blue-500">
 
       <div className="max-w-7xl mx-auto px-6">
 
@@ -41,7 +41,7 @@ function Stats() {
 
         <div className="text-center max-w-3xl mx-auto">
 
-          <span className="text-orange-100 font-semibold uppercase tracking-widest">
+          <span className="text-blue-100 font-semibold uppercase tracking-widest">
             Nos chiffres
           </span>
 
@@ -54,7 +54,7 @@ function Stats() {
           </h2>
 
 
-          <p className="mt-6 text-orange-50 text-lg leading-8">
+          <p className="mt-6 text-blue-50 text-lg leading-8">
 
             Eventia accompagne les organisateurs dans
             la création, la gestion et la réussite
@@ -110,7 +110,7 @@ function Stats() {
 
                   <Icon
                     size={32}
-                    className="text-orange-500"
+                    className="text-blue-500"
                   />
 
                 </div>
@@ -135,7 +135,7 @@ function Stats() {
                 <p
                   className="
                     mt-3
-                    text-orange-100
+                    text-blue-100
                     font-medium
                   "
                 >

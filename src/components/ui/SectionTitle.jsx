@@ -22,7 +22,7 @@ function SectionTitle({
 
         <span
           className="
-            text-orange-500
+            text-blue-500
             font-semibold
             uppercase
             tracking-widest

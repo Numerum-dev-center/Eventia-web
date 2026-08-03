@@ -10,12 +10,12 @@ export const login = async ({ email, motDePasse }) => {
   return response.data;
 };
 
-// Inscription client
-export const register = async ({email, password, confirmPassword}) => {
-  const response = await api.post(
-    "/auth/inscription-organisateur",
-    {email, password, confirmPassword}
-  );
+// Inscription (client ou organisateur)
+export const register = async ({ email, password, confirmPassword, role = "organisateur" }) => {
+  const endpoint =
+    role === "client" ? "/auth/inscription-client" : "/auth/inscription-organisateur";
+
+  const response = await api.post(endpoint, { email, password, confirmPassword });
 
   return response.data;
 };
@@ -37,6 +37,12 @@ export const forgotPassword = async (email) => {
     { email }
   );
 
+  return response.data;
+};
+
+// Vérification du code de réinitialisation
+export const verifyResetCode = async ({ email, code }) => {
+  const response = await api.post("/utilisateur/verify-reset-code", { email, code });
   return response.data;
 };
 

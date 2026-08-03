@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
+import PageHeader from "../../components/ui/PageHeader";
 import TicketPieChart from "../../components/organizer/TicketPieChart";
 import RevenueChart from "../../components/organizer/RevenueChart";
 import CalendarWidget from "../../components/ui/Calander";
@@ -41,14 +43,20 @@ function Dashboard() {
   }, []);
 
   if (loading) {
-    return <p>Chargement...</p>;
+    return (
+      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Chargement du tableau de bord...
+      </div>
+    );
   }
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-8">
-        Tableau de bord
-      </h1>
+      <PageHeader
+        title="Tableau de bord"
+        subtitle="Vue d'ensemble de vos événements et de vos ventes."
+      />
 
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-6 mb-8">
@@ -86,6 +94,10 @@ function Dashboard() {
         />
 
       </div>
+
+      <p className="text-xs text-gray-400 -mt-4 mb-6">
+        Données de démonstration — l'API de gestion des événements n'est pas encore disponible.
+      </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 

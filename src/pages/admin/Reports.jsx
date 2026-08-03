@@ -1,32 +1,38 @@
-import { FileText } from "lucide-react";
+import { BarChart3, FileText, TrendingUp, Users } from "lucide-react";
+
+import PageHeader from "../../components/ui/PageHeader";
+import Card from "../../components/ui/Card";
+
+const REPORTS = [
+  { icon: TrendingUp, label: "Rapport des ventes" },
+  { icon: FileText, label: "Rapport des revenus" },
+  { icon: Users, label: "Rapport des utilisateurs" },
+  { icon: BarChart3, label: "Rapport des événements" },
+];
 
 function Reports() {
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Rapports"
+        subtitle="Rapports générés par la plateforme."
+      />
 
-      <div className="flex items-center gap-3">
-        <FileText size={32} className="text-purple-600" />
-
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-dark">
-            Rapports
-          </h1>
-
-          <p className="text-gray-500">
-            Consultez les rapports générés par la plateforme.
-          </p>
-        </div>
-      </div>
-
-      <div className="bg-white dark:bg-whyte-500 rounded-2xl shadow p-6">
-        <ul className="space-y-3 text-dark-600 dark:text-dark-300">
-          <li>📄 Rapport des ventes</li>
-          <li>📄 Rapport des revenus</li>
-          <li>📄 Rapport des utilisateurs</li>
-          <li>📄 Rapport des événements</li>
+      <Card padding="p-2">
+        <ul className="divide-y divide-gray-100">
+          {REPORTS.map(({ icon: Icon, label }) => (
+            <li key={label} className="flex items-center justify-between px-4 py-4">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
+                  <Icon size={18} />
+                </span>
+                <span className="font-medium text-gray-800">{label}</span>
+              </div>
+              <span className="text-xs text-gray-400">Bientôt disponible</span>
+            </li>
+          ))}
         </ul>
-      </div>
-
+      </Card>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
-import { getEventById } from "../../data/eventsData";
+import { getEventById, updateEvent } from "../../data/eventsData";
 
 import {
   geocodeOpenStreetMapPlace,
@@ -141,8 +141,7 @@ function EventsEdit() {
     setLocation(resolvedLocation.formattedAddress);
     setLocationDetails(resolvedLocation);
 
-    const updatedEvent = {
-      id,
+    updateEvent(id, {
       title,
       date,
       location: resolvedLocation.formattedAddress,
@@ -151,15 +150,13 @@ function EventsEdit() {
         longitude: resolvedLocation.longitude,
       },
       tickets,
+      capacity: Number(tickets) || currentEvent.capacity,
       price,
       category,
       description,
-      image,
-    };
+    });
 
-    console.log(updatedEvent);
-
-    alert("Événement modifié avec succès !");
+    navigate(`/organizer/events/${id}`, { replace: true });
   };
 
   const handleCancel = () => {
@@ -248,7 +245,7 @@ function EventsEdit() {
                     key={place.id}
                     type="button"
                     onClick={() => handleSelectLocation(place)}
-                    className="w-full text-left px-4 py-3 hover:bg-orange-50 transition border-b border-gray-100 last:border-b-0"
+                    className="w-full text-left px-4 py-3 hover:bg-blue-50 transition border-b border-gray-100 last:border-b-0"
                   >
                     <span className="block font-medium text-gray-900">
                       {place.formattedAddress}
@@ -376,11 +373,11 @@ function EventsEdit() {
               w-full
               h-40
               border-2
-              border-gray-500
+              border-gray-300
               rounded-2xl
               p-4
               outline-none
-              focus:border-orange-500
+              focus:border-blue-500
             "
           />
 
@@ -397,8 +394,9 @@ function EventsEdit() {
 
           <Button
             type="button"
+            variant="outline"
             onClick={handleCancel}
-            className="flex-1 bg-gray-500"
+            className="flex-1"
           >
             Annuler
           </Button>

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {  ArrowLeft } from "lucide-react";
+import { ArrowLeft, Mail } from "lucide-react";
 
 import eventImage from "../../assets/organizer/im-land.jpg";
 
@@ -9,6 +9,7 @@ import Input from "../../components/ui/Input";
 import { forgotPassword } from "../../services/authService";
 
 function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -40,8 +41,11 @@ function ForgotPassword() {
     setSuccess("");
 
     try {
-      await forgotPassword({ email: email.trim().toLowerCase() });
-      setSuccess("Un email de réinitialisation vient de vous être envoyé.");
+      await forgotPassword(email.trim().toLowerCase());
+      setSuccess("Un code de vérification vient de vous être envoyé par email.");
+      setTimeout(() => {
+        navigate("/verify-code", { state: { email: email.trim().toLowerCase() } });
+      }, 1200);
     } catch (err) {
       setError(
         err?.response?.data?.message ||
@@ -100,6 +104,7 @@ function ForgotPassword() {
                   value={email}
                   onChange={handleChange}
                   autoComplete="email"
+                  icon={Mail}
                 />
               </div>
 
@@ -111,8 +116,8 @@ function ForgotPassword() {
 
             <div className="mt-8">
               <Link
-                to="/Login"
-                className="inline-flex items-center gap-2 text-orange-500 hover:underline font-medium"
+                to="/login"
+                className="inline-flex items-center gap-2 text-blue-500 hover:underline font-medium"
               >
                 <ArrowLeft size={18} />
                 Retour à la connexion

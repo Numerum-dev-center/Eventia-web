@@ -38,8 +38,8 @@ function Footer() {
 
     <footer
       className="
-        bg-[#F8F4EC]
-        text-dark-500
+        bg-[#EEF1F6]
+        text-gray-500
         pt-20
         pb-8
       "
@@ -64,12 +64,9 @@ function Footer() {
 
             <Link
               to="/"
-              className="
-                text-3xl
-                font-bold
-                text-dark-900
-              "
+              className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900"
             >
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500 text-white text-sm">●</span>
               Eventia
             </Link>
 
@@ -100,7 +97,7 @@ function Footer() {
 
               <a
                 href="#"
-                className="hover:text-orange-500"
+                className="hover:text-blue-500"
               >
                 <FaInstagram />
               </a>
@@ -108,7 +105,7 @@ function Footer() {
 
               <a
                 href="#)"
-                className="hover:text-orange-500"
+                className="hover:text-blue-500"
               >
                 <FaFacebook />
               </a>
@@ -116,7 +113,7 @@ function Footer() {
 
               <a
                 href="#"
-                className="hover:text-orange-500"
+                className="hover:text-blue-500"
               >
                 <FaLinkedin />
               </a>
@@ -124,7 +121,7 @@ function Footer() {
 
               <a
                 href="#"
-                className="hover:text-orange-500"
+                className="hover:text-blue-500"
               >
                 <FaXTwitter />
               </a>
@@ -140,7 +137,7 @@ function Footer() {
 
           <div>
 
-            <h3 className="text-dark-900 font-bold text-lg">
+            <h3 className="text-gray-900 font-bold text-lg">
               Produit
             </h3>
 
@@ -152,7 +149,7 @@ function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="hover:text-orange-500"
+                    className="hover:text-blue-500"
                   >
                     {item}
                   </a>
@@ -170,7 +167,7 @@ function Footer() {
 
           <div>
 
-            <h3 className="text-dark-900 font-bold text-lg">
+            <h3 className="text-gray-900 font-bold text-lg">
               Entreprise
             </h3>
 
@@ -182,7 +179,7 @@ function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="hover:text-orange-500"
+                    className="hover:text-blue-500"
                   >
                     {item}
                   </a>
@@ -200,7 +197,7 @@ function Footer() {
 
           <div>
 
-            <h3 className="text-dark-900 font-bold text-lg">
+            <h3 className="text-gray-900 font-bold text-lg">
               Support
             </h3>
 
@@ -212,7 +209,7 @@ function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="hover:text-orange-500"
+                    className="hover:text-blue-500"
                   >
                     {item}
                   </a>
@@ -236,7 +233,7 @@ function Footer() {
         <div
           className="
             border-t
-            border-gray-800
+            border-gray-200
             mt-16
             pt-8
             text-center

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
-import { Plus, Eye, Pencil } from "lucide-react";
+import { Plus, Eye, Pencil, CalendarDays } from "lucide-react";
 
+import PageHeader from "../../components/ui/PageHeader";
+import Button from "../../components/ui/Button";
+import EmptyState from "../../components/ui/EmptyState";
 import { getEvents } from "../../data/eventsData";
 
 function EventsList() {
@@ -34,31 +37,28 @@ function EventsList() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">
-          Mes événements
-        </h1>
-
-        <Link
-          to="/organizer/events/create"
-          className="
-            flex items-center gap-2
-            bg-orange-500
-            text-white
-            px-4 py-2
-            rounded-lg
-            hover:bg-orange-600
-          "
-        >
-          <Plus size={18} />
-          Créer un événement
-        </Link>
-      </div>
+      <PageHeader
+        title="Mes événements"
+        action={
+          <Button as={Link} to="/organizer/events/create" fullWidth={false}>
+            <Plus size={18} />
+            Créer un événement
+          </Button>
+        }
+      />
 
       {events.length === 0 ? (
-        <div className="bg-white p-6 rounded-xl shadow text-center text-gray-500">
-          Aucun événement trouvé.
-        </div>
+        <EmptyState
+          icon={CalendarDays}
+          title="Aucun événement pour le moment"
+          description="Créez votre premier événement pour commencer à vendre des billets."
+          action={
+            <Button as={Link} to="/organizer/events/create" fullWidth={false}>
+              <Plus size={18} />
+              Créer un événement
+            </Button>
+          }
+        />
       ) : (
         <div className="bg-white rounded-xl shadow overflow-x-auto">
           <table className="w-full">
@@ -117,7 +117,7 @@ function EventsList() {
                       {event.status === "DRAFT" && (
                         <Link
                           to={`/organizer/events/${event.id}/edit`}
-                          className="text-orange-500 hover:text-orange-700"
+                          className="text-blue-500 hover:text-blue-700"
                           title="Modifier"
                         >
                           <Pencil size={18} />

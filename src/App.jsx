@@ -11,6 +11,8 @@ import { Outlet, Navigate } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import VerifyCode from "./pages/auth/VerifyCode";
+import ResetPassword from "./pages/auth/Reset-password";
 import AccessDenied from "./pages/AccessDenied";
 import AdminLayout from "./components/layout/admin/AdminLayout";
 
@@ -94,6 +96,7 @@ function App() {
       <Routes>
 
         <Route path="/account-activation" element={<AccountActivation />} />
+        <Route path="/auth/activate" element={<AccountActivation />} />
 
         <Route path="/activate" element={<Activate />} />
         
@@ -103,16 +106,9 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-code" element={<VerifyCode />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-
-        <Route
-          path="dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
 
         <Route path="forbidden" element={<AccessDenied />} />
 
@@ -215,8 +211,12 @@ function App() {
             }
           />
           <Route
-          path="events/:id/billets"
-          element={<EventsParticipants />}
+            path="events/:id/billets"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+                <EventsParticipants />
+              </ProtectedRoute>
+            }
           />
 
           <Route
@@ -285,25 +285,6 @@ function App() {
         </Route>
 
         <Route
-    path="/admin/*"
-    element={
-        <ProtectedRoute allowedRoles={["admin"]}>
-            <AdminLayout />
-        </ProtectedRoute>
-    }
-/>
-
-<Route
-    path="/organizer/*"
-    element={
-        <ProtectedRoute allowedRoles={["Organisateur"]}>
-            <OrganizerLayout />
-        </ProtectedRoute>
-    }
-/>
-
-
-<Route
   path="/admin"
   element={
     <ProtectedRoute allowedRoles={["admin"]}>

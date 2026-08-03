@@ -186,3 +186,14 @@ export const addEvent = (event) => {
 
   return nextEvent;
 };
+
+export const updateEvent = (id, updates) => {
+  eventsData = eventsData.map((event) =>
+    event.id === String(id) ? { ...event, ...updates } : event
+  );
+  return getEventById(id);
+};
+
+export const deleteEvent = (id) => {
+  eventsData = eventsData.filter((event) => event.id !== String(id));
+};

@@ -50,7 +50,7 @@ function Features() {
   return (
     <section
       id="features"
-      className="py-24 bg-[#F8F4EC]"
+      className="py-24 bg-[#EEF1F6]"
     >
       <div className="max-w-7xl mx-auto px-6">
 
@@ -58,7 +58,7 @@ function Features() {
 
         <div className="text-center max-w-3xl mx-auto">
 
-          <span className="text-orange-500 font-semibold uppercase tracking-wider">
+          <span className="text-blue-500 font-semibold uppercase tracking-wider">
             Fonctionnalités
           </span>
 
@@ -101,7 +101,7 @@ function Features() {
                   w-16
                   h-16
                   rounded-2xl
-                  bg-orange-100
+                  bg-blue-100
                   flex
                   items-center
                   justify-center
@@ -109,7 +109,7 @@ function Features() {
 
                   <Icon
                     size={25}
-                    className="text-orange-500"
+                    className="text-blue-500"
                   />
 
                 </div>
