@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Wallet,
   BadgePercent,
@@ -7,27 +6,10 @@ import {
 
 import StatCard from "../../components/organizer/StatCard";
 import PageHeader from "../../components/ui/PageHeader";
-import { getAdminFinances } from "../../services/adminService";
+import { getPlatformFinances } from "../../data/ordersData";
 
 function AdminFinances() {
-  const [finances, setFinances] = useState({
-    revenue: 0,
-    commissions: 0,
-    reversements: 0,
-  });
-
-  useEffect(() => {
-    async function loadFinances() {
-      try {
-        const data = await getAdminFinances();
-        setFinances(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    loadFinances();
-  }, []);
+  const finances = getPlatformFinances();
 
   return (
     <div className="space-y-6">
@@ -36,7 +18,7 @@ function AdminFinances() {
         subtitle="Revenus, commissions et reversements de la plateforme."
       />
       <p className="text-xs text-gray-400 -mt-4">
-        Données de démonstration — le backend n'expose pas encore d'endpoint financier global.
+        Calculé à partir des réservations enregistrées sur cet appareil (commission plateforme : 10%).
       </p>
 
       {/* Cartes */}
@@ -44,19 +26,19 @@ function AdminFinances() {
 
         <StatCard
           title="Revenus"
-          value={`${finances.revenue} FCFA`}
+          value={`${finances.revenue.toLocaleString("fr-FR")} FCFA`}
           icon={<Wallet />}
         />
 
         <StatCard
           title="Commissions"
-          value={`${finances.commissions} FCFA`}
+          value={`${finances.commissions.toLocaleString("fr-FR")} FCFA`}
           icon={<BadgePercent />}
         />
 
         <StatCard
           title="Reversements"
-          value={`${finances.reversements} FCFA`}
+          value={`${finances.reversements.toLocaleString("fr-FR")} FCFA`}
           icon={<HandCoins />}
         />
 

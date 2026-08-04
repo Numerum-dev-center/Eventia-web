@@ -8,7 +8,7 @@ import CalendarWidget from "../../components/ui/Calander";
 
 import {
   BadgeCheck,
-  Star,
+  Ticket,
   Users,
   Wallet,
 } from "lucide-react";
@@ -16,7 +16,7 @@ import {
 import StatCard from "../../components/organizer/StatCard";
 import EventCard from "../../components/organizer/EventsCard";
 
-import { getOrganizerDashboard } from "../../services/organizerService";
+import { getOrganizerOverview } from "../../data/ordersData";
 import { getEvents } from "../../data/eventsData";
 
 function Dashboard() {
@@ -25,21 +25,11 @@ function Dashboard() {
   const events = getEvents();
 
   const [activeMetric, setActiveMetric] = useState("revenue");
-  
+
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await getOrganizerDashboard();
-        setDashboard(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
+    setDashboard(getOrganizerOverview());
+    setLoading(false);
   }, []);
 
   if (loading) {
@@ -63,14 +53,14 @@ function Dashboard() {
 
         <StatCard
           title="Revenus"
-          value={`${dashboard.revenue} FCFA`}
+          value={`${dashboard.revenue.toLocaleString("fr-FR")} FCFA`}
           icon={<Wallet />}
           active={activeMetric === "revenue"}
           onMouseEnter={() => setActiveMetric("revenue")}
         />
 
         <StatCard
-          title="Inscrits"
+          title="Acheteurs"
           value={dashboard.users}
           icon={<Users />}
           active={activeMetric === "users"}
@@ -86,17 +76,17 @@ function Dashboard() {
         />
 
         <StatCard
-          title="Notes"
-          value={dashboard.notes}
-          icon={<Star />}
-          active={activeMetric === "notes"}
-          onMouseEnter={() => setActiveMetric("notes")}
+          title="Billets vendus"
+          value={dashboard.tickets}
+          icon={<Ticket />}
+          active={activeMetric === "tickets"}
+          onMouseEnter={() => setActiveMetric("tickets")}
         />
 
       </div>
 
       <p className="text-xs text-gray-400 -mt-4 mb-6">
-        Données de démonstration — l'API de gestion des événements n'est pas encore disponible.
+        Données calculées à partir des événements et réservations enregistrés sur cet appareil.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

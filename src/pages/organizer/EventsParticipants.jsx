@@ -1,97 +1,47 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeft, Users } from "lucide-react";
 
-
-import { getParticipants } from "../../services/participantsService";
+import PageHeader from "../../components/ui/PageHeader";
+import EmptyState from "../../components/ui/EmptyState";
+import Badge from "../../components/ui/Badge";
+import { getEventById } from "../../data/eventsData";
+import { getOrdersByEvent, getTicketsByEvent } from "../../data/ordersData";
 
 function EventParticipants() {
   const { id } = useParams();
+  const event = getEventById(id);
+  const orders = getOrdersByEvent(id);
+  const tickets = getTicketsByEvent(id);
 
-  const [participants, setParticipants] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadParticipants() {
-      const data = await getParticipants(id);
-      setParticipants(data);
-      setLoading(false);
-    }
-
-    loadParticipants();
-  }, [id]);
-
-  const getPaymentBadge = (status) => {
-    const styles = {
-      PAYE: "bg-green-100 text-green-700",
-      EN_ATTENTE: "bg-yellow-100 text-yellow-700",
-      ECHOUE: "bg-red-100 text-red-700",
-      REMBOURSE: "bg-blue-100 text-blue-700",
-    };
-
-    const labels = {
-      PAYE: "Payé",
-      EN_ATTENTE: "En attente",
-      ECHOUE: "Échoué",
-      REMBOURSE: "Remboursé",
-    };
-
-    return (
-      <span
-        className={`px-3 py-1 rounded-full text-sm font-medium ${styles[status]}`}
-      >
-        {labels[status]}
-      </span>
-    );
-  };
-
-  const getTicketBadge = (status) => {
-    const styles = {
-      VALIDE: "bg-green-100 text-green-700",
-      UTILISE: "bg-blue-100 text-blue-700",
-      ANNULE: "bg-red-100 text-red-700",
-      EXPIRE: "bg-gray-100 text-gray-700",
-    };
-
-    const labels = {
-      VALIDE: "Valide",
-      UTILISE: "Utilisé",
-      ANNULE: "Annulé",
-      EXPIRE: "Expiré",
-    };
-
-    return (
-      <span
-        className={`px-3 py-1 rounded-full text-sm font-medium ${styles[status]}`}
-      >
-        {labels[status]}
-      </span>
-    );
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
+  const usedCountForOrder = (orderId) =>
+    tickets.filter((t) => t.orderId === orderId && t.status === "UTILISE").length;
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">
-          Participants
-        </h1>
+      <Link
+        to={`/organizer/events/${id}`}
+        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-500 mb-4"
+      >
+        <ArrowLeft size={16} />
+        Retour à l'événement
+      </Link>
 
-        <div className="text-sm text-gray-500">
-          Total : <strong>{participants.length}</strong>
-        </div>
-      </div>
+      <PageHeader
+        title="Participants"
+        subtitle={event ? event.title : undefined}
+        action={
+          <div className="text-sm text-gray-500">
+            Total : <strong>{orders.length}</strong> commande(s) — {tickets.length} billet(s)
+          </div>
+        }
+      />
 
-      {participants.length === 0 ? (
-        <div className="bg-white p-6 rounded-xl shadow text-center text-gray-500">
-          Aucun participant trouvé.
-        </div>
+      {orders.length === 0 ? (
+        <EmptyState
+          icon={Users}
+          title="Aucun participant pour le moment"
+          description="Les réservations effectuées depuis la page publique de l'événement apparaîtront ici."
+        />
       ) : (
         <div className="bg-white rounded-xl shadow overflow-x-auto">
           <table className="w-full">
@@ -100,63 +50,34 @@ function EventParticipants() {
                 <th className="px-6 py-4 text-left">Participant</th>
                 <th className="px-6 py-4 text-left">Email</th>
                 <th className="px-6 py-4 text-left">Téléphone</th>
-                <th className="px-6 py-4 text-left">Billet</th>
                 <th className="px-6 py-4 text-left">Qté</th>
                 <th className="px-6 py-4 text-left">Montant</th>
                 <th className="px-6 py-4 text-left">Paiement</th>
-                <th className="px-6 py-4 text-left">Billet</th>
+                <th className="px-6 py-4 text-left">Billets scannés</th>
                 <th className="px-6 py-4 text-left">Date</th>
-                
               </tr>
             </thead>
 
             <tbody>
-              {participants.map((participant) => (
-                <tr
-                  key={participant.id}
-                  className="border-b hover:bg-gray-50"
-                >
-                  <td className="px-6 py-4 font-medium">
-                    {participant.participant.nom}
-                  </td>
-
+              {orders.map((order) => (
+                <tr key={order.id} className="border-b hover:bg-gray-50">
+                  <td className="px-6 py-4 font-medium">{order.buyerName}</td>
+                  <td className="px-6 py-4">{order.buyerEmail}</td>
+                  <td className="px-6 py-4">{order.buyerPhone || "—"}</td>
+                  <td className="px-6 py-4">{order.quantity}</td>
+                  <td className="px-6 py-4">{order.amount.toLocaleString("fr-FR")} FCFA</td>
                   <td className="px-6 py-4">
-                    {participant.participant.email}
+                    <Badge tone="ok">Payé</Badge>
                   </td>
-
                   <td className="px-6 py-4">
-                    {participant.participant.telephone}
+                    {usedCountForOrder(order.id)} / {order.quantity}
                   </td>
-
                   <td className="px-6 py-4">
-                    {participant.typeBillet}
+                    {new Date(order.purchasedAt).toLocaleDateString("fr-FR")}
                   </td>
-
-                  <td className="px-6 py-4">
-                    {participant.quantite}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {participant.montant.toLocaleString()} FCFA
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {getPaymentBadge(participant.statutPaiement)}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {getTicketBadge(participant.statutBillet)}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    {new Date(participant.dateAchat).toLocaleDateString("fr-FR")}
-                  </td>
-
-                  
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
       )}

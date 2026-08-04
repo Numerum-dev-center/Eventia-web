@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { deleteEvent, getEventById } from "../../data/eventsData";
+import { getEventStats } from "../../data/ordersData";
 import StatCard from "../../components/organizer/StatCard";
 
 const formatCurrency = (value) =>
@@ -20,15 +21,12 @@ function EventDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const event = getEventById(id);
+  const stats = event ? getEventStats(id) : null;
 
-  const totalTickets = Number(event?.capacity || event?.tickets || 0);
-  const ticketsSold = event?.ticketsSold ?? 0;
-  const orders = event?.orders ?? 0;
-  const checkins = event?.checkins ?? 0;
-  const revenue = event?.revenue ?? ticketsSold * Number(event?.price || 0);
-  const remainingTickets = Math.max(totalTickets - ticketsSold, 0);
-  const occupancyRate =
-    totalTickets > 0 ? Math.round((ticketsSold / totalTickets) * 100) : 0;
+  const ticketsSold = stats?.ticketsSold ?? 0;
+  const revenue = stats?.revenue ?? 0;
+  const remainingTickets = stats?.remaining ?? 0;
+  const occupancyRate = stats?.occupancyRate ?? 0;
 
   if (!event) {
     return (

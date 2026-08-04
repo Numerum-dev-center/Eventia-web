@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom";
-import {
-  ArrowRight,
-  CalendarDays,
-  MapPin,
-  Search,
-  Sparkles,
-  Tag,
-  Zap,
-} from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Search, Sparkles, Zap } from "lucide-react";
 
 function Hero() {
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(search.trim() ? `/events?q=${encodeURIComponent(search.trim())}` : "/events");
+  };
+
   return (
     <section className="relative overflow-hidden bg-[#0B1330] pt-40 pb-32">
       {/* Fond : grille + halo radial, façon "Cosmo" */}
@@ -56,7 +57,7 @@ function Hero() {
           </Link>
 
           <Link
-            to="#events"
+            to="/events"
             className="border border-white/20 text-white rounded-xl px-6 py-3 font-semibold hover:border-blue-300 hover:text-blue-200 transition"
           >
             Voir les événements
@@ -71,7 +72,10 @@ function Hero() {
             Réservez votre place pour l'événement
           </h2>
 
-          <div className="grid gap-4 lg:grid-cols-[2fr_1fr_1fr_1fr_auto] lg:items-end">
+          <form
+            onSubmit={handleSearch}
+            className="grid gap-4 lg:grid-cols-[2fr_auto] lg:items-end"
+          >
             <label className="flex flex-col gap-1.5">
               <span className="text-xs font-medium text-gray-500">
                 Recherche
@@ -80,58 +84,22 @@ function Hero() {
                 <Search size={18} className="text-gray-400 shrink-0" />
                 <input
                   type="text"
-                  placeholder="Rechercher par nom ou type"
-                  className="w-full outline-none text-sm placeholder:text-gray-400"
-                />
-              </span>
-            </label>
-
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-gray-500">Date</span>
-              <span className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 text-gray-700 focus-within:border-blue-400">
-                <CalendarDays size={18} className="text-gray-400 shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Date"
-                  className="w-full outline-none text-sm placeholder:text-gray-400"
-                />
-              </span>
-            </label>
-
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-gray-500">Lieu</span>
-              <span className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 text-gray-700 focus-within:border-blue-400">
-                <MapPin size={18} className="text-gray-400 shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Lieu"
-                  className="w-full outline-none text-sm placeholder:text-gray-400"
-                />
-              </span>
-            </label>
-
-            <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-gray-500">
-                Catégorie
-              </span>
-              <span className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 text-gray-700 focus-within:border-blue-400">
-                <Tag size={18} className="text-gray-400 shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Catégorie"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Rechercher par nom, lieu ou catégorie"
                   className="w-full outline-none text-sm placeholder:text-gray-400"
                 />
               </span>
             </label>
 
             <button
-              type="button"
+              type="submit"
               className="bg-blue-500 text-white rounded-xl px-6 py-2.5 font-semibold hover:bg-blue-600 transition inline-flex items-center justify-center gap-2"
             >
               <Search size={18} />
               Rechercher
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </section>

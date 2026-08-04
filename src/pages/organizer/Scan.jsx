@@ -2,6 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { ArrowLeft, Camera, CheckCircle2, ScanLine, XCircle } from "lucide-react";
 
+import { validateTicket } from "../../data/ordersData";
+
 function Scan() {
   const { id } = useParams();
   const [code, setCode] = useState("");
@@ -10,8 +12,9 @@ function Scan() {
   const handleCheck = (e) => {
     e.preventDefault();
     if (!code.trim()) return;
-    // Pas encore d'API de contrôle d'accès : simulation locale pour prévisualiser l'interface.
-    setResult({ ok: false, message: "Vérification indisponible — API de contrôle d'accès non branchée." });
+    const outcome = validateTicket(code, { location: "Entrée principale" });
+    setResult(outcome);
+    setCode("");
   };
 
   return (
