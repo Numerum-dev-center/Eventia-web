@@ -1,13 +1,21 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Eye, Pencil, CalendarDays } from "lucide-react";
+import { Plus, Eye, Pencil, CalendarDays, Loader2 } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import Button from "../../components/ui/Button";
 import EmptyState from "../../components/ui/EmptyState";
-import { getEvents } from "../../data/eventsData";
+import { fetchMyEvents } from "../../services/eventsApiService";
 
 function EventsList() {
-  const events = getEvents();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMyEvents()
+      .then(setEvents)
+      .finally(() => setLoading(false));
+  }, []);
 
   const getStatusBadge = (status) => {
     const styles = {
@@ -47,7 +55,12 @@ function EventsList() {
         }
       />
 
-      {events.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
+          <Loader2 size={18} className="animate-spin" />
+          Chargement...
+        </div>
+      ) : events.length === 0 ? (
         <EmptyState
           icon={CalendarDays}
           title="Aucun événement pour le moment"

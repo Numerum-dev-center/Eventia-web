@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { CalendarDays, MapPin, Search, Sparkles } from "lucide-react";
+import { CalendarDays, Loader2, MapPin, Search, Sparkles } from "lucide-react";
 
 import NavBar from "../components/landing/NavBar";
 import Footer from "../components/landing/Footer";
-import { getPublishedEvents } from "../data/eventsData";
+import { fetchPublishedEvents } from "../services/eventsApiService";
 
 const formatDate = (value) =>
   new Date(value).toLocaleDateString("fr-FR", {
@@ -16,7 +16,14 @@ const formatDate = (value) =>
 function EventsBrowse() {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
-  const events = getPublishedEvents();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPublishedEvents()
+      .then(setEvents)
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -56,7 +63,12 @@ function EventsBrowse() {
           />
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="mt-16 flex items-center justify-center gap-2 text-gray-500">
+            <Loader2 size={18} className="animate-spin" />
+            Chargement des événements...
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="mt-16 text-center text-gray-500 bg-white rounded-2xl p-12 border border-dashed border-gray-200">
             Aucun événement ne correspond à votre recherche.
           </div>

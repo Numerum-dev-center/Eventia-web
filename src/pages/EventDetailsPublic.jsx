@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   CalendarDays,
   CheckCircle2,
   Clock,
+  Loader2,
   MapPin,
   Ticket,
 } from "lucide-react";
@@ -13,8 +14,7 @@ import NavBar from "../components/landing/NavBar";
 import Footer from "../components/landing/Footer";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import { getEventById } from "../data/eventsData";
-import { createOrder, getRemainingTickets } from "../data/ordersData";
+import { fetchEventById, reserverBillets } from "../services/eventsApiService";
 import { getStoredAuth } from "../services/authSession";
 
 const formatDate = (value) =>
@@ -27,16 +27,36 @@ const formatDate = (value) =>
 
 function EventDetailsPublic() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const event = getEventById(id);
   const auth = getStoredAuth();
 
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [buyerName, setBuyerName] = useState(auth?.user?.email ? "" : "");
+  const [buyerName, setBuyerName] = useState("");
   const [buyerEmail, setBuyerEmail] = useState(auth?.user?.email || "");
   const [buyerPhone, setBuyerPhone] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [confirmation, setConfirmation] = useState(null);
+
+  useEffect(() => {
+    fetchEventById(id)
+      .then(setEvent)
+      .catch(() => setEvent(null))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#EEF1F6]">
+        <NavBar />
+        <div className="flex items-center justify-center gap-2 pt-40 text-gray-500">
+          <Loader2 size={18} className="animate-spin" />
+          Chargement de l'événement...
+        </div>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
@@ -52,9 +72,9 @@ function EventDetailsPublic() {
     );
   }
 
-  const remaining = getRemainingTickets(event.id);
+  const remaining = event.remaining;
 
-  const handleReserve = (e) => {
+  const handleReserve = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -67,17 +87,22 @@ function EventDetailsPublic() {
       return;
     }
 
+    setSubmitting(true);
     try {
-      const result = createOrder({
-        eventId: event.id,
+      const result = await reserverBillets({
+        categorieTicketId: event.categorieTicketId,
+        quantite: quantity,
         buyerName: buyerName.trim(),
         buyerEmail: buyerEmail.trim(),
-        buyerPhone: buyerPhone.trim(),
-        quantity,
+        buyerTelephone: buyerPhone.trim() || undefined,
       });
       setConfirmation(result);
     } catch (err) {
-      setError(err.message || "Impossible de finaliser la réservation.");
+      setError(
+        err?.response?.data?.message || "Impossible de finaliser la réservation."
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -92,18 +117,18 @@ function EventDetailsPublic() {
             </div>
             <h1 className="text-2xl font-bold text-gray-900">Réservation confirmée</h1>
             <p className="text-gray-500 mt-2">
-              {confirmation.tickets.length} billet(s) pour <b>{event.title}</b>.
+              {confirmation.billets.length} billet(s) pour <b>{event.title}</b>.
             </p>
 
             <div className="mt-6 space-y-2 text-left">
-              {confirmation.tickets.map((ticket) => (
+              {confirmation.billets.map((ticket) => (
                 <div
                   key={ticket.id}
                   className="flex items-center justify-between bg-orange-50 rounded-xl px-4 py-3"
                 >
                   <span className="flex items-center gap-2 text-sm font-medium text-orange-700">
                     <Ticket size={16} />
-                    {ticket.code}
+                    {ticket.codeUniqueCrypto}
                   </span>
                   <span className="text-xs text-orange-500">Valide</span>
                 </div>
@@ -134,9 +159,11 @@ function EventDetailsPublic() {
           Tous les événements
         </Link>
 
-        <div className="mt-4 rounded-2xl overflow-hidden h-72">
-          <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
-        </div>
+        {event.image && (
+          <div className="mt-4 rounded-2xl overflow-hidden h-72">
+            <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-[2fr_1fr] gap-8 mt-8">
           <div>
@@ -202,7 +229,9 @@ function EventDetailsPublic() {
                   }
                 />
 
-                <Button type="submit">Réserver {quantity} billet(s)</Button>
+                <Button type="submit" disabled={submitting}>
+                  {submitting ? "Réservation..." : `Réserver ${quantity} billet(s)`}
+                </Button>
               </form>
             ) : (
               <p className="mt-5 text-sm text-gray-500">

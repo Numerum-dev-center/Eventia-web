@@ -11,7 +11,7 @@ import {
   geocodeOpenStreetMapPlace,
   searchOpenStreetMapPlaces,
 } from "../../services/openStreetMapService";
-import { addEvent } from "../../data/eventsData";
+import { createEvent } from "../../services/eventsApiService";
 
 
 
@@ -117,11 +117,6 @@ function EventsCreate() {
       newErrors.category = "La catégorie est obligatoire";
     }
 
-    if (!image) {
-      newErrors.image =
-        "Veuillez ajouter une image pour l'événement";
-    }
-
     if (!startTime) {
   newErrors.startTime = "L'heure de début est obligatoire";
 }
@@ -175,14 +170,21 @@ if (!endTime) {
       price,
       category,
       description,
-      image: URL.createObjectURL(image),
       startTime,
       endTime,
+      publish: true,
     };
 
-    const createdEvent = addEvent(eventData);
-
-    navigate(`/organizer/events/${createdEvent.id}`);
+    try {
+      const createdEvent = await createEvent(eventData);
+      navigate(`/organizer/events/${createdEvent.id}`);
+    } catch (err) {
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        submit:
+          err?.response?.data?.message || "Impossible de créer l'événement.",
+      }));
+    }
   };
 
   return (
@@ -459,6 +461,9 @@ if (!endTime) {
 
         {/* Bouton */}
         <div className="mt-8">
+          {errors.submit && (
+            <p className="text-red-500 text-sm mb-3">{errors.submit}</p>
+          )}
           <Button type="submit">
             Créer l'événement
           </Button>

@@ -16,20 +16,31 @@ import {
 import StatCard from "../../components/organizer/StatCard";
 import EventCard from "../../components/organizer/EventsCard";
 
-import { getOrganizerOverview } from "../../data/ordersData";
-import { getEvents } from "../../data/eventsData";
+import { fetchMyEvents, fetchOrganizerDashboard } from "../../services/eventsApiService";
 
 function Dashboard() {
   const [dashboard, setDashboard] = useState(null);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const events = getEvents();
 
   const [activeMetric, setActiveMetric] = useState("revenue");
 
 
   useEffect(() => {
-    setDashboard(getOrganizerOverview());
-    setLoading(false);
+    Promise.all([fetchOrganizerDashboard(), fetchMyEvents()])
+      .then(([dash, ev]) => {
+        setDashboard({
+          revenue: dash.revenue,
+          users: dash.inscrits,
+          checkins: dash.checkins,
+          tickets: dash.inscrits,
+          chart: [
+            { month: "Actuel", revenue: dash.revenue, users: dash.inscrits, checkins: dash.checkins, notes: 0 },
+          ],
+        });
+        setEvents(ev);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -128,7 +139,7 @@ function Dashboard() {
             Événements à venir
           </h2>
 
-          <EventCard event={events[0]} />
+          {events[0] && <EventCard event={events[0]} />}
 
           <CalendarWidget />
 

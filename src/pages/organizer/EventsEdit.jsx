@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
-import { getEventById, updateEvent } from "../../data/eventsData";
+import { fetchEventById, updateEvent } from "../../services/eventsApiService";
 
 import {
   geocodeOpenStreetMapPlace,
@@ -14,24 +14,40 @@ function EventsEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const currentEvent = getEventById(id);
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [title, setTitle] = useState(currentEvent?.title || "");
-  const [date, setDate] = useState(currentEvent?.date || "");
-  const [location, setLocation] = useState(currentEvent?.location || "");
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
-  const [locationDetails, setLocationDetails] = useState(currentEvent || null);
-  const [tickets, setTickets] = useState(currentEvent?.tickets || "");
-  const [price, setPrice] = useState(currentEvent?.price || "");
-  const [category, setCategory] = useState(currentEvent?.category || "");
-  const [description, setDescription] = useState(
-    currentEvent?.description || ""
-  );
+  const [locationDetails, setLocationDetails] = useState(null);
+  const [tickets, setTickets] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
 
   const [image, setImage] = useState(null);
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    fetchEventById(id)
+      .then((ev) => {
+        setCurrentEvent(ev);
+        setTitle(ev.title || "");
+        setDate(ev.date || "");
+        setLocation(ev.location || "");
+        setLocationDetails(ev);
+        setTickets(ev.capacity || "");
+        setPrice(ev.price || "");
+        setCategory(ev.category || "");
+        setDescription(ev.description || "");
+      })
+      .catch(() => setCurrentEvent(null))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   useEffect(() => {
     const query = location.trim();
@@ -141,27 +157,39 @@ function EventsEdit() {
     setLocation(resolvedLocation.formattedAddress);
     setLocationDetails(resolvedLocation);
 
-    updateEvent(id, {
-      title,
-      date,
-      location: resolvedLocation.formattedAddress,
-      coordinates: {
-        latitude: resolvedLocation.latitude,
-        longitude: resolvedLocation.longitude,
-      },
-      tickets,
-      capacity: Number(tickets) || currentEvent.capacity,
-      price,
-      category,
-      description,
-    });
-
-    navigate(`/organizer/events/${id}`, { replace: true });
+    try {
+      await updateEvent(id, {
+        title,
+        date,
+        location: resolvedLocation.formattedAddress,
+        coordinates: {
+          latitude: resolvedLocation.latitude,
+          longitude: resolvedLocation.longitude,
+        },
+        capacity: Number(tickets) || currentEvent.capacity,
+        price,
+        category,
+        description,
+        categorieTicketId: currentEvent.categorieTicketId,
+      });
+      navigate(`/organizer/events/${id}`, { replace: true });
+    } catch (err) {
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        submit: err?.response?.data?.message || "Impossible d'enregistrer les modifications.",
+      }));
+    }
   };
 
   const handleCancel = () => {
     navigate(-1);
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto text-gray-500">Chargement...</div>
+    );
+  }
 
   if (!currentEvent) {
     return (
@@ -318,14 +346,14 @@ function EventsEdit() {
         </div>
 
         <div className="mt-6">
-            
-
           <label className="block mb-2 font-medium">
             Modifier la photo
           </label>
+          <p className="text-xs text-gray-400 mb-2">
+            L'hébergement d'image n'est pas encore branché côté serveur — l'aperçu reste local.
+          </p>
 
           <input
-
             type="file"
             accept="image/*"
             onChange={(e) =>
@@ -337,14 +365,13 @@ function EventsEdit() {
               border-gray-300
               rounded-xl
               p-3
-            "            
+            "
           />
 
           {image && (
             <img
               src={URL.createObjectURL(image)}
-              alt="
-            {URL.createObjectURL(image)}Prévisualisation"
+              alt="Prévisualisation"
               className="
                 mt-4
                 h-64
@@ -382,6 +409,10 @@ function EventsEdit() {
           />
 
         </div>
+
+        {errors.submit && (
+          <p className="text-red-500 text-sm mt-4">{errors.submit}</p>
+        )}
 
         <div className="flex gap-4 mt-8">
 

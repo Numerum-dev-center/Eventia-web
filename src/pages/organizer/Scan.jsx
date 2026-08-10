@@ -2,19 +2,34 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { ArrowLeft, Camera, CheckCircle2, ScanLine, XCircle } from "lucide-react";
 
-import { validateTicket } from "../../data/ordersData";
+import { scanTicket } from "../../services/eventsApiService";
 
 function Scan() {
   const { id } = useParams();
   const [code, setCode] = useState("");
   const [result, setResult] = useState(null);
+  const [scanning, setScanning] = useState(false);
 
-  const handleCheck = (e) => {
+  const handleCheck = async (e) => {
     e.preventDefault();
     if (!code.trim()) return;
-    const outcome = validateTicket(code, { location: "Entrée principale" });
-    setResult(outcome);
-    setCode("");
+    setScanning(true);
+    try {
+      const outcome = await scanTicket({
+        codeUniqueCrypto: code.trim(),
+        evenementId: id,
+        localisation: "Entrée principale",
+      });
+      setResult(outcome);
+    } catch (err) {
+      setResult({
+        ok: false,
+        message: err?.response?.data?.message || "Erreur lors de la vérification.",
+      });
+    } finally {
+      setScanning(false);
+      setCode("");
+    }
   };
 
   return (
@@ -54,9 +69,10 @@ function Scan() {
           />
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600 transition rounded-xl px-5 font-semibold text-sm"
+            disabled={scanning}
+            className="bg-orange-500 hover:bg-orange-600 transition rounded-xl px-5 font-semibold text-sm disabled:opacity-50"
           >
-            Vérifier
+            {scanning ? "..." : "Vérifier"}
           </button>
         </form>
 

@@ -1,10 +1,10 @@
-import { CalendarDays, Check, X } from "lucide-react";
+import { CalendarDays, Check, X, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Badge from "../../components/ui/Badge";
-import { getEvents, updateEvent } from "../../data/eventsData";
-import { useState } from "react";
+import { fetchAllEventsAdmin, setEventStatusAdmin } from "../../services/eventsApiService";
 
 const STATUS_TONE = {
   PUBLISHED: "ok",
@@ -21,13 +21,40 @@ const STATUS_LABEL = {
 };
 
 function Events() {
-  const [, forceRender] = useState(0);
-  const events = getEvents();
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState(null);
 
-  const setStatus = (id, status) => {
-    updateEvent(id, { status });
-    forceRender((n) => n + 1);
+  const load = () => {
+    setLoading(true);
+    fetchAllEventsAdmin()
+      .then((data) => setEvents(Array.isArray(data) ? data : []))
+      .catch(() => setEvents([]))
+      .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const setStatus = async (id, status) => {
+    setUpdatingId(id);
+    try {
+      await setEventStatusAdmin(id, status);
+      load();
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Chargement des événements...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -69,8 +96,9 @@ function Events() {
                     <div className="flex items-center justify-end gap-3">
                       {event.status !== "PUBLISHED" && (
                         <button
+                          disabled={updatingId === event.id}
                           onClick={() => setStatus(event.id, "PUBLISHED")}
-                          className="inline-flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 text-sm font-medium"
+                          className="inline-flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 text-sm font-medium disabled:opacity-50"
                         >
                           <Check size={15} />
                           Valider
@@ -78,8 +106,9 @@ function Events() {
                       )}
                       {event.status !== "CANCELLED" && (
                         <button
+                          disabled={updatingId === event.id}
                           onClick={() => setStatus(event.id, "CANCELLED")}
-                          className="inline-flex items-center gap-1.5 text-red-500 hover:text-red-600 text-sm font-medium"
+                          className="inline-flex items-center gap-1.5 text-red-500 hover:text-red-600 text-sm font-medium disabled:opacity-50"
                         >
                           <X size={15} />
                           Rejeter

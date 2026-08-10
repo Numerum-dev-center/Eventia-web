@@ -1,14 +1,22 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, ClipboardList, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ClipboardList, Loader2, XCircle } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Button from "../../components/ui/Button";
-import { getScansByEvent } from "../../data/ordersData";
+import { fetchAccessLog } from "../../services/eventsApiService";
 
 function AccessLog() {
   const { id } = useParams();
-  const scans = getScansByEvent(id);
+  const [scans, setScans] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAccessLog(id)
+      .then(setScans)
+      .finally(() => setLoading(false));
+  }, [id]);
 
   return (
     <div className="space-y-6">
@@ -30,7 +38,12 @@ function AccessLog() {
         }
       />
 
-      {scans.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
+          <Loader2 size={18} className="animate-spin" />
+          Chargement...
+        </div>
+      ) : scans.length === 0 ? (
         <EmptyState
           icon={ClipboardList}
           title="Aucun scan enregistré"
@@ -56,7 +69,7 @@ function AccessLog() {
               {scans.map((scan) => (
                 <tr key={scan.id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    {scan.success ? (
+                    {scan.estSucces ? (
                       <span className="inline-flex items-center gap-1.5 text-emerald-600 text-sm font-medium">
                         <CheckCircle2 size={16} />
                         Validé
@@ -68,10 +81,12 @@ function AccessLog() {
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-gray-600">{scan.message}</td>
-                  <td className="px-6 py-4 text-gray-600">{scan.location}</td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {scan.messageErreur || "Billet validé"}
+                  </td>
+                  <td className="px-6 py-4 text-gray-600">{scan.localisation}</td>
                   <td className="px-6 py-4 text-gray-500">
-                    {new Date(scan.scannedAt).toLocaleString("fr-FR")}
+                    {new Date(scan.createdAt).toLocaleString("fr-FR")}
                   </td>
                 </tr>
               ))}

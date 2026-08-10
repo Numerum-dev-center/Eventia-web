@@ -1,16 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
   BadgeCheck,
   Gauge,
+  Loader2,
   ShoppingCart,
   Ticket,
   Users,
   UsersRound,
 } from "lucide-react";
 
-import { deleteEvent, getEventById } from "../../data/eventsData";
-import { getEventStats } from "../../data/ordersData";
+import {
+  deleteEvent,
+  fetchEventById,
+  fetchEventFinance,
+} from "../../services/eventsApiService";
 import StatCard from "../../components/organizer/StatCard";
 
 const formatCurrency = (value) =>
@@ -20,13 +25,36 @@ function EventDetails() {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const event = getEventById(id);
-  const stats = event ? getEventStats(id) : null;
+  const [event, setEvent] = useState(null);
+  const [finance, setFinance] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const ticketsSold = stats?.ticketsSold ?? 0;
-  const revenue = stats?.revenue ?? 0;
-  const remainingTickets = stats?.remaining ?? 0;
-  const occupancyRate = stats?.occupancyRate ?? 0;
+  useEffect(() => {
+    Promise.all([fetchEventById(id), fetchEventFinance(id)])
+      .then(([ev, fin]) => {
+        setEvent(ev);
+        setFinance(fin);
+      })
+      .catch(() => setEvent(null))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  const ticketsSold = finance?.ticketsVendus ?? 0;
+  const revenue = finance?.revenue ?? 0;
+  const remainingTickets = event?.remaining ?? 0;
+  const occupancyRate =
+    event && event.capacity > 0
+      ? Math.round(((event.capacity - event.remaining) / event.capacity) * 100)
+      : 0;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Chargement...
+      </div>
+    );
+  }
 
   if (!event) {
     return (
@@ -217,9 +245,9 @@ function EventDetails() {
   </Link>
 
   <button
-    onClick={() => {
+    onClick={async () => {
       if (window.confirm("Supprimer définitivement cet événement ?")) {
-        deleteEvent(id);
+        await deleteEvent(id);
         navigate("/organizer/events", { replace: true });
       }
     }}

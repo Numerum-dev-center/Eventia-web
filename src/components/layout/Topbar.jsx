@@ -5,18 +5,10 @@ import { Link } from "react-router-dom";
 import { getStoredAuth } from "../../services/authSession";
 import { useState } from "react";
 
-import { getEvents } from "../../data/eventsData";
-
 function OrganizerTopbar({ title, subtitle, organizer }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEvents = getEvents().filter((event) =>
-  event.titre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  event.lieu?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  event.categorie?.toLowerCase().includes(searchTerm.toLowerCase())
-);
 
-  
   return (
     <header className="bg-white border border-gray-100 shadow-sm rounded-2xl px-6 py-4 mb-2 flex items-center justify-between gap-6">
 

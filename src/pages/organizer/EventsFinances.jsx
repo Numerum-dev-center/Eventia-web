@@ -1,21 +1,35 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, HandCoins, ShoppingCart, Wallet } from "lucide-react";
+import { ArrowLeft, HandCoins, Loader2, ShoppingCart, Wallet } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
-import Button from "../../components/ui/Button";
 import StatCard from "../../components/organizer/StatCard";
-import { getOrdersByEvent } from "../../data/ordersData";
-import { getEventStats } from "../../data/ordersData";
-
-const COMMISSION_RATE = 0.05;
+import { fetchEventFinance, fetchParticipants } from "../../services/eventsApiService";
 
 function EventsFinances() {
   const { id } = useParams();
-  const orders = getOrdersByEvent(id);
-  const stats = getEventStats(id);
-  const commission = Math.round(stats.revenue * COMMISSION_RATE);
-  const net = stats.revenue - commission;
+  const [finance, setFinance] = useState(null);
+  const [commandes, setCommandes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([fetchEventFinance(id), fetchParticipants(id)])
+      .then(([f, c]) => {
+        setFinance(f);
+        setCommandes(c);
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Chargement...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -33,12 +47,12 @@ function EventsFinances() {
       />
 
       <div className="grid sm:grid-cols-3 gap-4">
-        <StatCard title="Revenus bruts" value={`${stats.revenue.toLocaleString("fr-FR")} FCFA`} icon={<Wallet size={26} />} />
-        <StatCard title="Commission (5%)" value={`${commission.toLocaleString("fr-FR")} FCFA`} icon={<HandCoins size={26} />} />
-        <StatCard title="Reversement net" value={`${net.toLocaleString("fr-FR")} FCFA`} icon={<ShoppingCart size={26} />} />
+        <StatCard title="Revenus bruts" value={`${finance.revenue.toLocaleString("fr-FR")} FCFA`} icon={<Wallet size={26} />} />
+        <StatCard title="Commission (5%)" value={`${finance.commission.toLocaleString("fr-FR")} FCFA`} icon={<HandCoins size={26} />} />
+        <StatCard title="Reversement net" value={`${finance.net.toLocaleString("fr-FR")} FCFA`} icon={<ShoppingCart size={26} />} />
       </div>
 
-      {orders.length === 0 ? (
+      {commandes.length === 0 ? (
         <EmptyState
           icon={Wallet}
           title="Aucune vente pour le moment"
@@ -56,13 +70,15 @@ function EventsFinances() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
-                <tr key={order.id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium">{order.buyerName}</td>
-                  <td className="px-6 py-4">{order.quantity}</td>
-                  <td className="px-6 py-4">{order.amount.toLocaleString("fr-FR")} FCFA</td>
+              {commandes.map((commande) => (
+                <tr key={commande.id} className="border-b hover:bg-gray-50">
+                  <td className="px-6 py-4 font-medium">{commande.buyerName}</td>
+                  <td className="px-6 py-4">{commande.ticketsEmis?.length ?? 0}</td>
+                  <td className="px-6 py-4">
+                    {Number(commande.montantTotal).toLocaleString("fr-FR")} FCFA
+                  </td>
                   <td className="px-6 py-4 text-gray-500">
-                    {new Date(order.purchasedAt).toLocaleDateString("fr-FR")}
+                    {new Date(commande.dateCommande).toLocaleDateString("fr-FR")}
                   </td>
                 </tr>
               ))}

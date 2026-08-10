@@ -1,20 +1,43 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Users } from "lucide-react";
+import { ArrowLeft, Loader2, Users } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Badge from "../../components/ui/Badge";
-import { getEventById } from "../../data/eventsData";
-import { getOrdersByEvent, getTicketsByEvent } from "../../data/ordersData";
+import { fetchEventById, fetchParticipants } from "../../services/eventsApiService";
+
+const STATUT_TONE = {
+  Payé: "ok",
+  "En attente": "warn",
+  Echoué: "danger",
+};
 
 function EventParticipants() {
   const { id } = useParams();
-  const event = getEventById(id);
-  const orders = getOrdersByEvent(id);
-  const tickets = getTicketsByEvent(id);
+  const [event, setEvent] = useState(null);
+  const [commandes, setCommandes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const usedCountForOrder = (orderId) =>
-    tickets.filter((t) => t.orderId === orderId && t.status === "UTILISE").length;
+  useEffect(() => {
+    Promise.all([fetchEventById(id), fetchParticipants(id)])
+      .then(([ev, c]) => {
+        setEvent(ev);
+        setCommandes(c);
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  const totalBillets = commandes.reduce((sum, c) => sum + (c.ticketsEmis?.length ?? 0), 0);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Chargement...
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -31,12 +54,12 @@ function EventParticipants() {
         subtitle={event ? event.title : undefined}
         action={
           <div className="text-sm text-gray-500">
-            Total : <strong>{orders.length}</strong> commande(s) — {tickets.length} billet(s)
+            Total : <strong>{commandes.length}</strong> commande(s) — {totalBillets} billet(s)
           </div>
         }
       />
 
-      {orders.length === 0 ? (
+      {commandes.length === 0 ? (
         <EmptyState
           icon={Users}
           title="Aucun participant pour le moment"
@@ -59,24 +82,32 @@ function EventParticipants() {
             </thead>
 
             <tbody>
-              {orders.map((order) => (
-                <tr key={order.id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium">{order.buyerName}</td>
-                  <td className="px-6 py-4">{order.buyerEmail}</td>
-                  <td className="px-6 py-4">{order.buyerPhone || "—"}</td>
-                  <td className="px-6 py-4">{order.quantity}</td>
-                  <td className="px-6 py-4">{order.amount.toLocaleString("fr-FR")} FCFA</td>
-                  <td className="px-6 py-4">
-                    <Badge tone="ok">Payé</Badge>
-                  </td>
-                  <td className="px-6 py-4">
-                    {usedCountForOrder(order.id)} / {order.quantity}
-                  </td>
-                  <td className="px-6 py-4">
-                    {new Date(order.purchasedAt).toLocaleDateString("fr-FR")}
-                  </td>
-                </tr>
-              ))}
+              {commandes.map((commande) => {
+                const billets = commande.ticketsEmis ?? [];
+                const scannes = billets.filter((t) => t.statutValidation === "Scanne").length;
+                return (
+                  <tr key={commande.id} className="border-b hover:bg-gray-50">
+                    <td className="px-6 py-4 font-medium">{commande.buyerName}</td>
+                    <td className="px-6 py-4">{commande.buyerEmail}</td>
+                    <td className="px-6 py-4">{commande.buyerTelephone || "—"}</td>
+                    <td className="px-6 py-4">{billets.length}</td>
+                    <td className="px-6 py-4">
+                      {Number(commande.montantTotal).toLocaleString("fr-FR")} FCFA
+                    </td>
+                    <td className="px-6 py-4">
+                      <Badge tone={STATUT_TONE[commande.statutPaiement] || "muted"}>
+                        {commande.statutPaiement}
+                      </Badge>
+                    </td>
+                    <td className="px-6 py-4">
+                      {scannes} / {billets.length}
+                    </td>
+                    <td className="px-6 py-4">
+                      {new Date(commande.dateCommande).toLocaleDateString("fr-FR")}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
