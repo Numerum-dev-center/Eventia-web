@@ -23,7 +23,7 @@ function Reports() {
           {REPORTS.map(({ icon: Icon, label }) => (
             <li key={label} className="flex items-center justify-between px-4 py-4">
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-orange-500">
                   <Icon size={18} />
                 </span>
                 <span className="font-medium text-gray-800">{label}</span>

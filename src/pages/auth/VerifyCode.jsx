@@ -89,7 +89,7 @@ function VerifyCode() {
 
             <Link
               to="/forgot-password"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-500 mb-6"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
             >
               <ArrowLeft size={20} />
               <span>Retour</span>
@@ -114,7 +114,7 @@ function VerifyCode() {
             )}
 
             {resendMessage && (
-              <div className="mb-4 rounded-lg bg-blue-50 text-blue-700 p-3 text-sm" role="status">
+              <div className="mb-4 rounded-lg bg-orange-50 text-orange-700 p-3 text-sm" role="status">
                 {resendMessage}
               </div>
             )}
@@ -158,7 +158,7 @@ function VerifyCode() {
                 type="button"
                 onClick={handleResend}
                 disabled={resending}
-                className="text-blue-500 font-medium hover:underline disabled:opacity-50"
+                className="text-orange-500 font-medium hover:underline disabled:opacity-50"
               >
                 {resending ? "Envoi..." : "Renvoyer le code"}
               </button>
@@ -167,7 +167,7 @@ function VerifyCode() {
             <p className="mt-4 text-center text-sm">
               <Link
                 to="/login"
-                className="text-blue-500 hover:underline"
+                className="text-orange-500 hover:underline"
               >
                 Retour à la connexion
               </Link>

@@ -48,7 +48,7 @@ function HowItWorks() {
 
         <div className="text-center max-w-3xl mx-auto">
 
-          <span className="text-blue-500 font-semibold uppercase tracking-widest">
+          <span className="text-orange-500 font-semibold uppercase tracking-widest">
             Comment ça marche
           </span>
 
@@ -70,7 +70,7 @@ function HowItWorks() {
 
           {/* Ligne centrale (desktop uniquement) */}
 
-          <div className="hidden lg:block absolute top-12 left-0 w-full h-1 bg-blue-100 rounded-full"></div>
+          <div className="hidden lg:block absolute top-12 left-0 w-full h-1 bg-orange-100 rounded-full"></div>
 
           <div className="grid gap-10 lg:grid-cols-4 relative">
 
@@ -91,7 +91,7 @@ function HowItWorks() {
                       w-24
                       h-24
                       rounded-full
-                      bg-blue-500
+                      bg-orange-500
                       flex
                       items-center
                       justify-center
@@ -108,7 +108,7 @@ function HowItWorks() {
 
                   {/* Numéro */}
 
-                  <span className="block mt-6 text-blue-500 font-bold text-lg">
+                  <span className="block mt-6 text-orange-500 font-bold text-lg">
 
                     {step.number}
 

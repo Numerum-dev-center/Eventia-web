@@ -117,7 +117,7 @@ function ForgotPassword() {
             <div className="mt-8">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 text-blue-500 hover:underline font-medium"
+                className="inline-flex items-center gap-2 text-orange-500 hover:underline font-medium"
               >
                 <ArrowLeft size={18} />
                 Retour à la connexion

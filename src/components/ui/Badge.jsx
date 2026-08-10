@@ -1,5 +1,5 @@
 const TONES = {
-  neutral: "bg-blue-50 text-blue-600",
+  neutral: "bg-orange-50 text-orange-600",
   ok: "bg-emerald-50 text-emerald-600",
   warn: "bg-amber-50 text-amber-700",
   danger: "bg-red-50 text-red-600",

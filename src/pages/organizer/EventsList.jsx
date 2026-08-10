@@ -108,7 +108,7 @@ function EventsList() {
                     <div className="flex items-center gap-3">
                       <Link
                         to={`/organizer/events/${event.id}`}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-orange-600 hover:text-orange-800"
                         title="Voir"
                       >
                         <Eye size={18} />
@@ -117,7 +117,7 @@ function EventsList() {
                       {event.status === "DRAFT" && (
                         <Link
                           to={`/organizer/events/${event.id}/edit`}
-                          className="text-blue-500 hover:text-blue-700"
+                          className="text-orange-500 hover:text-orange-700"
                           title="Modifier"
                         >
                           <Pencil size={18} />

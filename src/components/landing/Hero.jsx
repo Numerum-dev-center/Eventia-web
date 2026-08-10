@@ -22,23 +22,23 @@ function Hero() {
           backgroundSize: "56px 56px",
         }}
       />
-      <div className="pointer-events-none absolute -top-32 right-0 h-[32rem] w-[32rem] rounded-full bg-blue-500/30 blur-3xl" />
+      <div className="pointer-events-none absolute -top-32 right-0 h-[32rem] w-[32rem] rounded-full bg-orange-500/30 blur-3xl" />
       <div className="pointer-events-none absolute top-1/3 -left-24 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
 
       <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <span className="inline-flex items-center gap-2 bg-white/10 text-blue-200 border border-white/10 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur">
+        <span className="inline-flex items-center gap-2 bg-white/10 text-orange-200 border border-white/10 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur">
           <Sparkles size={16} />
           Plateforme de gestion d'événements
         </span>
 
         <h1 className="mt-8 text-4xl lg:text-6xl font-extrabold text-white leading-tight">
           Trouvez votre prochaine{" "}
-          <span className="inline-flex items-center gap-2 text-blue-300">
+          <span className="inline-flex items-center gap-2 text-orange-300">
             expérience <Sparkles size={36} className="hidden sm:inline" />
           </span>
           <br />
           Réservez instantanément{" "}
-          <Zap size={36} className="inline text-blue-300 fill-blue-300" />
+          <Zap size={36} className="inline text-orange-300 fill-orange-300" />
         </h1>
 
         <p className="mt-6 text-lg text-slate-300 leading-8 max-w-2xl mx-auto">
@@ -50,7 +50,7 @@ function Hero() {
         <div className="flex flex-wrap justify-center gap-4 mt-10">
           <Link
             to="/register"
-            className="bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition inline-flex items-center gap-2"
+            className="bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition inline-flex items-center gap-2"
           >
             Commencer
             <ArrowRight size={18} />
@@ -58,7 +58,7 @@ function Hero() {
 
           <Link
             to="/events"
-            className="border border-white/20 text-white rounded-xl px-6 py-3 font-semibold hover:border-blue-300 hover:text-blue-200 transition"
+            className="border border-white/20 text-white rounded-xl px-6 py-3 font-semibold hover:border-orange-300 hover:text-orange-200 transition"
           >
             Voir les événements
           </Link>
@@ -80,7 +80,7 @@ function Hero() {
               <span className="text-xs font-medium text-gray-500">
                 Recherche
               </span>
-              <span className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 text-gray-700 focus-within:border-blue-400">
+              <span className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 text-gray-700 focus-within:border-orange-400">
                 <Search size={18} className="text-gray-400 shrink-0" />
                 <input
                   type="text"
@@ -94,7 +94,7 @@ function Hero() {
 
             <button
               type="submit"
-              className="bg-blue-500 text-white rounded-xl px-6 py-2.5 font-semibold hover:bg-blue-600 transition inline-flex items-center justify-center gap-2"
+              className="bg-orange-500 text-white rounded-xl px-6 py-2.5 font-semibold hover:bg-orange-600 transition inline-flex items-center justify-center gap-2"
             >
               <Search size={18} />
               Rechercher

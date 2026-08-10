@@ -21,7 +21,7 @@ function Input({
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        className={`w-5 h-5 rounded-md border-gray-300 text-blue-500 accent-blue-500 outline-none focus:ring-2 focus:ring-blue-300 ${className}`}
+        className={`w-5 h-5 rounded-md border-gray-300 text-orange-500 accent-orange-500 outline-none focus:ring-2 focus:ring-orange-300 ${className}`}
       />
     );
   }
@@ -55,9 +55,9 @@ function Input({
             placeholder:text-gray-400
             outline-none
             disabled:bg-gray-50 disabled:text-gray-400
-            focus:border-blue-500
+            focus:border-orange-500
             focus:ring-2
-            focus:ring-blue-100
+            focus:ring-orange-100
             transition
             ${className}
           `}

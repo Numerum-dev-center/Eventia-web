@@ -58,7 +58,7 @@ function Features() {
 
         <div className="text-center max-w-3xl mx-auto">
 
-          <span className="text-blue-500 font-semibold uppercase tracking-wider">
+          <span className="text-orange-500 font-semibold uppercase tracking-wider">
             Fonctionnalités
           </span>
 
@@ -101,7 +101,7 @@ function Features() {
                   w-16
                   h-16
                   rounded-2xl
-                  bg-blue-100
+                  bg-orange-100
                   flex
                   items-center
                   justify-center
@@ -109,7 +109,7 @@ function Features() {
 
                   <Icon
                     size={25}
-                    className="text-blue-500"
+                    className="text-orange-500"
                   />
 
                 </div>

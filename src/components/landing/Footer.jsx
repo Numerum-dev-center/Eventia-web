@@ -66,7 +66,7 @@ function Footer() {
               to="/"
               className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500 text-white text-sm">●</span>
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-white text-sm">●</span>
               Eventia
             </Link>
 
@@ -97,7 +97,7 @@ function Footer() {
 
               <a
                 href="#"
-                className="hover:text-blue-500"
+                className="hover:text-orange-500"
               >
                 <FaInstagram />
               </a>
@@ -105,7 +105,7 @@ function Footer() {
 
               <a
                 href="#)"
-                className="hover:text-blue-500"
+                className="hover:text-orange-500"
               >
                 <FaFacebook />
               </a>
@@ -113,7 +113,7 @@ function Footer() {
 
               <a
                 href="#"
-                className="hover:text-blue-500"
+                className="hover:text-orange-500"
               >
                 <FaLinkedin />
               </a>
@@ -121,7 +121,7 @@ function Footer() {
 
               <a
                 href="#"
-                className="hover:text-blue-500"
+                className="hover:text-orange-500"
               >
                 <FaXTwitter />
               </a>
@@ -149,7 +149,7 @@ function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="hover:text-blue-500"
+                    className="hover:text-orange-500"
                   >
                     {item}
                   </a>
@@ -179,7 +179,7 @@ function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="hover:text-blue-500"
+                    className="hover:text-orange-500"
                   >
                     {item}
                   </a>
@@ -209,7 +209,7 @@ function Footer() {
                 <li key={item}>
                   <a
                     href="#"
-                    className="hover:text-blue-500"
+                    className="hover:text-orange-500"
                   >
                     {item}
                   </a>

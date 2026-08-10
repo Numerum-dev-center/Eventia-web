@@ -20,7 +20,7 @@ function StatCard({
 
         ${
           active
-            ? "bg-blue-50 border-2 border-blue-500 shadow-lg scale-[1.02]"
+            ? "bg-orange-50 border-2 border-orange-500 shadow-lg scale-[1.02]"
             : "bg-white shadow hover:shadow-lg"
         }
       `}
@@ -46,8 +46,8 @@ function StatCard({
           text-3xl
           ${
             active
-              ? "text-blue-600"
-              : "text-blue-500"
+              ? "text-orange-600"
+              : "text-orange-500"
           }
         `}
       >

@@ -17,7 +17,7 @@ export default function EventCard({
       )}
 
       <div className="p-5">
-        <span className="bg-blue-100 text-blue-500 text-xs px-3 py-1 rounded-full">
+        <span className="bg-orange-100 text-orange-500 text-xs px-3 py-1 rounded-full">
           {event.category}
         </span>
 
@@ -35,8 +35,8 @@ export default function EventCard({
           className="
             inline-block
             mt-4
-            bg-blue-500
-            hover:bg-blue-600
+            bg-orange-500
+            hover:bg-orange-600
             text-white
             px-4
             py-2

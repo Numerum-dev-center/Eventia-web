@@ -68,7 +68,7 @@ function FAQ() {
 
           <span
             className="
-              text-blue-500
+              text-orange-500
               font-semibold
               uppercase
               tracking-widest
@@ -163,7 +163,7 @@ function FAQ() {
                     w-10
                     h-10
                     rounded-full
-                    bg-blue-100
+                    bg-orange-100
                     flex
                     items-center
                     justify-center
@@ -174,14 +174,14 @@ function FAQ() {
 
                     <Minus
                       size={20}
-                      className="text-blue-500"
+                      className="text-orange-500"
                     />
 
                   ) : (
 
                     <Plus
                       size={20}
-                      className="text-blue-500"
+                      className="text-orange-500"
                     />
 
                   )}

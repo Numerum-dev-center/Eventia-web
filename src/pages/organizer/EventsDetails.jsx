@@ -83,7 +83,7 @@ function EventDetails() {
       <div className="bg-white rounded-xl p-6 shadow">
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="rounded-2xl border border-gray-100 p-4 bg-blue-50">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
             <p className="text-sm text-gray-500">Places restantes</p>
             <p className="text-2xl font-bold mt-1 flex items-center gap-2">
               <Users size={20} />
@@ -91,12 +91,12 @@ function EventDetails() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-gray-100 p-4 bg-blue-50">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
             <p className="text-sm text-gray-500">Prix du ticket</p>
             <p className="text-2xl font-bold mt-1">{formatCurrency(event.price)}</p>
           </div>
 
-          <div className="rounded-2xl border border-gray-100 p-4 bg-blue-50 flex items-center justify-center">
+          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50 flex items-center justify-center">
   <Link
     to={`/organizer/events/${id}/billets`}
     className="
@@ -193,11 +193,11 @@ function EventDetails() {
   <Link
     to={`/organizer/events/${id}/edit`}
     className="
-      bg-blue-500
+      bg-orange-500
       text-white
       px-4 py-2
       rounded-lg
-      hover:bg-blue-600
+      hover:bg-orange-600
     "
   >
     Modifier

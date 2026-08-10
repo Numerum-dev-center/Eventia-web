@@ -20,7 +20,7 @@ function EventParticipants() {
     <div>
       <Link
         to={`/organizer/events/${id}`}
-        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-500 mb-4"
+        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500 mb-4"
       >
         <ArrowLeft size={16} />
         Retour à l'événement

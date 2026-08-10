@@ -245,7 +245,7 @@ function EventsEdit() {
                     key={place.id}
                     type="button"
                     onClick={() => handleSelectLocation(place)}
-                    className="w-full text-left px-4 py-3 hover:bg-blue-50 transition border-b border-gray-100 last:border-b-0"
+                    className="w-full text-left px-4 py-3 hover:bg-orange-50 transition border-b border-gray-100 last:border-b-0"
                   >
                     <span className="block font-medium text-gray-900">
                       {place.formattedAddress}
@@ -377,7 +377,7 @@ function EventsEdit() {
               rounded-2xl
               p-4
               outline-none
-              focus:border-blue-500
+              focus:border-orange-500
             "
           />
 

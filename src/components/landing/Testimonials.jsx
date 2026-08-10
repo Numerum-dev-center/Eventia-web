@@ -46,7 +46,7 @@ function Testimonials() {
 
           <span
             className="
-              text-blue-500
+              text-orange-500
               font-semibold
               uppercase
               tracking-widest
@@ -125,7 +125,7 @@ function Testimonials() {
                   <Star
                     key={star}
                     size={18}
-                    className="fill-blue-400 text-blue-400"
+                    className="fill-orange-400 text-orange-400"
                   />
 
                 ))}
@@ -169,11 +169,11 @@ function Testimonials() {
                     w-14
                     h-14
                     rounded-full
-                    bg-blue-100
+                    bg-orange-100
                     flex
                     items-center
                     justify-center
-                    text-blue-500
+                    text-orange-500
                     font-bold
                     text-xl
                   "

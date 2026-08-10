@@ -44,7 +44,7 @@ function EventDetailsPublic() {
         <NavBar />
         <div className="max-w-3xl mx-auto px-6 pt-40 text-center">
           <h1 className="text-2xl font-bold text-gray-900">Événement introuvable</h1>
-          <Link to="/events" className="text-blue-500 hover:underline mt-4 inline-block">
+          <Link to="/events" className="text-orange-500 hover:underline mt-4 inline-block">
             Retour aux événements
           </Link>
         </div>
@@ -99,13 +99,13 @@ function EventDetailsPublic() {
               {confirmation.tickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="flex items-center justify-between bg-blue-50 rounded-xl px-4 py-3"
+                  className="flex items-center justify-between bg-orange-50 rounded-xl px-4 py-3"
                 >
-                  <span className="flex items-center gap-2 text-sm font-medium text-blue-700">
+                  <span className="flex items-center gap-2 text-sm font-medium text-orange-700">
                     <Ticket size={16} />
                     {ticket.code}
                   </span>
-                  <span className="text-xs text-blue-500">Valide</span>
+                  <span className="text-xs text-orange-500">Valide</span>
                 </div>
               ))}
             </div>
@@ -129,7 +129,7 @@ function EventDetailsPublic() {
       <NavBar />
 
       <div className="max-w-5xl mx-auto px-6 pt-28 pb-20">
-        <Link to="/events" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-500">
+        <Link to="/events" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500">
           <ArrowLeft size={16} />
           Tous les événements
         </Link>
@@ -140,22 +140,22 @@ function EventDetailsPublic() {
 
         <div className="grid lg:grid-cols-[2fr_1fr] gap-8 mt-8">
           <div>
-            <span className="inline-block bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full">
+            <span className="inline-block bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">
               {event.category}
             </span>
             <h1 className="mt-3 text-3xl font-bold text-gray-900">{event.title}</h1>
 
             <div className="mt-4 flex flex-wrap gap-5 text-sm text-gray-600">
               <span className="flex items-center gap-2">
-                <CalendarDays size={16} className="text-blue-500" />
+                <CalendarDays size={16} className="text-orange-500" />
                 {formatDate(event.date)}
               </span>
               <span className="flex items-center gap-2">
-                <Clock size={16} className="text-blue-500" />
+                <Clock size={16} className="text-orange-500" />
                 {event.startTime} — {event.endTime}
               </span>
               <span className="flex items-center gap-2">
-                <MapPin size={16} className="text-blue-500" />
+                <MapPin size={16} className="text-orange-500" />
                 {event.location}
               </span>
             </div>

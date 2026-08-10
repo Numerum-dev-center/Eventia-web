@@ -49,7 +49,7 @@ const handleLogout = async () => {
       <div className="p-6 border-b border-white/10 flex items-center justify-between">
         {!collapsed && (
           <div className="flex items-center gap-2 min-w-0">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500">
               <Sparkles size={16} className="text-white" />
             </span>
             <h1 className="text-lg font-bold text-white truncate">
@@ -61,7 +61,7 @@ const handleLogout = async () => {
         <button
           onClick={() => setCollapsed(!collapsed)}
           className={`
-            p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-blue-300
+            p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-orange-300
             transition-all
             ${collapsed ? "mx-auto" : ""}
           `}
@@ -97,7 +97,7 @@ const handleLogout = async () => {
                     px-4 py-3 rounded-2xl transition-all
                     ${
                       isParentActive
-                        ? "bg-blue-500 text-white"
+                        ? "bg-orange-500 text-white"
                         : "text-slate-300 hover:bg-white/5"
                     }
                   `}
@@ -131,7 +131,7 @@ const handleLogout = async () => {
                               transition-all
                               ${
                                 isActive
-                                  ? "bg-blue-500/15 text-blue-300 font-semibold"
+                                  ? "bg-orange-500/15 text-orange-300 font-semibold"
                                   : "text-slate-400 hover:bg-white/5"
                               }
                             `
@@ -161,8 +161,8 @@ const handleLogout = async () => {
                   px-4 py-3 mb-2 rounded-2xl transition-all
                   ${
                     isActive
-                      ? "bg-blue-500 text-white font-semibold"
-                      : "text-slate-300 hover:bg-white/5 hover:text-blue-300"
+                      ? "bg-orange-500 text-white font-semibold"
+                      : "text-slate-300 hover:bg-white/5 hover:text-orange-300"
                   }
                 `
               }

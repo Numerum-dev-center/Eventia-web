@@ -21,15 +21,15 @@ function Scan() {
     <div className="min-h-[calc(100vh-160px)] -m-8 bg-[#0B1330] text-white p-8 rounded-2xl">
       <Link
         to={`/organizer/events/${id}`}
-        className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-blue-300"
+        className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-orange-300"
       >
         <ArrowLeft size={16} />
         Retour à l'événement
       </Link>
 
       <div className="max-w-md mx-auto mt-10 text-center">
-        <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-500/15 flex items-center justify-center mb-6">
-          <ScanLine size={28} className="text-blue-300" />
+        <div className="mx-auto w-16 h-16 rounded-2xl bg-orange-500/15 flex items-center justify-center mb-6">
+          <ScanLine size={28} className="text-orange-300" />
         </div>
         <h1 className="text-2xl font-bold">Contrôle d'accès</h1>
         <p className="text-slate-400 mt-2 text-sm">
@@ -38,7 +38,7 @@ function Scan() {
 
         <button
           type="button"
-          className="mt-8 w-full flex flex-col items-center justify-center gap-3 border-2 border-dashed border-white/20 rounded-2xl py-14 text-slate-400 hover:border-blue-400 hover:text-blue-300 transition"
+          className="mt-8 w-full flex flex-col items-center justify-center gap-3 border-2 border-dashed border-white/20 rounded-2xl py-14 text-slate-400 hover:border-orange-400 hover:text-orange-300 transition"
         >
           <Camera size={32} />
           <span className="text-sm font-medium">Activer la caméra</span>
@@ -50,11 +50,11 @@ function Scan() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Saisir le code du billet"
-            className="flex-1 bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-400"
+            className="flex-1 bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-orange-400"
           />
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 transition rounded-xl px-5 font-semibold text-sm"
+            className="bg-orange-500 hover:bg-orange-600 transition rounded-xl px-5 font-semibold text-sm"
           >
             Vérifier
           </button>

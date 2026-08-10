@@ -1,7 +1,7 @@
 const VARIANTS = {
-  primary: "bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300",
+  primary: "bg-orange-500 text-white hover:bg-orange-600 disabled:bg-orange-300",
   outline:
-    "border border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 bg-white disabled:opacity-50",
+    "border border-gray-300 text-gray-700 hover:border-orange-400 hover:text-orange-600 bg-white disabled:opacity-50",
   ghost: "text-gray-600 hover:bg-gray-100 disabled:opacity-50",
   danger: "bg-red-500 text-white hover:bg-red-600 disabled:bg-red-300",
 };

@@ -56,14 +56,14 @@ function AccountActivation() {
             <p className="text-gray-600 mb-8">{error}</p>
             <Link
               to="/login"
-              className="inline-block bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transition"
+              className="inline-block bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 transition"
             >
               Retour à la connexion
             </Link>
           </>
         ) : (
           <>
-            <Loader2 size={56} className="mx-auto text-blue-500 mb-6 animate-spin" />
+            <Loader2 size={56} className="mx-auto text-orange-500 mb-6 animate-spin" />
             <h1 className="text-2xl font-bold mb-3">Activation en cours</h1>
             <p className="text-gray-600">Nous activons votre compte, un instant...</p>
           </>

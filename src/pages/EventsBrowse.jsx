@@ -34,7 +34,7 @@ function EventsBrowse() {
       <NavBar />
 
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-20">
-        <span className="inline-flex items-center gap-2 text-blue-500 font-semibold uppercase tracking-wider text-sm">
+        <span className="inline-flex items-center gap-2 text-orange-500 font-semibold uppercase tracking-wider text-sm">
           <Sparkles size={16} />
           Événements
         </span>
@@ -76,7 +76,7 @@ function EventsBrowse() {
                   />
                 </div>
                 <div className="p-5">
-                  <span className="inline-block bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full">
+                  <span className="inline-block bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">
                     {event.category}
                   </span>
                   <h3 className="mt-3 font-bold text-gray-900 text-lg">{event.title}</h3>
@@ -88,7 +88,7 @@ function EventsBrowse() {
                     <MapPin size={15} />
                     {event.location}
                   </p>
-                  <p className="mt-4 font-semibold text-blue-600">
+                  <p className="mt-4 font-semibold text-orange-600">
                     À partir de {Number(event.price).toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>

@@ -58,7 +58,7 @@ function EventShowcase() {
 
           <div className="max-w-2xl">
 
-            <span className="text-blue-500 font-semibold uppercase tracking-widest">
+            <span className="text-orange-500 font-semibold uppercase tracking-widest">
               Événements
             </span>
 
@@ -77,7 +77,7 @@ function EventShowcase() {
 
           <Link
             to="/register"
-            className="bg-blue-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-blue-600"
+            className="bg-orange-500 text-white px-4 py-2 rounded-xl font-semibold hover:bg-orange-600"
           >
             Découvrir Eventia
 
@@ -135,8 +135,8 @@ function EventShowcase() {
                 <span
                   className="
                     inline-block
-                    bg-blue-100
-                    text-blue-600
+                    bg-orange-100
+                    text-orange-600
                     text-sm
                     font-semibold
                     px-4

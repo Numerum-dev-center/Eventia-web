@@ -4,7 +4,7 @@ function AccessDenied() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
       <div className="max-w-xl w-full bg-white rounded-3xl shadow p-8 text-center">
-        <p className="text-sm uppercase tracking-widest text-blue-500 font-semibold">
+        <p className="text-sm uppercase tracking-widest text-orange-500 font-semibold">
           Accès refusé
         </p>
 
@@ -19,7 +19,7 @@ function AccessDenied() {
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link
             to="/login"
-            className="bg-blue-500 text-white px-5 py-3 rounded-xl hover:bg-blue-600 transition"
+            className="bg-orange-500 text-white px-5 py-3 rounded-xl hover:bg-orange-600 transition"
           >
             Retour au login
           </Link>

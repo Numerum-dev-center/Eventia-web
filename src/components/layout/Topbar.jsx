@@ -66,17 +66,17 @@ function OrganizerTopbar({ title, subtitle, organizer }) {
     items-center
     gap-3
     cursor-pointer
-    bg-blue-50
+    bg-orange-50
     px-3
     py-2
     rounded-2xl
-    hover:bg-blue-100
+    hover:bg-orange-100
     transition
   "
 >
 
 
-          <UserCircle size={32} className="text-blue-500" />
+          <UserCircle size={32} className="text-orange-500" />
 
           <div className="hidden sm:block">
             <p className="font-semibold text-gray-800 text-sm">

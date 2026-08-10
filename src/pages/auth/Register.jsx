@@ -105,7 +105,7 @@ function Register() {
         <div className="flex items-center justify-center p-8 md:p-14">
           
           <div className="w-full max-w-md">
-            <Link to="/" className="absolute top-19  inline-flex items-center gap-2 text-gray-600 hover:text-blue-500 mb-6"
+            <Link to="/" className="absolute top-19  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
             >
               <ArrowLeft size={22} />
               <span>Retour à l'accueil</span>
@@ -117,7 +117,7 @@ function Register() {
             </h2>
             <p className="text-gray-500 mb-10">
               Vous avez déjà un compte ?{" "}
-              <Link to="/login" className="text-blue-500 font-medium hover:underline">
+              <Link to="/login" className="text-orange-500 font-medium hover:underline">
                 Se connecter
               </Link>
             </p>
@@ -136,7 +136,7 @@ function Register() {
                   onClick={() => setFormData((prev) => ({ ...prev, role: "client" }))}
                   className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-semibold text-sm transition ${
                     formData.role === "client"
-                      ? "border-blue-500 bg-blue-50 text-blue-600"
+                      ? "border-orange-500 bg-orange-50 text-orange-600"
                       : "border-gray-200 text-gray-500 hover:border-gray-300"
                   }`}
                 >
@@ -148,7 +148,7 @@ function Register() {
                   onClick={() => setFormData((prev) => ({ ...prev, role: "organisateur" }))}
                   className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-semibold text-sm transition ${
                     formData.role === "organisateur"
-                      ? "border-blue-500 bg-blue-50 text-blue-600"
+                      ? "border-orange-500 bg-orange-50 text-orange-600"
                       : "border-gray-200 text-gray-500 hover:border-gray-300"
                   }`}
                 >

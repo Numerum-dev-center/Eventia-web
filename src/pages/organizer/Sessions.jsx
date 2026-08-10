@@ -12,7 +12,7 @@ function Sessions() {
     <div className="space-y-6">
       <Link
         to={`/organizer/events/${id}`}
-        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-blue-500"
+        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500"
       >
         <ArrowLeft size={16} />
         Retour à l'événement

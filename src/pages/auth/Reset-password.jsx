@@ -82,7 +82,7 @@ function ResetPassword() {
 
             <Link
               to="/verify-code"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-500 mb-6"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
             >
               <ArrowLeft size={20} />
               <span>Retour</span>
@@ -143,7 +143,7 @@ function ResetPassword() {
             </form>
 
             <p className="mt-6 text-center text-sm">
-              <Link to="/login" className="text-blue-500 hover:underline">
+              <Link to="/login" className="text-orange-500 hover:underline">
                 Retour à la connexion
               </Link>
             </p>
