@@ -1,4 +1,4 @@
-import { ArrowLeft, BarChart3, Check, ShieldCheck, Ticket } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import eventImage from "../../assets/organizer/im-land.jpg";
 import "../../styles/auth.css";
@@ -29,17 +29,6 @@ function AuthVisual() {
           <strong>Festival Horizon</strong>
           <small>24 août · Lomé</small>
         </div>
-      </div>
-
-      <div className="auth-float auth-float--sales">
-        <span><BarChart3 size={18} /></span>
-        <div><small>Ventes aujourd’hui</small><strong>+ 248 billets</strong></div>
-        <em>+18%</em>
-      </div>
-      <div className="auth-float auth-float--ticket">
-        <span><Ticket size={18} /></span>
-        <div><small>Dernier billet</small><strong>Confirmé</strong></div>
-        <i><Check size={13} /></i>
       </div>
 
       <div className="auth-visual-proof"><ShieldCheck size={15} /> Paiements et données sécurisés</div>

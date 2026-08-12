@@ -47,15 +47,6 @@
 .auth-event-overlay span { color: #ff9176; font-size: 8px; font-weight: 800; letter-spacing: .1em; }
 .auth-event-overlay strong { margin-top: 7px; font: 700 22px/1 "Manrope", sans-serif; letter-spacing: -.035em; }
 .auth-event-overlay small { margin-top: 6px; color: rgba(255,255,255,.58); font-size: 9px; }
-.auth-float { position: absolute; z-index: 4; padding: 12px 14px; display: flex; align-items: center; gap: 10px; color: var(--auth-ink); border: 1px solid rgba(255,255,255,.82); border-radius: 15px; background: rgba(255,255,255,.92); box-shadow: 0 18px 42px rgba(0,0,0,.22); backdrop-filter: blur(18px); }
-.auth-float > span { width: 34px; height: 34px; display: grid; place-items: center; color: var(--auth-orange); border-radius: 10px; background: #fff0eb; }
-.auth-float div { display: flex; flex-direction: column; gap: 2px; }
-.auth-float small { color: #89827b; font-size: 8px; }
-.auth-float strong { font-size: 10px; }
-.auth-float em { margin-left: 8px; color: #299766; font-size: 8px; font-style: normal; font-weight: 800; }
-.auth-float > i { width: 24px; height: 24px; margin-left: 5px; display: grid; place-items: center; color: white; border-radius: 50%; background: #30a46c; }
-.auth-float--sales { right: 28px; bottom: 270px; }
-.auth-float--ticket { left: 28px; bottom: 42px; }
 .auth-visual-proof { position: absolute; z-index: 2; left: 54px; bottom: 25px; display: flex; align-items: center; gap: 7px; color: rgba(255,255,255,.45); font-size: 9px; }
 
 .auth-form-panel { min-height: 700px; padding: 58px clamp(40px, 6vw, 90px); display: flex; align-items: center; justify-content: center; }

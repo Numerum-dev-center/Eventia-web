@@ -98,16 +98,6 @@
 .next-event-card small { color: var(--ev-orange); font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
 .next-event-card strong { font: 700 15px/1.2 "Manrope", sans-serif; }
 .next-event-card span { color: #918a83; font-size: 9px; }
-.floating-ticket, .floating-scan { position: absolute; z-index: 5; padding: 13px 15px; display: flex; align-items: center; gap: 11px; border: 1px solid rgba(255,255,255,.9); border-radius: 16px; background: rgba(255,255,255,.91); box-shadow: 0 18px 45px rgba(50,35,24,.15); backdrop-filter: blur(18px); }
-.floating-ticket { top: 96px; right: -58px; }
-.ticket-icon { width: 36px; height: 36px; display: grid; place-items: center; color: var(--ev-orange); border-radius: 11px; background: #fff0eb; }
-.floating-ticket div, .floating-scan div { display: flex; flex-direction: column; gap: 2px; }
-.floating-ticket small, .floating-scan small { color: #8e8780; font-size: 9px; }
-.floating-ticket strong, .floating-scan strong { font-size: 12px; }
-.status-dot { width: 7px; height: 7px; margin-left: 8px; border-radius: 50%; background: #30a46c; }
-.floating-scan { left: -52px; bottom: 68px; }
-.floating-scan > svg { color: var(--ev-orange); }
-.floating-scan > span { width: 26px; height: 26px; margin-left: 8px; display: grid; place-items: center; color: white; border-radius: 50%; background: #30a46c; }
 .search-panel { position: relative; z-index: 5; width: min(780px, calc(100% - 36px)); min-height: 72px; margin: -35px auto 0; padding: 8px 8px 8px 22px; display: flex; align-items: center; gap: 13px; border: 1px solid rgba(255,255,255,.9); border-radius: 23px; background: rgba(255,255,255,.92); box-shadow: 0 22px 55px rgba(44,29,18,.13); backdrop-filter: blur(18px); }
 .search-panel > svg { color: var(--ev-orange); flex: 0 0 auto; }
 .search-panel input { min-width: 0; flex: 1; border: 0; outline: 0; color: var(--ev-ink); background: transparent; font-size: 14px; }
@@ -264,8 +254,6 @@
 @media (max-width: 1000px) {
   .desktop-nav { display: none; }
   .product-stage { width: min(850px, 100%); }
-  .floating-ticket { right: -20px; }
-  .floating-scan { left: -20px; }
   .proof-strip { grid-template-columns: repeat(3, 1fr); }
   .proof-strip p { grid-column: 1 / -1; margin-top: 28px; justify-content: center; }
   .experience-section { gap: 20px; }
@@ -308,8 +296,6 @@
   .next-event-card img { height: 90px; }
   .next-event-card > div { padding: 8px; }
   .next-event-card strong { font-size: 9px; }
-  .floating-ticket { top: 64px; right: -7px; padding: 8px; transform: scale(.75); transform-origin: right top; }
-  .floating-scan { left: -8px; bottom: 32px; padding: 8px; transform: scale(.72); transform-origin: left bottom; }
   .search-panel { width: 100%; min-height: 62px; margin-top: 18px; padding-left: 16px; border-radius: 18px; }
   .search-panel input { font-size: 12px; }
   .search-panel button { min-height: 46px; padding: 0 15px; border-radius: 13px; font-size: 11px; }
@@ -348,7 +334,6 @@
   .product-stage { margin-left: -4px; width: calc(100% + 8px); }
   .metric-grid > div:last-child { display: none; }
   .metric-grid { grid-template-columns: repeat(2, 1fr); }
-  .floating-ticket { right: -18px; }
   .phone-bubble { min-width: 145px; }
   .phone-bubble--top { right: -18px; }
   .phone-bubble--bottom { left: -18px; }

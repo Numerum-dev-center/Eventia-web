@@ -227,16 +227,6 @@ function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="floating-ticket">
-              <span className="ticket-icon"><Ticket size={20} /></span>
-              <div><small>Nouvelle vente</small><strong>+ 15 000 F</strong></div>
-              <span className="status-dot" />
-            </div>
-            <div className="floating-scan">
-              <QrCode size={25} />
-              <div><strong>Billet validé</strong><small>Entrée autorisée</small></div>
-              <span><Check size={15} /></span>
-            </div>
           </div>
 
           <form className="search-panel" onSubmit={handleSearch}>
