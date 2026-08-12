@@ -156,10 +156,7 @@ function LandingPage() {
           <div className="ambient ambient--one" />
           <div className="ambient ambient--two" />
           <div className="hero-copy">
-            <div className="eyebrow">
-              <Sparkles size={15} />
-              L’événementiel, réinventé
-            </div>
+
             <h1>
               Des événements.
               <br />
@@ -295,7 +292,7 @@ function LandingPage() {
               <h3>Votre public,<br />toujours plus proche.</h3>
               <p>Listes, statuts et présences restent parfaitement organisés.</p>
               <div className="people-list">
-                  {["AM", "KA", "SE"].map((initials) => (
+                {["AM", "KA", "SE"].map((initials) => (
                   <div key={initials}><span>{initials}</span><i /><Check size={14} /></div>
                 ))}
               </div>
