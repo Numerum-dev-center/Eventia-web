@@ -1,205 +1,92 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-import eventImage from "../../assets/organizer/im-land.jpg";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail, TriangleAlert } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
-
-import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
-import SocialButton from "../../components/ui/SocialButton";
-import { login } from "../../services/authService"; // à créer, voir plus bas
+import { AuthShell } from "../../components/auth/AuthShell";
+import { login } from "../../services/authService";
 import { setStoredAuth } from "../../services/authSession";
-
-import { ArrowLeft } from "lucide-react";
 
 function Login() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    remember: false,
-  });
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "", remember: false });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    setFormData((current) => ({ ...current, [name]: type === "checkbox" ? checked : value }));
   };
 
   const validate = () => {
-    if (!formData.email.trim() || !formData.password.trim()) {
-      return "Merci de remplir tous les champs.";
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      return "Adresse email invalide.";
-    }
+    if (!formData.email.trim() || !formData.password.trim()) return "Merci de remplir tous les champs.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return "Adresse email invalide.";
     return "";
   };
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const validationError = validate();
+    if (validationError) { setError(validationError); return; }
+    setLoading(true);
+    setError("");
 
-  const validationError = validate();
+    try {
+      const response = await login({
+        email: formData.email.trim().toLowerCase(),
+        motDePasse: formData.password,
+      });
+      const authState = setStoredAuth({
+        token: response.accessToken,
+        user: { email: response.email, role: response.role },
+      });
+      const role = authState.user.role?.trim().toLowerCase();
+      if (role === "admin") navigate("/admin/dashboard", { replace: true });
+      else if (role === "organisateur") navigate("/organizer/dashboard", { replace: true });
+      else setError(`Rôle non reconnu : ${role}`);
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || requestError.message || "Impossible de vous connecter.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (validationError) {
-    setError(validationError);
-    return;
-  }
+  const handleGoogleLogin = () => {
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4090";
+    window.location.href = `${apiUrl}/auth/google`;
+  };
 
-  setLoading(true);
-  setError("");
-
-  try {
-    const response = await login({
-      email: formData.email.trim().toLowerCase(),
-      motDePasse: formData.password,
-    });
-
-    const authState = setStoredAuth({
-      token: response.accessToken,
-      user: {
-        email: response.email,
-        role: response.role,
-      },
-    });
-
-    const role = authState.user.role
-  ?.trim()
-  .toLowerCase();
-
-console.log("ROLE =", role);
-
-switch (role) {
-  case "admin":
-    navigate("/admin/dashboard", { replace: true });
-    break;
-
-  case "organisateur":
-    navigate("/organizer/dashboard", { replace: true });
-    break;
-
-  default:
-    setError(`Rôle non reconnu : ${role}`);
-}
-  } catch (err) {
-    setError(
-      err.response?.data?.message ||
-      err.message ||
-      "Erreur de connexion"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-6xl bg-white rounded-2xl overflow-hidden shadow-2xl grid md:grid-cols-2">
+    <AuthShell
+      eyebrow="Heureux de vous revoir"
+      title="Se connecter."
+      description={<>Nouveau sur Eventia ? <Link to="/register">Créer un compte</Link></>}
+    >
+      {error && <div className="auth-alert auth-alert--error" role="alert"><TriangleAlert size={16} /> {error}</div>}
 
-        <div className="relative hidden md:flex items-center justify-center overflow-hidden">
-          <div className="absolute -right-32 top-0 h-full w-96 bg-white/10 rounded-l-full" />
-          <img
-            src={eventImage}
-            alt="Concert"
-            className="w-[90%] rounded-3xl shadow-xl object-cover"
-          />
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+        <div className="auth-field">
+          <label htmlFor="login-email">Adresse email</label>
+          <div className="auth-input-wrap"><Mail size={17} /><input id="login-email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="vous@exemple.com" autoComplete="email" /></div>
         </div>
-
-        <div className="flex items-center justify-center p-8 md:p-14">
-          <div className="w-full max-w-md">
-
-            <Link to="/" className="absolute top-15  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
-            >
-              <ArrowLeft size={22} />
-              <span>Retour à l'accueil</span>
-            </Link>
-            <h2 className="text-5xl font-bold text-gray-800 mb-3">Login</h2>
-
-            <p className="text-gray-500 mb-10">
-              Vous n'avez pas de compte ?{" "}
-              <Link to="/register" className="text-orange-500 font-medium hover:underline">
-                Créer un compte
-              </Link>
-            </p>
-
-            {error && (
-              <div className="mb-4 rounded-lg bg-red-100 text-red-700 p-3 text-sm" role="alert">
-                {error}
-              </div>
-            )}
-
-            <form className="space-y-6" onSubmit={handleSubmit} noValidate>
-              <div>
-                <label htmlFor="email" className="sr-only">Adresse email</label>
-                <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Adresse email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="sr-only">Mot de passe</label>
-                <Input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="Mot de passe"
-                  value={formData.password}
-                  onChange={handleChange}
-                  autoComplete="current-password"
-                />
-              </div>
-
-              <div className="flex justify-between items-center text-sm">
-                <label className="flex items-center gap-2 text-gray-500">
-                  <Input
-                    type="checkbox"
-                    name="remember"
-                    checked={formData.remember}
-                    onChange={handleChange}
-                  />
-                  Rester connecté
-                </label>
-
-                <Link to="/forgot-password" className="text-gray-500 hover:text-pink-500">
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-
-              <Button type="submit" disabled={loading} aria-busy={loading}>
-                {loading ? "Connexion..." : "Login"}
-              </Button>
-            </form>
-
-            <div className="mt-12 text-center">
-              <p className="text-gray-500 mb-5">Ou continuer avec Google</p>
-              <div className="flex justify-center">
-                <SocialButton
-                  icon={<FcGoogle size={24} />}
-                  onClick={() => {
-                    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4090";
-                    window.location.href = `${apiUrl}/auth/google`;
-                  }}
-                >
-                  Continuer avec Google
-                </SocialButton>
-              </div>
-            </div>
+        <div className="auth-field">
+          <label htmlFor="login-password">Mot de passe</label>
+          <div className="auth-input-wrap auth-input-wrap--action">
+            <LockKeyhole size={17} />
+            <input id="login-password" name="password" type={showPassword ? "text" : "password"} value={formData.password} onChange={handleChange} placeholder="Votre mot de passe" autoComplete="current-password" />
+            <button className="auth-input-action" type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button>
           </div>
         </div>
-      </div>
-    </div>
+        <div className="auth-row">
+          <label className="auth-check"><input type="checkbox" name="remember" checked={formData.remember} onChange={handleChange} /> Rester connecté</label>
+          <Link to="/forgot-password">Mot de passe oublié ?</Link>
+        </div>
+        <button className="auth-primary" type="submit" disabled={loading} aria-busy={loading}>{loading ? "Connexion en cours…" : <>Se connecter <ArrowRight size={17} /></>}</button>
+      </form>
+
+      <div className="auth-divider">ou</div>
+      <button className="auth-secondary" type="button" onClick={handleGoogleLogin}><FcGoogle size={21} /> Continuer avec Google</button>
+    </AuthShell>
   );
 }
 

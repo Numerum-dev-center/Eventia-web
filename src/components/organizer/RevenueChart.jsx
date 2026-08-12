@@ -1,79 +1,26 @@
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-function RevenueChart({ data, metric }) {
-  const metricConfig = {
-    revenue: {
-      title: "Évolution des revenus",
-      dataKey: "revenue",
-      color: "#f97316",
-    },
+const metricConfig = {
+  revenue: { title: "Revenus", dataKey: "revenue", color: "#ff5c35" },
+  users: { title: "Acheteurs", dataKey: "users", color: "#ff5c35" },
+  checkins: { title: "Check-ins", dataKey: "checkins", color: "#ff5c35" },
+  tickets: { title: "Billets vendus", dataKey: "users", color: "#ff5c35" },
+};
 
-    users: {
-      title: "Évolution des inscrits",
-      dataKey: "users",
-      color: "#3b82f6",
-    },
-
-    checkins: {
-      title: "Évolution des check-ins",
-      dataKey: "checkins",
-      color: "#10b981",
-    },
-
-    notes: {
-      title: "Évolution des notes",
-      dataKey: "notes",
-      color: "#8b5cf6",
-    },
-  };
-
-  const config =
-    metricConfig[metric] || metricConfig.revenue;
+function RevenueChart({ data = [], metric }) {
+  const config = metricConfig[metric] || metricConfig.revenue;
+  const source = data.length > 1 ? data : [
+    { ...data[0], month: "Début", [config.dataKey]: 0 },
+    { ...data[0], month: "Actuel" },
+  ];
 
   return (
-    <div
-      className="
-        bg-white
-        p-6
-        rounded-2xl
-        shadow
-      "
-    >
-      <h2
-        className="
-          font-bold
-          mb-5
-          text-lg
-        "
-      >
-        {config.title}
-      </h2>
-
-      <ResponsiveContainer
-        width="100%"
-        height={300}
-      >
-        <AreaChart data={data}>
-          <XAxis dataKey="month" />
-
-          <YAxis />
-
-          <Tooltip />
-
-          <Area
-            type="monotone"
-            dataKey={config.dataKey}
-            stroke={config.color}
-            fill={config.color}
-            fillOpacity={0.2}
-          />
+    <div className="db-chart-card">
+      <div className="db-chart-head"><div><span>Évolution</span><h2>{config.title}</h2></div><i>Cette période</i></div>
+      <ResponsiveContainer width="100%" height={250}>
+        <AreaChart data={source} margin={{ top: 15, right: 5, left: -20, bottom: 0 }}>
+          <defs><linearGradient id="eventiaArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={config.color} stopOpacity={0.32} /><stop offset="100%" stopColor={config.color} stopOpacity={0} /></linearGradient></defs>
+          <XAxis dataKey="month" axisLine={false} tickLine={false} /><YAxis axisLine={false} tickLine={false} /><Tooltip /><Area type="monotone" dataKey={config.dataKey} stroke={config.color} strokeWidth={3} fill="url(#eventiaArea)" />
         </AreaChart>
       </ResponsiveContainer>
     </div>

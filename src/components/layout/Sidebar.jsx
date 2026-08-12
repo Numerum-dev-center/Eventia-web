@@ -1,197 +1,61 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { LogOut, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight, Sparkles } from "lucide-react";
-
-import { useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { ChevronDown, ChevronLeft, ChevronRight, LogOut, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { logout } from "../../services/authSession";
-
-
 import { logoutApi } from "../../services/authService";
-function Sidebar({
-  title = "Eventia Admin",
-  menuItems = [],
-  onLogout,
-}) {
-  const location = useLocation();
 
+function Sidebar({ title = "Eventia", menuItems = [], mobileOpen = false, onMobileClose }) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [openMenus, setOpenMenus] = useState({});
   const [collapsed, setCollapsed] = useState(false);
+  const workspace = title.toLowerCase().includes("admin") ? "Administration" : "Organisateur";
 
-  const toggleMenu = (title) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [title]: !prev[title],
-    }));
+  const handleLogout = async () => {
+    try { await logoutApi(); } catch { /* La session locale doit malgré tout être fermée. */ }
+    finally { logout(); navigate("/login", { replace: true }); }
   };
 
-  const navigate = useNavigate();
-
-const handleLogout = async () => {
-  try {
-    await logoutApi(); // Informe le backend (si cette route existe)
-  } catch (error) {
-    console.error(error);
-  } finally {
-    logout(); // Nettoie le localStorage
-    navigate("/login", { replace: true });
-  }
-};
+  const closeMobile = () => onMobileClose?.();
 
   return (
-    <aside
-      className={`
-        ${collapsed ? "w-20" : "w-72"}
-        min-h-screen bg-[#0B1330] border-r border-white/10 flex flex-col
-        transition-all duration-300
-      `}
-    >
-      {/* Logo + bouton réduire */}
-      <div className="p-6 border-b border-white/10 flex items-center justify-between">
-        {!collapsed && (
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500">
-              <Sparkles size={16} className="text-white" />
-            </span>
-            <h1 className="text-lg font-bold text-white truncate">
-              {title}
-            </h1>
-          </div>
-        )}
-
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className={`
-            p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-orange-300
-            transition-all
-            ${collapsed ? "mx-auto" : ""}
-          `}
-          title={collapsed ? "Étendre" : "Réduire"}
-        >
-          {collapsed ? <ChevronsRight size={20} /> : <ChevronsLeft size={20} />}
-        </button>
+    <aside className={`db-sidebar ${collapsed ? "is-collapsed" : ""} ${mobileOpen ? "is-mobile-open" : ""}`}>
+      <div className="db-sidebar-head">
+        <NavLink to={workspace === "Administration" ? "/admin/dashboard" : "/organizer/dashboard"} className="db-logo" onClick={closeMobile}>
+          <span className="db-logo-mark" aria-hidden="true"><i /><i /><i /></span>
+          {!collapsed && <span><strong>Eventia</strong><small>{workspace}</small></span>}
+        </NavLink>
+        <button className="db-mobile-close" type="button" onClick={closeMobile} aria-label="Fermer le menu"><X size={20} /></button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 overflow-y-auto overflow-x-hidden">
+      {!collapsed && <p className="db-nav-label">Espace de travail</p>}
+      <nav className="db-nav" aria-label={`Navigation ${workspace.toLowerCase()}`}>
         {menuItems.map((item) => {
           const Icon = item.icon;
-
-          // Menu avec enfants
           if (item.children) {
-            const isParentActive = item.children.some((child) =>
-              location.pathname.startsWith(child.path)
-            );
-
+            const parentActive = item.children.some((child) => location.pathname.startsWith(child.path));
+            const opened = openMenus[item.title];
             return (
-              <div key={item.title} className="mb-2">
-                <button
-                  onClick={() => {
-                    // Si réduit, on déplie automatiquement en cliquant
-                    if (collapsed) setCollapsed(false);
-                    toggleMenu(item.title);
-                  }}
-                  title={item.title}
-                  className={`
-                    w-full flex items-center
-                    ${collapsed ? "justify-center" : "justify-between"}
-                    px-4 py-3 rounded-2xl transition-all
-                    ${
-                      isParentActive
-                        ? "bg-orange-500 text-white"
-                        : "text-slate-300 hover:bg-white/5"
-                    }
-                  `}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon size={20} className="shrink-0" />
-                    {!collapsed && <span>{item.title}</span>}
-                  </div>
-
-                  {!collapsed &&
-                    (openMenus[item.title] ? (
-                      <ChevronDown size={18} />
-                    ) : (
-                      <ChevronRight size={18} />
-                    ))}
+              <div className="db-nav-group" key={item.title}>
+                <button className={`db-nav-item ${parentActive ? "is-active" : ""}`} type="button" title={item.title} onClick={() => { if (collapsed) setCollapsed(false); setOpenMenus((current) => ({ ...current, [item.title]: !current[item.title] })); }}>
+                  <Icon size={19} /><span>{item.title}</span>{opened ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
                 </button>
-
-                {!collapsed && openMenus[item.title] && (
-                  <div className="ml-6 mt-2 flex flex-col gap-1">
-                    {item.children.map((child) => {
-                      const ChildIcon = child.icon;
-
-                      return (
-                        <NavLink
-                          key={child.title}
-                          to={child.path}
-                          className={({ isActive }) =>
-                            `
-                              flex items-center gap-3
-                              px-3 py-2 rounded-xl
-                              transition-all
-                              ${
-                                isActive
-                                  ? "bg-orange-500/15 text-orange-300 font-semibold"
-                                  : "text-slate-400 hover:bg-white/5"
-                              }
-                            `
-                          }
-                        >
-                          <ChildIcon size={16} className="shrink-0" />
-                          <span>{child.title}</span>
-                        </NavLink>
-                      );
-                    })}
-                  </div>
-                )}
+                {!collapsed && opened && <div className="db-subnav">{item.children.map((child) => { const ChildIcon = child.icon; return <NavLink key={child.path} to={child.path} onClick={closeMobile} className={({ isActive }) => isActive ? "is-active" : ""}><ChildIcon size={15} />{child.title}</NavLink>; })}</div>}
               </div>
             );
           }
-
-          // Menu simple
           return (
-            <NavLink
-              key={item.title}
-              to={item.path}
-              title={item.title}
-              className={({ isActive }) =>
-                `
-                  flex items-center gap-3
-                  ${collapsed ? "justify-center" : ""}
-                  px-4 py-3 mb-2 rounded-2xl transition-all
-                  ${
-                    isActive
-                      ? "bg-orange-500 text-white font-semibold"
-                      : "text-slate-300 hover:bg-white/5 hover:text-orange-300"
-                  }
-                `
-              }
-            >
-              <Icon size={20} className="shrink-0" />
-              {!collapsed && <span>{item.title}</span>}
+            <NavLink key={item.path} to={item.path} onClick={closeMobile} title={item.title} className={({ isActive }) => `db-nav-item ${isActive ? "is-active" : ""}`}>
+              <Icon size={19} /><span>{item.title}</span>{!collapsed && <ChevronRight className="db-nav-arrow" size={14} />}
             </NavLink>
           );
         })}
       </nav>
 
-      {/* Déconnexion */}
-      <div className="p-4 border-t border-white/10">
-        <button
-          onClick={handleLogout}
-          title="Déconnexion"
-          className={`
-            w-full flex items-center gap-3
-            ${collapsed ? "justify-center" : ""}
-            px-4 py-3 rounded-2xl
-            text-slate-300
-            hover:bg-red-500/10
-            hover:text-red-300
-            transition-all
-          `}
-        >
-          <LogOut size={20} className="shrink-0" />
-          {!collapsed && <span>Déconnexion</span>}
-        </button>
+      <div className="db-sidebar-foot">
+        {!collapsed && <div className="db-plan"><span>Eventia Pro</span><strong>Votre espace est actif</strong><small>Tous vos outils sont disponibles.</small><i><span /></i></div>}
+        <button className="db-logout" type="button" onClick={handleLogout} title="Déconnexion"><LogOut size={18} /><span>Déconnexion</span></button>
+        <button className="db-collapse" type="button" onClick={() => setCollapsed((value) => !value)} aria-label={collapsed ? "Déployer la navigation" : "Réduire la navigation"}>{collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}<span>{collapsed ? "" : "Réduire"}</span>{!collapsed && <ChevronLeft size={14} />}</button>
       </div>
     </aside>
   );

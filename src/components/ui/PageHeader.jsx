@@ -1,11 +1,12 @@
-function PageHeader({ title, subtitle, action }) {
+function PageHeader({ title, subtitle, action, eyebrow = "Eventia" }) {
   return (
-    <div className="flex items-start justify-between gap-4 flex-wrap mb-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+    <div className="ui-page-header">
+      <div className="ui-page-header-copy">
+        <span>{eyebrow}</span>
+        <h1>{title}</h1>
+        {subtitle && <p>{subtitle}</p>}
       </div>
-      {action && <div className="shrink-0">{action}</div>}
+      {action && <div className="ui-page-header-action">{action}</div>}
     </div>
   );
 }

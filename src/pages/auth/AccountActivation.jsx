@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Loader2, ShieldAlert } from "lucide-react";
-
+import { ArrowRight, LoaderCircle, ShieldAlert } from "lucide-react";
+import { AuthStatus } from "../../components/auth/AuthShell";
 import api from "../../services/api/axios";
 import { setStoredAuth } from "../../services/authSession";
 
@@ -14,62 +14,44 @@ function AccountActivation() {
     async function activateAccount() {
       const accessToken = searchParams.get("accessToken");
       const token = searchParams.get("token");
-
       try {
-        // Flux Google : les tokens arrivent directement dans l'URL de redirection
         if (accessToken) {
           setStoredAuth({ token: accessToken, user: {} });
           navigate("/organizer/dashboard", { replace: true });
           return;
         }
-
-        // Flux email : token d'activation à échanger
         if (token) {
           const response = await api.get(`/auth/activate?token=${token}`);
-          setStoredAuth({
-            token: response.data.accessToken,
-            user: response.data.user || {},
-          });
+          setStoredAuth({ token: response.data.accessToken, user: response.data.user || {} });
           navigate("/organizer/dashboard", { replace: true });
           return;
         }
-
-        setError("Lien d'activation invalide ou incomplet.");
-      } catch (err) {
-        setError(
-          err?.response?.data?.message ||
-            "Ce lien d'activation est invalide ou a expiré."
-        );
+        setError("Lien d’activation invalide ou incomplet.");
+      } catch (requestError) {
+        setError(requestError?.response?.data?.message || "Ce lien d’activation est invalide ou a expiré.");
       }
     }
-
     activateAccount();
   }, [navigate, searchParams]);
 
+  if (error) {
+    return (
+      <AuthStatus
+        icon={<ShieldAlert size={34} />}
+        tone="red"
+        title="Activation impossible."
+        action={<Link className="auth-primary" to="/login">Retour à la connexion <ArrowRight size={16} /></Link>}
+        secondary={<Link className="auth-status-secondary" to="/register">Créer un nouveau compte</Link>}
+      >
+        {error}
+      </AuthStatus>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-lg p-10 text-center">
-        {error ? (
-          <>
-            <ShieldAlert size={56} className="mx-auto text-red-500 mb-6" />
-            <h1 className="text-2xl font-bold mb-3">Activation impossible</h1>
-            <p className="text-gray-600 mb-8">{error}</p>
-            <Link
-              to="/login"
-              className="inline-block bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 transition"
-            >
-              Retour à la connexion
-            </Link>
-          </>
-        ) : (
-          <>
-            <Loader2 size={56} className="mx-auto text-orange-500 mb-6 animate-spin" />
-            <h1 className="text-2xl font-bold mb-3">Activation en cours</h1>
-            <p className="text-gray-600">Nous activons votre compte, un instant...</p>
-          </>
-        )}
-      </div>
-    </div>
+    <AuthStatus icon={<LoaderCircle className="auth-spinner" size={34} />} tone="orange" title="Activation en cours.">
+      Nous sécurisons votre compte et préparons votre espace Eventia. Cela ne prendra qu’un instant.
+    </AuthStatus>
   );
 }
 

@@ -1,52 +1,19 @@
-import { MapPin } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { eventsData } from "../../data/eventsData";
 
-export default function EventCard({
-  event = eventsData[0],
-}) {
+export default function EventCard({ event = eventsData[0] }) {
   return (
-    <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
-      
-      {event.image && (
-        <img
-          src={event.image}
-          alt={event.title}
-          className="w-full h-40 object-cover"
-        />
-      )}
-
-      <div className="p-5">
-        <span className="bg-orange-100 text-orange-500 text-xs px-3 py-1 rounded-full">
-          {event.category}
-        </span>
-
-        <h3 className="font-bold text-lg mt-3">
-          {event.title}
-        </h3>
-
-        <div className="flex items-center gap-2 text-gray-500 text-sm mt-2">
-          <MapPin size={14} />
-          <span>{event.location}</span>
-        </div>
-
-        <Link
-          to={`/organizer/events/${event.id}`}
-          className="
-            inline-block
-            mt-4
-            bg-orange-500
-            hover:bg-orange-600
-            text-white
-            px-4
-            py-2
-            rounded-full
-            transition
-          "
-        >
-          Voir détails
-        </Link>
+    <article className="db-event-card">
+      <div className="db-event-image">
+        {event.image ? <img src={event.image} alt={event.title} /> : <div className="db-event-placeholder"><CalendarDays size={28} /></div>}
+        <span>{event.category || "Événement"}</span>
       </div>
-    </div>
+      <div className="db-event-body">
+        <h3>{event.title}</h3>
+        <p><MapPin size={13} /> {event.location || "Lieu à confirmer"}</p>
+        <Link to={`/organizer/events/${event.id}`}>Voir les détails <ArrowRight size={15} /></Link>
+      </div>
+    </article>
   );
 }

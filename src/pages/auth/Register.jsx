@@ -1,212 +1,73 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-import eventImage from "../../assets/organizer/im-land.jpg";
-
-import Button from "../../components/ui/Button";
-import Input from "../../components/ui/Input";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, CalendarDays, Eye, EyeOff, LockKeyhole, Mail, Ticket, TriangleAlert } from "lucide-react";
+import { AuthShell } from "../../components/auth/AuthShell";
 import { register } from "../../services/authService";
-
-import { ArrowLeft, Calendar, User } from "lucide-react";
 
 function Register() {
   const navigate = useNavigate();
-
-
-
-  const [formData, setFormData] = useState({
-    role: "client",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ role: "client", email: "", password: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
   };
 
   const validate = () => {
-    if (
-      
-      !formData.email.trim() ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
-      return "Merci de remplir tous les champs.";
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      return "Adresse email invalide.";
-    }
-
-    if (formData.password.length < 6) {
-      return "Le mot de passe doit contenir au moins 6 caractères.";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      return "Les mots de passe ne correspondent pas.";
-    }
-
+    if (!formData.email.trim() || !formData.password || !formData.confirmPassword) return "Merci de remplir tous les champs.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return "Adresse email invalide.";
+    if (formData.password.length < 6) return "Le mot de passe doit contenir au moins 6 caractères.";
+    if (formData.password !== formData.confirmPassword) return "Les mots de passe ne correspondent pas.";
     return "";
   };
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const validationError = validate();
+    if (validationError) { setError(validationError); return; }
+    setLoading(true);
+    setError("");
+    try {
+      await register({
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+        role: formData.role,
+      });
+      navigate("/activate");
+    } catch (requestError) {
+      setError(requestError?.response?.data?.message || "Une erreur est survenue lors de l’inscription.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const validationError = validate();
-
-  if (validationError) {
-    setError(validationError);
-    return;
-  }
-
-  setLoading(true);
-  setError("");
-
-  try {
-    await register({
-      email: formData.email.trim().toLowerCase(),
-      password: formData.password,
-      confirmPassword: formData.confirmPassword,
-      role: formData.role,
-    });
-
-    // Redirection vers une page informant l'utilisateur
-    navigate("/activate");
-
-  } catch (err) {
-    setError(
-      err?.response?.data?.message ||
-      "Une erreur est survenue lors de l'inscription."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-6xl bg-white rounded-2xl overflow-hidden shadow-2xl grid md:grid-cols-2">
-        
+    <AuthShell
+      eyebrow="Bienvenue sur Eventia"
+      title="Créer un compte."
+      description={<>Déjà membre ? <Link to="/login">Se connecter</Link></>}
+    >
+      {error && <div className="auth-alert auth-alert--error" role="alert"><TriangleAlert size={16} /> {error}</div>}
 
-        <div className="relative hidden md:flex items-center justify-center overflow-hidden">
-          <div className="absolute -right-32 top-0 h-full w-96 bg-white/10 rounded-l-full" />
-          <img
-            src={eventImage}
-            alt="Concert"
-            className="w-[90%] rounded-3xl shadow-xl object-cover"
-          />
-        </div>
-
-        <div className="flex items-center justify-center p-8 md:p-14">
-          
-          <div className="w-full max-w-md">
-            <Link to="/" className="absolute top-19  inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 mb-6"
-            >
-              <ArrowLeft size={22} />
-              <span>Retour à l'accueil</span>
-            </Link>
-            
-
-            <h2 className="text-4xl font-bold text-gray-900 mb-3">
-              Créer un compte
-            </h2>
-            <p className="text-gray-500 mb-10">
-              Vous avez déjà un compte ?{" "}
-              <Link to="/login" className="text-orange-500 font-medium hover:underline">
-                Se connecter
-              </Link>
-            </p>
-
-            {error && (
-              <div className="mb-4 rounded-lg bg-red-100 text-red-700 p-3 text-sm" role="alert">
-                {error}
-              </div>
-            )}
-
-            <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData((prev) => ({ ...prev, role: "client" }))}
-                  className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-semibold text-sm transition ${
-                    formData.role === "client"
-                      ? "border-orange-500 bg-orange-50 text-orange-600"
-                      : "border-gray-200 text-gray-500 hover:border-gray-300"
-                  }`}
-                >
-                  <User size={16} />
-                  Je réserve des billets
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData((prev) => ({ ...prev, role: "organisateur" }))}
-                  className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-semibold text-sm transition ${
-                    formData.role === "organisateur"
-                      ? "border-orange-500 bg-orange-50 text-orange-600"
-                      : "border-gray-200 text-gray-500 hover:border-gray-300"
-                  }`}
-                >
-                  <Calendar size={16} />
-                  J'organise des événements
-                </button>
-              </div>
-
-              <div>
-                <label htmlFor="email" className="sr-only">Email</label>
-                <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="sr-only">Mot de passe</label>
-                <Input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="Mot de passe"
-                  value={formData.password}
-                  onChange={handleChange}
-                  autoComplete="new-password"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="sr-only">Confirmer le mot de passe</label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirmer le mot de passe"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  autoComplete="new-password"
-                />
-              </div>
-
-              <Button type="submit" disabled={loading} aria-busy={loading}>
-                {loading ? "Inscription..." : "S'inscrire"}
-              </Button>
-
-            </form>
-
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+        <div className="auth-field">
+          <label>Comment utiliserez-vous Eventia ?</label>
+          <div className="auth-role-grid" role="group" aria-label="Type de compte">
+            <button className={`auth-role ${formData.role === "client" ? "is-active" : ""}`} type="button" aria-pressed={formData.role === "client"} onClick={() => setFormData((current) => ({ ...current, role: "client" }))}><span><Ticket size={16} /></span><div><strong>Participant</strong><small>Je réserve des billets</small></div></button>
+            <button className={`auth-role ${formData.role === "organisateur" ? "is-active" : ""}`} type="button" aria-pressed={formData.role === "organisateur"} onClick={() => setFormData((current) => ({ ...current, role: "organisateur" }))}><span><CalendarDays size={16} /></span><div><strong>Organisateur</strong><small>Je crée des événements</small></div></button>
           </div>
         </div>
-
-      </div>
-    </div>
+        <div className="auth-field"><label htmlFor="register-email">Adresse email</label><div className="auth-input-wrap"><Mail size={17} /><input id="register-email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="vous@exemple.com" autoComplete="email" /></div></div>
+        <div className="auth-field"><label htmlFor="register-password">Mot de passe</label><div className="auth-input-wrap auth-input-wrap--action"><LockKeyhole size={17} /><input id="register-password" name="password" type={showPassword ? "text" : "password"} value={formData.password} onChange={handleChange} placeholder="6 caractères minimum" autoComplete="new-password" /><button className="auth-input-action" type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Masquer les mots de passe" : "Afficher les mots de passe"}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></div></div>
+        <div className="auth-field"><label htmlFor="register-confirm">Confirmer le mot de passe</label><div className="auth-input-wrap"><LockKeyhole size={17} /><input id="register-confirm" name="confirmPassword" type={showPassword ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} placeholder="Répétez votre mot de passe" autoComplete="new-password" /></div></div>
+        <button className="auth-primary" type="submit" disabled={loading} aria-busy={loading}>{loading ? "Création en cours…" : <>Créer mon compte <ArrowRight size={17} /></>}</button>
+      </form>
+      <p className="auth-help">En créant un compte, vous acceptez nos conditions d’utilisation.</p>
+    </AuthShell>
   );
 }
 

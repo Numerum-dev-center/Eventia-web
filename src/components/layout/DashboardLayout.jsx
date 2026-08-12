@@ -1,29 +1,20 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import "../../styles/dashboard.css";
 
 function DashboardLayout({ title, menuItems }) {
-  
-  
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const workspace = title?.toLowerCase().includes("admin") ? "Administration" : "Organisateur";
+
   return (
-    <div className="h-screen flex overflow-hidden bg-[#EEF1F6]">
-      {/* Sidebar fixe */}
-      <Sidebar
-        title={title}
-        menuItems={menuItems}
-      />
-
-      {/* Zone principale */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Topbar fixe */}
-        <div className="shrink-0 px-8 pt-6">
-          <Topbar />
-        </div>
-
-        {/* Contenu scrollable */}
-        <main className="flex-1 overflow-y-auto p-8">
-          <Outlet />
-        </main>
+    <div className="db-app">
+      <Sidebar title={title} menuItems={menuItems} mobileOpen={mobileMenuOpen} onMobileClose={() => setMobileMenuOpen(false)} />
+      {mobileMenuOpen && <button className="db-backdrop" type="button" aria-label="Fermer le menu" onClick={() => setMobileMenuOpen(false)} />}
+      <div className="db-workspace">
+        <Topbar workspace={workspace} onMenuOpen={() => setMobileMenuOpen(true)} />
+        <main className="db-main"><div className="db-content"><Outlet /></div></main>
       </div>
     </div>
   );
