@@ -210,19 +210,18 @@ function EventsEdit() {
   return (
     <div className="apple-page apple-form-page max-w-5xl mx-auto">
 
-      <h1 className="text-3xl font-bold mb-8">
-        Modifier l'événement
-      </h1>
+      <header className="event-editor-header"><span>Événements · Modification</span><h1>Modifier l’événement</h1><p>Mettez à jour les informations publiques et la capacité de votre événement.</p></header>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow p-6"
+        className="event-editor-card p-6"
       >
 
         <div className="grid md:grid-cols-2 gap-5">
 
           <div>
             <Input
+              label="Titre de l’événement"
               placeholder="Titre"
               value={title}
               onChange={(e) =>
@@ -239,6 +238,7 @@ function EventsEdit() {
 
           <div>
             <Input
+              label="Date"
               type="date"
               value={date}
               onChange={(e) =>
@@ -255,6 +255,7 @@ function EventsEdit() {
 
           <div>
             <Input
+              label="Lieu"
               placeholder="Lieu"
               value={location}
               onChange={handleLocationChange}
@@ -295,6 +296,7 @@ function EventsEdit() {
 
           <div>
             <Input
+              label="Capacité"
               type="number"
               placeholder="Nombre de tickets disponibles"
               value={tickets}
@@ -312,6 +314,7 @@ function EventsEdit() {
 
           <div>
             <Input
+              label="Prix par billet"
               type="number"
               placeholder="Prix du ticket"
               value={price}
@@ -329,6 +332,7 @@ function EventsEdit() {
 
           <div>
             <Input
+              label="Catégorie"
               placeholder="Catégorie"
               value={category}
               onChange={(e) =>

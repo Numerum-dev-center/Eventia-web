@@ -26,6 +26,12 @@ import StatCard from "../../components/organizer/StatCard";
 const formatCurrency = (value) =>
   new Intl.NumberFormat("fr-FR").format(value) + " FCFA";
 
+const STATUS_LABEL = {
+  PUBLISHED: "Publié",
+  DRAFT: "Brouillon",
+  CANCELLED: "Annulé",
+};
+
 function EventDetails() {
 
   const { id } = useParams();
@@ -73,7 +79,7 @@ function EventDetails() {
     <div className="apple-page">
       <Link className="apple-back" to="/organizer/events"><ArrowLeft size={16} /> Tous les événements</Link>
       <section className="apple-detail-hero">
-        <span>{event.category || "Événement"} · {event.status || "Brouillon"}</span>
+        <span>{event.category || "Événement"} · {STATUS_LABEL[event.status] || "Brouillon"}</span>
         <h1>{event.title}</h1>
         <p>{new Date(event.date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} · {event.location}</p>
       </section>

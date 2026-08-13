@@ -107,12 +107,12 @@ function OrganizerSettings() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input name="prenoms" placeholder="Prénoms" value={form.prenoms} onChange={handleChange} />
-            <Input name="nom" placeholder="Nom" value={form.nom} onChange={handleChange} />
+            <Input name="prenoms" label="Prénoms" placeholder="Prénoms" value={form.prenoms} onChange={handleChange} />
+            <Input name="nom" label="Nom" placeholder="Nom" value={form.nom} onChange={handleChange} />
           </div>
-          <Input name="telephone" placeholder="Téléphone (+228...)" value={form.telephone} onChange={handleChange} />
-          <Input name="nomEntreprise" placeholder="Nom de l'entreprise / organisation" value={form.nomEntreprise} onChange={handleChange} />
-          <Input name="description" placeholder="Description de votre activité" value={form.description} onChange={handleChange} />
+          <Input name="telephone" label="Téléphone" placeholder="Téléphone (+228...)" value={form.telephone} onChange={handleChange} />
+          <Input name="nomEntreprise" label="Organisation" placeholder="Nom de l'entreprise / organisation" value={form.nomEntreprise} onChange={handleChange} />
+          <Input name="description" label="Présentation" placeholder="Description de votre activité" value={form.description} onChange={handleChange} />
 
           <Button type="submit" fullWidth={false} disabled={saving} className="px-6">
             {saving ? "Enregistrement..." : "Enregistrer"}

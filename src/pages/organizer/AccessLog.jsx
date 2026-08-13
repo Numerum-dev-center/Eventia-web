@@ -1,16 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, ClipboardList, Loader2, XCircle } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Button from "../../components/ui/Button";
+import DataToolbar from "../../components/ui/DataToolbar";
 import { fetchAccessLog } from "../../services/eventsApiService";
 
 function AccessLog() {
   const { id } = useParams();
   const [scans, setScans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const visibleScans = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase("fr");
+    if (!query) return scans;
+    return scans.filter((scan) => [scan.estSucces ? "validé succès" : "refusé échec", scan.messageErreur, scan.localisation].some((value) => String(value || "").toLocaleLowerCase("fr").includes(query)));
+  }, [scans, search]);
 
   useEffect(() => {
     fetchAccessLog(id)
@@ -55,7 +63,9 @@ function AccessLog() {
           }
         />
       ) : (
-        <div className="apple-table-card">
+        <>
+        <DataToolbar value={search} onChange={setSearch} placeholder="Rechercher dans les contrôles…" countLabel={`${visibleScans.length} passage${visibleScans.length > 1 ? "s" : ""}`} />
+        {visibleScans.length === 0 ? <EmptyState icon={ClipboardList} title="Aucun résultat" description="Aucun passage ne correspond à cette recherche." /> : <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -66,7 +76,7 @@ function AccessLog() {
               </tr>
             </thead>
             <tbody>
-              {scans.map((scan) => (
+              {visibleScans.map((scan) => (
                 <tr key={scan.id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4">
                     {scan.estSucces ? (
@@ -92,7 +102,8 @@ function AccessLog() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div>}
+        </>
       )}
     </div>
   );

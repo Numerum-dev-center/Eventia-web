@@ -178,11 +178,14 @@ function EventsCreate() {
 
   return (
     <div className="apple-page apple-form-page">
-      <p className="text-sm text-gray-400 mb-2">Événements / Nouveau</p>
-      <h1 className="text-2xl font-bold mb-8">Créer un événement</h1>
+      <header className="event-editor-header">
+        <span>Événements · Nouveau</span>
+        <h1>Créer un événement</h1>
+        <p>Renseignez les informations utiles aux participants, configurez la billetterie puis publiez.</p>
+      </header>
 
       {/* Repères d'étapes — indicatif, tout se soumet en une fois */}
-      <div className="flex items-center gap-3 mb-10 max-w-xl">
+      <div className="event-editor-steps">
         {[
           { label: "Informations", done: true },
           { label: "Billetterie", done: Boolean(tickets && price) },
@@ -210,9 +213,9 @@ function EventsCreate() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
+      <div className="event-editor-layout">
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow p-6">
+        <form onSubmit={handleSubmit} className="event-editor-card p-6">
 
           <div className="grid md:grid-cols-2 gap-5">
 
@@ -220,7 +223,7 @@ function EventsCreate() {
             <div className="md:col-span-2">
               <label className="block mb-2 font-medium text-sm">Photo de couverture</label>
               <label
-                className="
+                className="event-cover-uploader
                   w-full h-56 border-2 border-dashed border-gray-300 rounded-2xl
                   flex flex-col items-center justify-center cursor-pointer
                   hover:border-orange-500 transition overflow-hidden text-center
@@ -250,6 +253,7 @@ function EventsCreate() {
             {/* Titre */}
             <div className="md:col-span-2">
               <Input
+                label="Titre de l’événement"
                 placeholder="Titre de l'événement"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -259,6 +263,7 @@ function EventsCreate() {
 
             {/* Date */}
             <Input
+              label="Date"
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -269,6 +274,7 @@ function EventsCreate() {
 
             {/* Heures */}
             <Input
+              label="Heure de début"
               type="time"
               placeholder="Heure de début"
               value={startTime}
@@ -276,6 +282,7 @@ function EventsCreate() {
               error={errors.startTime}
             />
             <Input
+              label="Heure de fin"
               type="time"
               placeholder="Heure de fin"
               value={endTime}
@@ -286,6 +293,7 @@ function EventsCreate() {
             {/* Lieu */}
             <div className="md:col-span-2">
               <Input
+                label="Lieu"
                 placeholder="Lieu"
                 value={location}
                 onChange={handleLocationChange}
@@ -323,7 +331,7 @@ function EventsCreate() {
             {/* Catégorie */}
             <div className="md:col-span-2">
               <label className="block mb-2 font-medium text-sm">Catégorie</label>
-              <div className="flex flex-wrap gap-2">
+              <div className="event-category-picker">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
@@ -343,6 +351,7 @@ function EventsCreate() {
 
             {/* Tickets */}
             <Input
+              label="Capacité"
               type="number"
               placeholder="Nombre de places disponibles"
               value={tickets}
@@ -352,6 +361,7 @@ function EventsCreate() {
 
             {/* Prix */}
             <Input
+              label="Prix par billet"
               type="number"
               placeholder="Prix du ticket (FCFA)"
               value={price}
@@ -391,11 +401,11 @@ function EventsCreate() {
         </form>
 
         {/* Aperçu public */}
-        <aside className="lg:sticky lg:top-6">
-          <p className="text-xs uppercase tracking-wide text-gray-400 font-medium mb-3">
+        <aside className="event-preview-panel lg:sticky lg:top-6">
+          <p className="event-preview-label">
             Aperçu public
           </p>
-          <div className="bg-white rounded-2xl shadow overflow-hidden border border-gray-100">
+          <div className="event-preview-card">
             <div
               className="h-32 bg-gray-100"
               style={

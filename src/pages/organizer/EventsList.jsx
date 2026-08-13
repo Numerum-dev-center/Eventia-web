@@ -1,21 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Eye, Pencil, CalendarDays, Loader2 } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import Button from "../../components/ui/Button";
 import EmptyState from "../../components/ui/EmptyState";
+import DataToolbar from "../../components/ui/DataToolbar";
 import { fetchMyEvents } from "../../services/eventsApiService";
 
 function EventsList() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchMyEvents()
       .then(setEvents)
       .finally(() => setLoading(false));
   }, []);
+
+  const visibleEvents = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase("fr");
+    if (!query) return events;
+    return events.filter((event) => [event.title, event.location, event.category, event.status].some((value) => String(value || "").toLocaleLowerCase("fr").includes(query)));
+  }, [events, search]);
 
   const getStatusBadge = (status) => {
     const styles = {
@@ -73,7 +81,9 @@ function EventsList() {
           }
         />
       ) : (
-        <div className="apple-table-card">
+        <>
+        <DataToolbar value={search} onChange={setSearch} placeholder="Rechercher un événement…" countLabel={`${visibleEvents.length} événement${visibleEvents.length > 1 ? "s" : ""}`} />
+        {visibleEvents.length === 0 ? <EmptyState icon={CalendarDays} title="Aucun résultat" description="Essayez un autre titre, lieu, statut ou catégorie." /> : <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -88,7 +98,7 @@ function EventsList() {
             </thead>
 
             <tbody>
-              {events.map((event) => (
+              {visibleEvents.map((event) => (
                 <tr
                   key={event.id}
                   className="border-b hover:bg-gray-50"
@@ -143,7 +153,8 @@ function EventsList() {
             </tbody>
 
           </table>
-        </div>
+        </div>}
+        </>
       )}
     </div>
   );

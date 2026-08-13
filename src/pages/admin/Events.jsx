@@ -1,9 +1,12 @@
-import { CalendarDays, Check, X, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CalendarCheck, CalendarDays, Check, Clock3, FilePenLine, X, Loader2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Badge from "../../components/ui/Badge";
+import DataToolbar from "../../components/ui/DataToolbar";
+import StatCard from "../../components/organizer/StatCard";
 import { fetchAllEventsAdmin, setEventStatusAdmin } from "../../services/eventsApiService";
 
 const STATUS_TONE = {
@@ -24,28 +27,34 @@ function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const load = () => {
-    setLoading(true);
+  const visibleEvents = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase("fr");
+    if (!query) return events;
+    return events.filter((event) => [event.title, event.category, event.location, STATUS_LABEL[event.status], event.status].some((value) => String(value || "").toLocaleLowerCase("fr").includes(query)));
+  }, [events, search]);
+
+  useEffect(() => {
     fetchAllEventsAdmin()
       .then((data) => setEvents(Array.isArray(data) ? data : []))
       .catch(() => setEvents([]))
       .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    load();
   }, []);
 
   const setStatus = async (id, status) => {
     setUpdatingId(id);
     try {
       await setEventStatusAdmin(id, status);
-      load();
+      const data = await fetchAllEventsAdmin();
+      setEvents(Array.isArray(data) ? data : []);
     } finally {
       setUpdatingId(null);
     }
   };
+
+  const statusChart = Object.entries(events.reduce((acc, event) => ({ ...acc, [event.status]: (acc[event.status] || 0) + 1 }), {})).map(([status, value]) => ({ name: STATUS_LABEL[status] || status, value, color: { PUBLISHED: "#34c759", PENDING: "#ff9f0a", DRAFT: "#8e8e93", CANCELLED: "#ff453a" }[status] || "#64d2ff" }));
+  const categoryChart = Object.entries(events.reduce((acc, event) => ({ ...acc, [event.category || "Autre"]: (acc[event.category || "Autre"] || 0) + 1 }), {})).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
   if (loading) {
     return (
@@ -59,9 +68,22 @@ function Events() {
   return (
     <div className="apple-page space-y-6">
       <PageHeader
+        eyebrow="Supervision du catalogue"
         title="Gestion des événements"
         subtitle="Modération et supervision des événements de la plateforme."
       />
+
+      <div className="admin-page-kpis">
+        <StatCard title="Total" value={events.length} icon={<CalendarDays size={22} />} />
+        <StatCard title="Publiés" value={events.filter((event) => event.status === "PUBLISHED").length} icon={<CalendarCheck size={22} />} />
+        <StatCard title="En attente" value={events.filter((event) => event.status === "PENDING").length} icon={<Clock3 size={22} />} />
+        <StatCard title="Brouillons" value={events.filter((event) => event.status === "DRAFT").length} icon={<FilePenLine size={22} />} />
+      </div>
+
+      {events.length > 0 && <section className="admin-page-charts">
+        <article className="admin-panel admin-mini-chart"><header className="admin-panel-head"><div><span>Modération</span><h2>Répartition par statut</h2></div></header><div className="admin-mini-chart-body"><div className="admin-mini-donut"><ResponsiveContainer width="100%" height={210}><PieChart><Pie data={statusChart} dataKey="value" innerRadius={57} outerRadius={82} paddingAngle={3} stroke="none">{statusChart.map((item) => <Cell key={item.name} fill={item.color} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer><strong>{events.length}</strong></div><div className="admin-legend">{statusChart.map((item) => <span key={item.name}><i style={{ background:item.color }} /><em>{item.name}</em><strong>{item.value}</strong></span>)}</div></div></article>
+        <article className="admin-panel"><header className="admin-panel-head"><div><span>Catalogue</span><h2>Catégories principales</h2></div></header><div className="admin-category-bars">{categoryChart.map(([name, value]) => <div key={name}><span><em>{name}</em><strong>{value}</strong></span><i><b style={{ width:`${Math.max(8,(value / Math.max(...categoryChart.map(([, count]) => count))) * 100)}%` }} /></i></div>)}</div></article>
+      </section>}
 
       {events.length === 0 ? (
         <EmptyState
@@ -70,7 +92,9 @@ function Events() {
           description="Les événements créés par les organisateurs apparaîtront ici."
         />
       ) : (
-        <div className="apple-table-card">
+        <>
+        <DataToolbar value={search} onChange={setSearch} placeholder="Rechercher dans les événements…" countLabel={`${visibleEvents.length} événement${visibleEvents.length > 1 ? "s" : ""}`} />
+        {visibleEvents.length === 0 ? <EmptyState icon={CalendarDays} title="Aucun résultat" description="Aucun événement ne correspond à cette recherche." /> : <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -82,7 +106,7 @@ function Events() {
               </tr>
             </thead>
             <tbody>
-              {events.map((event) => (
+              {visibleEvents.map((event) => (
                 <tr key={event.id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium">{event.title}</td>
                   <td className="px-6 py-4">{event.category}</td>
@@ -120,7 +144,8 @@ function Events() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div>}
+        </>
       )}
     </div>
   );

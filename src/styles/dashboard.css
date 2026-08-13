@@ -109,6 +109,8 @@
 .ui-button--sm { min-height: 36px; padding: 0 13px; font-size: 10px; }
 .ui-button--lg { min-height: 50px; padding: 0 22px; font-size: 12px; }
 .ui-input-shell { width: 100%; }
+.ui-input-label { margin: 0 0 7px; display: block; color: #3a3a3c; font-size: 10px; font-weight: 700; }
+.ui-input-hint { margin: 6px 0 0; color: #8e8e93; font-size: 9px; }
 .ui-input-wrap { position: relative; }
 .ui-input-icon { position: absolute; z-index: 2; left: 15px; top: 50%; color: #9a938c; transform: translateY(-50%); pointer-events: none; }
 .ui-input { width: 100%; min-height: 50px; padding: 0 16px; color: var(--db-ink); border: 1px solid #dcd5ce; border-radius: 14px; outline: 0; background: rgba(255,255,255,.9); font-size: 12px; transition: border .2s, box-shadow .2s; }

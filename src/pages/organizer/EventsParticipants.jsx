@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Loader2, Users } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Badge from "../../components/ui/Badge";
+import DataToolbar from "../../components/ui/DataToolbar";
 import { fetchEventById, fetchParticipants } from "../../services/eventsApiService";
 
 const STATUT_TONE = {
@@ -18,6 +19,7 @@ function EventParticipants() {
   const [event, setEvent] = useState(null);
   const [commandes, setCommandes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     Promise.all([fetchEventById(id), fetchParticipants(id)])
@@ -29,6 +31,11 @@ function EventParticipants() {
   }, [id]);
 
   const totalBillets = commandes.reduce((sum, c) => sum + (c.ticketsEmis?.length ?? 0), 0);
+  const visibleCommandes = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase("fr");
+    if (!query) return commandes;
+    return commandes.filter((commande) => [commande.buyerName, commande.buyerEmail, commande.buyerTelephone, commande.statutPaiement].some((value) => String(value || "").toLocaleLowerCase("fr").includes(query)));
+  }, [commandes, search]);
 
   if (loading) {
     return (
@@ -66,7 +73,9 @@ function EventParticipants() {
           description="Les réservations effectuées depuis la page publique de l'événement apparaîtront ici."
         />
       ) : (
-        <div className="apple-table-card">
+        <>
+        <DataToolbar value={search} onChange={setSearch} placeholder="Rechercher un participant…" countLabel={`${visibleCommandes.length} commande${visibleCommandes.length > 1 ? "s" : ""}`} />
+        {visibleCommandes.length === 0 ? <EmptyState icon={Users} title="Aucun résultat" description="Aucun participant ne correspond à cette recherche." /> : <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -82,7 +91,7 @@ function EventParticipants() {
             </thead>
 
             <tbody>
-              {commandes.map((commande) => {
+              {visibleCommandes.map((commande) => {
                 const billets = commande.ticketsEmis ?? [];
                 const scannes = billets.filter((t) => t.statutValidation === "Scanne").length;
                 return (
@@ -110,7 +119,8 @@ function EventParticipants() {
               })}
             </tbody>
           </table>
-        </div>
+        </div>}
+        </>
       )}
     </div>
   );

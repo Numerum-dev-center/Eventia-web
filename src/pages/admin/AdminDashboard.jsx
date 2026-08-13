@@ -1,63 +1,170 @@
 import { useEffect, useState } from "react";
-import { Users, CalendarDays, Wallet, Ticket, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  Activity,
+  ArrowUpRight,
+  CalendarCheck,
+  CalendarDays,
+  CircleDollarSign,
+  Loader2,
+  ShieldCheck,
+  Ticket,
+  UserRoundCheck,
+  Users,
+  Wallet,
+} from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import PageHeader from "../../components/ui/PageHeader";
 import StatCard from "../../components/organizer/StatCard";
-import { fetchAdminDashboard } from "../../services/eventsApiService";
+import {
+  fetchAdminDashboard,
+  fetchAdminReversements,
+  fetchAllEventsAdmin,
+} from "../../services/eventsApiService";
+
+const money = (value) => `${Number(value || 0).toLocaleString("fr-FR")} FCFA`;
+const compactMoney = (value) => new Intl.NumberFormat("fr-FR", { notation: "compact", maximumFractionDigits: 1 }).format(Number(value || 0));
+const STATUS_LABEL = { PUBLISHED: "Publiés", DRAFT: "Brouillons", PENDING: "En attente", CANCELLED: "Annulés" };
+const STATUS_COLORS = { PUBLISHED: "#34c759", DRAFT: "#8e8e93", PENDING: "#ff9f0a", CANCELLED: "#ff453a" };
+
+function ChartTooltip({ active, payload, label, formatter = money }) {
+  if (!active || !payload?.length) return null;
+  return <div className="admin-chart-tooltip"><span>{label || payload[0]?.name}</span><strong>{formatter(payload[0]?.value)}</strong></div>;
+}
 
 function AdminDashboard() {
   const [dashboard, setDashboard] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [reversements, setReversements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchAdminDashboard()
-      .then(setDashboard)
-      .catch(() => setDashboard(null))
+    Promise.allSettled([fetchAdminDashboard(), fetchAllEventsAdmin(), fetchAdminReversements()])
+      .then(([dashboardResult, eventsResult, reversementsResult]) => {
+        setDashboard(dashboardResult.status === "fulfilled" ? dashboardResult.value : null);
+        setEvents(eventsResult.status === "fulfilled" && Array.isArray(eventsResult.value) ? eventsResult.value : []);
+        setReversements(reversementsResult.status === "fulfilled" && Array.isArray(reversementsResult.value) ? reversementsResult.value : []);
+      })
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement du tableau de bord...
-      </div>
-    );
+    return <div className="db-loading"><Loader2 size={19} className="animate-spin" /> Préparation des indicateurs…</div>;
   }
 
+  const users = Number(dashboard?.utilisateurs || 0);
+  const organizers = Number(dashboard?.organisateurs || 0);
+  const participants = Math.max(users - organizers, 0);
+  const checkinRate = Math.min(100, Math.max(0, Number(dashboard?.tauxCheckIn || 0)));
+  const published = Number(dashboard?.evenementsPublies || 0);
+
+  const roleData = [
+    { name: "Participants", value: participants, color: "#1d1d1f" },
+    { name: "Organisateurs", value: organizers, color: "#ff5a1f" },
+  ].filter((item) => item.value > 0);
+
+  const statusData = Object.entries(events.reduce((acc, event) => {
+    acc[event.status] = (acc[event.status] || 0) + 1;
+    return acc;
+  }, {})).map(([status, value]) => ({ name: STATUS_LABEL[status] || status, value, color: STATUS_COLORS[status] || "#64d2ff" }));
+
+  const revenueData = [...reversements]
+    .sort((a, b) => Number(b.revenue || 0) - Number(a.revenue || 0))
+    .slice(0, 7)
+    .map((item) => ({ name: item.titre?.length > 18 ? `${item.titre.slice(0, 18)}…` : item.titre || "Événement", revenue: Number(item.revenue || 0) }));
+
+  const recentEvents = [...events]
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+    .slice(0, 5);
+
   return (
-    <div className="apple-page space-y-6">
+    <div className="apple-page admin-command-center">
       <PageHeader
-        title="Tableau de bord administrateur"
-        subtitle="Vue d'ensemble de la plateforme Eventia."
+        eyebrow="Centre de pilotage"
+        title="Vue d’ensemble"
+        subtitle="Suivez la santé de la plateforme, les ventes et l’activité de vos événements en temps réel."
+        action={<span className="admin-live-pill"><i /> Données en direct</span>}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <StatCard
-          title="Utilisateurs"
-          value={dashboard?.utilisateurs ?? "—"}
-          icon={<Users size={26} />}
-        />
-        <StatCard
-          title="Événements"
-          value={dashboard?.evenements ?? "—"}
-          icon={<CalendarDays size={26} />}
-        />
-        <StatCard
-          title="Billets vendus"
-          value={dashboard?.billetsVendus ?? "—"}
-          icon={<Ticket size={26} />}
-        />
-        <StatCard
-          title="Revenus"
-          value={`${(dashboard?.revenue ?? 0).toLocaleString("fr-FR")} FCFA`}
-          icon={<Wallet size={26} />}
-        />
-      </div>
+      <section className="admin-kpi-grid">
+        <StatCard title="Utilisateurs" value={users.toLocaleString("fr-FR")} icon={<Users size={24} />} />
+        <StatCard title="Organisateurs" value={organizers.toLocaleString("fr-FR")} icon={<UserRoundCheck size={24} />} />
+        <StatCard title="Événements publiés" value={`${published} / ${dashboard?.evenements ?? 0}`} icon={<CalendarCheck size={24} />} />
+        <StatCard title="Billets vendus" value={Number(dashboard?.billetsVendus || 0).toLocaleString("fr-FR")} icon={<Ticket size={24} />} />
+        <StatCard title="Taux de check-in" value={`${checkinRate}%`} icon={<ShieldCheck size={24} />} />
+        <StatCard title="Revenus générés" value={money(dashboard?.revenue)} icon={<Wallet size={24} />} />
+      </section>
 
-      <p className="text-xs text-gray-400">
-        Données calculées en temps réel à partir de la base de données de la plateforme.
-      </p>
+      <section className="admin-chart-layout">
+        <article className="admin-panel admin-revenue-panel">
+          <header className="admin-panel-head"><div><span>Performance financière</span><h2>Revenus par événement</h2><p>Classement des événements selon les ventes enregistrées.</p></div><CircleDollarSign size={22} /></header>
+          {revenueData.length ? (
+            <ResponsiveContainer width="100%" height={310}>
+              <BarChart data={revenueData} margin={{ top: 18, right: 6, left: -12, bottom: 0 }}>
+                <defs><linearGradient id="adminRevenueBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#ff7138" /><stop offset="100%" stopColor="#ff4f16" /></linearGradient></defs>
+                <CartesianGrid stroke="rgba(60,60,67,.08)" vertical={false} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} interval={0} tick={{ fontSize: 9, fill: "#8e8e93" }} />
+                <YAxis axisLine={false} tickLine={false} tickFormatter={compactMoney} tick={{ fontSize: 9, fill: "#8e8e93" }} />
+                <Tooltip cursor={{ fill: "rgba(255,90,31,.04)" }} content={<ChartTooltip />} />
+                <Bar dataKey="revenue" fill="url(#adminRevenueBar)" radius={[9, 9, 3, 3]} maxBarSize={42} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : <div className="admin-chart-empty"><CircleDollarSign size={25} /><strong>Aucun revenu enregistré</strong><span>Les ventes apparaîtront ici automatiquement.</span></div>}
+        </article>
+
+        <article className="admin-panel admin-checkin-panel">
+          <header className="admin-panel-head"><div><span>Contrôle d’accès</span><h2>Taux de check-in</h2></div><Activity size={21} /></header>
+          <div className="admin-gauge" style={{ "--gauge-value": `${checkinRate * 3.6}deg` }}><div><strong>{checkinRate}%</strong><span>billets contrôlés</span></div></div>
+          <div className="admin-gauge-note"><i className={checkinRate >= 50 ? "is-good" : ""} /><span><strong>{checkinRate >= 50 ? "Bonne progression" : "Contrôles en cours"}</strong><small>Calculé sur l’ensemble des billets vendus.</small></span></div>
+        </article>
+      </section>
+
+      <section className="admin-secondary-grid">
+        <article className="admin-panel admin-donut-panel">
+          <header className="admin-panel-head"><div><span>Communauté</span><h2>Répartition des comptes</h2></div><Users size={21} /></header>
+          <div className="admin-donut-content">
+            <div className="admin-donut-chart">
+              <ResponsiveContainer width="100%" height={205}>
+                <PieChart><Pie data={roleData.length ? roleData : [{ name: "Aucune donnée", value: 1, color: "#e5e5ea" }]} dataKey="value" innerRadius={62} outerRadius={84} paddingAngle={3} stroke="none">{(roleData.length ? roleData : [{ color: "#e5e5ea" }]).map((entry) => <Cell key={entry.name || entry.color} fill={entry.color} />)}</Pie><Tooltip content={<ChartTooltip formatter={(value) => Number(value).toLocaleString("fr-FR")} />} /></PieChart>
+              </ResponsiveContainer>
+              <div><strong>{users}</strong><span>comptes</span></div>
+            </div>
+            <div className="admin-legend">{roleData.map((item) => <span key={item.name}><i style={{ background: item.color }} /><em>{item.name}</em><strong>{item.value}</strong></span>)}</div>
+          </div>
+        </article>
+
+        <article className="admin-panel admin-donut-panel">
+          <header className="admin-panel-head"><div><span>Catalogue</span><h2>Statut des événements</h2></div><CalendarDays size={21} /></header>
+          <div className="admin-donut-content">
+            <div className="admin-donut-chart">
+              <ResponsiveContainer width="100%" height={205}>
+                <PieChart><Pie data={statusData.length ? statusData : [{ name: "Aucune donnée", value: 1, color: "#e5e5ea" }]} dataKey="value" innerRadius={62} outerRadius={84} paddingAngle={3} stroke="none">{(statusData.length ? statusData : [{ color: "#e5e5ea" }]).map((entry) => <Cell key={entry.name || entry.color} fill={entry.color} />)}</Pie><Tooltip content={<ChartTooltip formatter={(value) => Number(value).toLocaleString("fr-FR")} />} /></PieChart>
+              </ResponsiveContainer>
+              <div><strong>{events.length}</strong><span>événements</span></div>
+            </div>
+            <div className="admin-legend">{statusData.map((item) => <span key={item.name}><i style={{ background: item.color }} /><em>{item.name}</em><strong>{item.value}</strong></span>)}</div>
+          </div>
+        </article>
+
+        <article className="admin-panel admin-recent-panel">
+          <header className="admin-panel-head"><div><span>Activité récente</span><h2>Derniers événements</h2></div><Link to="/admin/events" aria-label="Voir tous les événements"><ArrowUpRight size={18} /></Link></header>
+          <div className="admin-recent-list">
+            {recentEvents.length ? recentEvents.map((event) => <div key={event.id}><span>{String(event.title || "E").slice(0, 1).toUpperCase()}</span><div><strong>{event.title}</strong><small>{event.location || "Lieu à confirmer"} · {event.date ? new Date(event.date).toLocaleDateString("fr-FR") : "Date à confirmer"}</small></div><em className={`is-${String(event.status || "draft").toLowerCase()}`}>{STATUS_LABEL[event.status] || event.status}</em></div>) : <div className="admin-chart-empty"><CalendarDays size={22} /><span>Aucun événement récent.</span></div>}
+          </div>
+        </article>
+      </section>
     </div>
   );
 }

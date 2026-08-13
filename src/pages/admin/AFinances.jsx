@@ -1,19 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Wallet,
   BadgePercent,
   HandCoins,
   Loader2,
+  Landmark,
 } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import StatCard from "../../components/organizer/StatCard";
 import PageHeader from "../../components/ui/PageHeader";
+import DataToolbar from "../../components/ui/DataToolbar";
 import { fetchAdminCommissions, fetchAdminReversements } from "../../services/eventsApiService";
 
 function AdminFinances() {
   const [commissions, setCommissions] = useState(null);
   const [reversements, setReversements] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     Promise.all([fetchAdminCommissions(), fetchAdminReversements()])
@@ -28,6 +32,11 @@ function AdminFinances() {
       .finally(() => setLoading(false));
   }, []);
 
+  const visibleReversements = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase("fr");
+    return query ? reversements.filter((item) => String(item.titre || "").toLocaleLowerCase("fr").includes(query)) : reversements;
+  }, [reversements, search]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
@@ -37,22 +46,26 @@ function AdminFinances() {
     );
   }
 
-  const revenue = commissions?.revenue ?? 0;
-  const commission = commissions?.commission ?? 0;
-  const netTotal = reversements.reduce((sum, r) => sum + (r.net ?? 0), 0);
+  const revenue = reversements.reduce((sum, r) => sum + Number(r.revenue ?? 0), 0);
+  const commission = reversements.reduce((sum, r) => sum + Number(r.commission ?? 0), 0);
+  const netTotal = reversements.reduce((sum, r) => sum + Number(r.net ?? 0), 0);
+  const tauxCommission = commissions?.[0]?.taux ? `${Math.round(commissions[0].taux * 100)}%` : "5%";
+  const chartData = [...reversements].sort((a, b) => Number(b.revenue || 0) - Number(a.revenue || 0)).slice(0, 7).map((item) => ({ name: item.titre?.length > 16 ? `${item.titre.slice(0, 16)}…` : item.titre, revenus: Number(item.revenue || 0), net: Number(item.net || 0) }));
+  const splitData = [{ name: "Net organisateurs", value: netTotal, color: "#1d1d1f" }, { name: "Commission Eventia", value: Number(commission), color: "#ff5a1f" }].filter((item) => item.value > 0);
 
   return (
     <div className="apple-page space-y-6">
       <PageHeader
+        eyebrow="Pilotage financier"
         title="Finances"
         subtitle="Revenus, commissions et reversements de la plateforme."
       />
       <p className="text-xs text-gray-400 -mt-4">
-        Calculé en temps réel à partir des commandes enregistrées (commission plateforme : 5%).
+        Calculé en temps réel à partir des commandes enregistrées (commission plateforme : {tauxCommission}).
       </p>
 
       {/* Cartes */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="admin-page-kpis">
 
         <StatCard
           title="Revenus"
@@ -72,10 +85,17 @@ function AdminFinances() {
           icon={<HandCoins />}
         />
 
+        <StatCard title="Événements rémunérés" value={reversements.length} icon={<Landmark />} />
+
       </div>
 
+      {reversements.length > 0 && <section className="admin-finance-charts">
+        <article className="admin-panel"><header className="admin-panel-head"><div><span>Performance</span><h2>Revenus par événement</h2></div></header><ResponsiveContainer width="100%" height={285}><BarChart data={chartData} margin={{ top:20,right:5,left:-15,bottom:0 }}><CartesianGrid vertical={false} stroke="rgba(60,60,67,.08)" /><XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize:8,fill:"#8e8e93" }} /><YAxis axisLine={false} tickLine={false} tick={{ fontSize:8,fill:"#8e8e93" }} /><Tooltip /><Bar dataKey="revenus" fill="#ff5a1f" radius={[8,8,2,2]} maxBarSize={38} /><Bar dataKey="net" fill="#1d1d1f" radius={[8,8,2,2]} maxBarSize={38} /></BarChart></ResponsiveContainer></article>
+        <article className="admin-panel"><header className="admin-panel-head"><div><span>Distribution</span><h2>Commission et reversements</h2></div></header><div className="admin-mini-chart-body"><div className="admin-mini-donut"><ResponsiveContainer width="100%" height={220}><PieChart><Pie data={splitData.length ? splitData : [{ name:"Aucune donnée",value:1,color:"#e5e5ea" }]} dataKey="value" innerRadius={60} outerRadius={86} paddingAngle={3} stroke="none">{(splitData.length ? splitData : [{ name:"vide",color:"#e5e5ea" }]).map((item) => <Cell key={item.name} fill={item.color} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer><strong>{tauxCommission}</strong></div><div className="admin-legend">{splitData.map((item) => <span key={item.name}><i style={{ background:item.color }} /><em>{item.name}</em><strong>{item.value.toLocaleString("fr-FR")}</strong></span>)}</div></div></article>
+      </section>}
+
       {reversements.length > 0 && (
-        <div className="apple-table-card">
+        <><DataToolbar value={search} onChange={setSearch} placeholder="Rechercher un événement…" countLabel={`${visibleReversements.length} reversement${visibleReversements.length > 1 ? "s" : ""}`} /><div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
@@ -86,7 +106,7 @@ function AdminFinances() {
               </tr>
             </thead>
             <tbody>
-              {reversements.map((r, idx) => (
+              {visibleReversements.map((r, idx) => (
                 <tr key={idx} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium">{r.titre}</td>
                   <td className="px-6 py-4 text-right">
@@ -102,7 +122,7 @@ function AdminFinances() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div></>
       )}
     </div>
   );

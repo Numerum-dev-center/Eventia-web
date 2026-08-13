@@ -53,7 +53,7 @@ function Scan() {
 
         <button
           type="button"
-          className="mt-8 w-full flex flex-col items-center justify-center gap-3 border-2 border-dashed border-white/20 rounded-2xl py-14 text-slate-400 hover:border-orange-400 hover:text-orange-300 transition"
+          className="apple-camera-zone mt-8 w-full flex flex-col items-center justify-center gap-3 border-2 border-dashed border-white/20 rounded-2xl py-14 text-slate-400 hover:border-orange-400 hover:text-orange-300 transition"
         >
           <Camera size={32} />
           <span className="text-sm font-medium">Activer la caméra</span>

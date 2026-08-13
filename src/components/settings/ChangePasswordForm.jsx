@@ -68,6 +68,7 @@ function ChangePasswordForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <Input
+          label="Mot de passe actuel"
           type="password"
           name="current"
           placeholder="Mot de passe actuel"
@@ -77,6 +78,7 @@ function ChangePasswordForm() {
           icon={Lock}
         />
         <Input
+          label="Nouveau mot de passe"
           type="password"
           name="next"
           placeholder="Nouveau mot de passe"
@@ -86,6 +88,7 @@ function ChangePasswordForm() {
           icon={Lock}
         />
         <Input
+          label="Confirmation"
           type="password"
           name="confirm"
           placeholder="Confirmer le nouveau mot de passe"
