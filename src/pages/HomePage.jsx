@@ -3,14 +3,13 @@
 import "tailwindcss";
 
 import { Link } from "react-router-dom";
+import BrandLogo from "../components/brand/BrandLogo";
 
 function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
       <nav className="flex justify-between items-center p-6 max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-white">
-          Eventia
-        </h1>
+        <Link to="/" className="rounded-xl bg-white px-3 py-2"><BrandLogo /></Link>
 
         <div className="flex gap-4">
           <Link

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BrandLogo from "../brand/BrandLogo";
 
 
 import {
@@ -64,10 +65,9 @@ function Footer() {
 
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900"
+              className="inline-flex items-center"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500 text-white text-sm">●</span>
-              Eventia
+              <BrandLogo className="landing-footer-logo" />
             </Link>
 
 

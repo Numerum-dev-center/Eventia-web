@@ -1,13 +1,13 @@
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import eventImage from "../../assets/organizer/im-land.jpg";
+import BrandLogo from "../brand/BrandLogo";
 import "../../styles/auth.css";
 
 export function AuthBrand() {
   return (
     <Link className="auth-brand" to="/" aria-label="Eventia, retour à l’accueil">
-      <span className="auth-brand-mark" aria-hidden="true"><i /><i /><i /></span>
-      <span>Eventia</span>
+      <BrandLogo className="auth-brand-logo" />
     </Link>
   );
 }

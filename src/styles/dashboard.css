@@ -17,7 +17,10 @@
 .db-sidebar { position: relative; z-index: 40; width: 258px; height: 100vh; flex: 0 0 auto; padding: 16px 13px; display: flex; flex-direction: column; color: white; background: #191716; border-right: 1px solid rgba(255,255,255,.05); transition: width .28s ease, transform .28s ease; }
 .db-sidebar.is-collapsed { width: 82px; }
 .db-sidebar-head { height: 57px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 7px; }
-.db-logo { min-width: 0; display: flex; align-items: center; gap: 10px; }
+.db-logo { min-width: 0; display: flex; align-items: center; gap: 9px; }
+.eventia-logo--sidebar { width: 145px; height: 38px; padding: 6px 9px; border-radius: 11px; background: white; box-shadow: 0 8px 22px rgba(0,0,0,.2); }
+.eventia-logo--sidebar.eventia-logo--icon { width: 38px; height: 38px; padding: 5px; }
+.eventia-logo--sidebar.eventia-logo--icon img { width: 181px; height: 36px; }
 .db-logo-mark { width: 31px; height: 31px; flex: 0 0 auto; padding: 7px 6px; display: inline-flex; align-items: flex-end; justify-content: center; gap: 2px; color: white; border-radius: 10px; background: var(--db-orange); box-shadow: inset 0 1px rgba(255,255,255,.36), 0 8px 18px rgba(255,92,53,.2); }
 .db-logo-mark i { width: 4px; display: block; border-radius: 4px; background: currentColor; }
 .db-logo-mark i:nth-child(1) { height: 7px; transform: rotate(-9deg); }

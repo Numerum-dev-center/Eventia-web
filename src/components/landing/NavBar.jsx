@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 import Button from "../ui/Button";
+import BrandLogo from "../brand/BrandLogo";
 
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,12 +45,9 @@ function NavBar() {
 
         <Link
           to="/"
-          className="flex items-center gap-2 text-2xl font-bold text-white"
+          className="flex items-center rounded-xl bg-white px-3 py-2"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500">
-            <Sparkles size={18} className="text-white" />
-          </span>
-          Eventia
+          <BrandLogo className="landing-nav-logo" />
         </Link>
 
         {/* Desktop */}

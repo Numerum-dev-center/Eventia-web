@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronLeft, ChevronRight, LogOut, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { logout } from "../../services/authSession";
 import { logoutApi } from "../../services/authService";
+import BrandLogo from "../brand/BrandLogo";
 
 function Sidebar({ title = "Eventia", menuItems = [], mobileOpen = false, onMobileClose }) {
   const location = useLocation();
@@ -22,8 +23,8 @@ function Sidebar({ title = "Eventia", menuItems = [], mobileOpen = false, onMobi
     <aside className={`db-sidebar ${collapsed ? "is-collapsed" : ""} ${mobileOpen ? "is-mobile-open" : ""}`}>
       <div className="db-sidebar-head">
         <NavLink to={workspace === "Administration" ? "/admin/dashboard" : "/organizer/dashboard"} className="db-logo" onClick={closeMobile}>
-          <span className="db-logo-mark" aria-hidden="true"><i /><i /><i /></span>
-          {!collapsed && <span><strong>Eventia</strong><small>{workspace}</small></span>}
+          <BrandLogo className="eventia-logo--sidebar" iconOnly={collapsed} />
+          {!collapsed && <span><small>{workspace}</small></span>}
         </NavLink>
         <button className="db-mobile-close" type="button" onClick={closeMobile} aria-label="Fermer le menu"><X size={20} /></button>
       </div>

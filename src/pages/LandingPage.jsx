@@ -10,7 +10,6 @@ import {
   QrCode,
   Search,
   ShieldCheck,
-  Sparkles,
   Ticket,
   Users,
   X,
@@ -21,6 +20,7 @@ import conference from "../assets/landing/events/conference.jpg";
 import festival from "../assets/landing/events/festival.jpg";
 import heroDashboard from "../assets/landing/hero-dashboard.jpg";
 import "../styles/landing.css";
+import BrandLogo from "../components/brand/BrandLogo";
 
 const navItems = [
   { label: "Fonctionnalités", href: "#fonctionnalites" },
@@ -76,16 +76,6 @@ const faqs = [
   },
 ];
 
-function BrandMark() {
-  return (
-    <span className="brand-mark" aria-hidden="true">
-      <span />
-      <span />
-      <span />
-    </span>
-  );
-}
-
 function LandingPage() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -102,8 +92,7 @@ function LandingPage() {
       <header className="site-header">
         <div className="nav-shell">
           <Link className="brand" to="/" aria-label="Eventia, accueil">
-            <BrandMark />
-            <span>Eventia</span>
+            <BrandLogo className="landing-brand-logo" />
           </Link>
 
           <nav className="desktop-nav" aria-label="Navigation principale">
@@ -191,7 +180,7 @@ function LandingPage() {
               </div>
               <div className="dashboard-body">
                 <aside className="mini-sidebar">
-                  <BrandMark />
+                  <BrandLogo iconOnly />
                   <span className="active" />
                   <span />
                   <span />
@@ -317,7 +306,7 @@ function LandingPage() {
             <div className="phone-frame">
               <div className="phone-island" />
               <div className="phone-screen">
-                <div className="mobile-top"><BrandMark /><span>Mon billet</span><i>•••</i></div>
+                <div className="mobile-top"><BrandLogo iconOnly /><span>Mon billet</span><i>•••</i></div>
                 <img src={concert} alt="Concert sous les lumières de scène" />
                 <div className="mobile-event-copy"><small>15 AOÛT · 19:30</small><h3>Concert<br />Live</h3><p>Lomé, Togo</p></div>
                 <div className="mobile-ticket"><div><QrCode size={64} /><span><small>ADMISSION</small><strong>PASS STANDARD</strong><em>EVT-2048-AL</em></span></div><p>Présentez ce code à l’entrée</p></div>
@@ -377,7 +366,7 @@ function LandingPage() {
 
       <footer className="site-footer">
         <div className="footer-main">
-          <div><Link className="brand" to="/"><BrandMark /><span>Eventia</span></Link><p>Créer. Rassembler.<br />Faire vivre.</p></div>
+          <div><Link className="brand" to="/"><BrandLogo className="landing-brand-logo" /></Link><p>Créer. Rassembler.<br />Faire vivre.</p></div>
           <div><strong>Produit</strong><a href="#fonctionnalites">Fonctionnalités</a><a href="#experience">Expérience</a><Link to="/events">Événements</Link></div>
           <div><strong>Compte</strong><Link to="/register">Créer un compte</Link><Link to="/login">Se connecter</Link><a href="#faq">Aide</a></div>
           <div><strong>Légal</strong><a href="#">Confidentialité</a><a href="#">Conditions</a><a href="#">Mentions légales</a></div>

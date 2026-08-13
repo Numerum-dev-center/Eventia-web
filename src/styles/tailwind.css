@@ -22,3 +22,31 @@ body {
 body {
   font-family: "Inter", sans-serif;
 }
+
+.eventia-logo {
+  width: 142px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.eventia-logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.eventia-logo--icon {
+  width: 32px;
+  height: 32px;
+}
+
+.eventia-logo--icon img {
+  width: 161px;
+  max-width: none;
+  height: 32px;
+  object-fit: contain;
+  object-position: left center;
+}
