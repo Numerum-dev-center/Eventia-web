@@ -42,7 +42,7 @@ function Login() {
       });
       const role = authState.user.role?.trim().toLowerCase();
       if (role === "admin") navigate("/admin/dashboard", { replace: true });
-      else if (role === "organisateur") navigate("/organizer/dashboard", { replace: true });
+      else if (role === "organizer") navigate("/organizer/dashboard", { replace: true });
       else setError(`Rôle non reconnu : ${role}`);
     } catch (requestError) {
       setError(requestError.response?.data?.message || requestError.message || "Impossible de vous connecter.");

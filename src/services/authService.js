@@ -2,18 +2,18 @@ import api from "./api/axios";
 
 // Connexion
 export const login = async ({ email, motDePasse }) => {
-  const response = await api.post("/auth/connexion", {
+  const response = await api.post("/auth/login", {
     email,
-    motDePasse,
+    password: motDePasse,
   });
 
   return response.data;
 };
 
 // Inscription (client ou organisateur)
-export const register = async ({ email, password, confirmPassword, role = "organisateur" }) => {
+export const register = async ({ email, password, confirmPassword, role = "Organizer" }) => {
   const endpoint =
-    role === "client" ? "/auth/inscription-client" : "/auth/inscription-organisateur";
+    role === "client" ? "/auth/register-client" : "/auth/register-organizer";
 
   const response = await api.post(endpoint, { email, password, confirmPassword });
 
@@ -24,7 +24,7 @@ export const register = async ({ email, password, confirmPassword, role = "organ
 
 // Deconnexion
 export const logoutApi = async () => {
-  const response = await api.post("/auth/deconnexion");
+  const response = await api.post("/auth/logout");
   return response.data;
 }
 
