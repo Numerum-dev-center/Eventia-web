@@ -86,7 +86,7 @@ function OrganizerSettings() {
   }
 
   return (
-    <div className="space-y-6 max-w-xl">
+    <div className="apple-page apple-settings-page space-y-6 max-w-xl">
       <PageHeader
         title="Paramètres"
         subtitle="Gérez votre profil organisateur et la sécurité de votre compte."

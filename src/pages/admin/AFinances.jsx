@@ -42,7 +42,7 @@ function AdminFinances() {
   const netTotal = reversements.reduce((sum, r) => sum + (r.net ?? 0), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <PageHeader
         title="Finances"
         subtitle="Revenus, commissions et reversements de la plateforme."
@@ -75,7 +75,7 @@ function AdminFinances() {
       </div>
 
       {reversements.length > 0 && (
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
+        <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>

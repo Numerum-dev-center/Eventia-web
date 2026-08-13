@@ -33,7 +33,7 @@ function Scan() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-160px)] -m-8 bg-[#0B1330] text-white p-8 rounded-2xl">
+    <div className="apple-page apple-scan-page">
       <Link
         to={`/organizer/events/${id}`}
         className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-orange-300"

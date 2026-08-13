@@ -177,7 +177,7 @@ function EventsCreate() {
     : null;
 
   return (
-    <div>
+    <div className="apple-page apple-form-page">
       <p className="text-sm text-gray-400 mb-2">Événements / Nouveau</p>
       <h1 className="text-2xl font-bold mb-8">Créer un événement</h1>
 

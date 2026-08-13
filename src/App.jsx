@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 
 
@@ -46,7 +46,6 @@ import OrganizerSettings from "./pages/organizer/OrganizerSettings";
 import EventsParticipants from "./pages/organizer/EventsParticipants";
 
 
-import LandingPage from "./pages/LandingPage";
 import EventsBrowse from "./pages/EventsBrowse";
 import EventDetailsPublic from "./pages/EventDetailsPublic";
 
@@ -70,7 +69,7 @@ function App() {
 
 
   
-  const [darkMode, setDarkMode] = useState(
+  const [darkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
 
@@ -102,7 +101,7 @@ function App() {
 
         <Route path="/activate" element={<Activate />} />
         
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<EventsBrowse />} />
         <Route path="/events" element={<EventsBrowse />} />
         <Route path="/events/:id" element={<EventDetailsPublic />} />
         <Route path="/login" element={<Login />} />
@@ -322,4 +321,3 @@ function App() {
 }
 
 export default App;
-

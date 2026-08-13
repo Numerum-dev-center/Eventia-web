@@ -2,12 +2,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
+  ArrowLeft,
   BadgeCheck,
+  CalendarDays,
+  Clock3,
   Gauge,
   Loader2,
+  MapPin,
+  Pencil,
   ShoppingCart,
   Ticket,
-  Users,
+  Trash2,
   UsersRound,
 } from "lucide-react";
 
@@ -58,26 +63,20 @@ function EventDetails() {
 
   if (!event) {
     return (
-      <div>
-        <h1 className="text-3xl font-bold mb-4">
-          Détail événement
-        </h1>
-
-        <div className="bg-white rounded-xl p-6 shadow">
-          <p className="text-gray-600">
-            Cet événement est introuvable.
-          </p>
-        </div>
+      <div className="apple-page">
+        <div className="ui-empty"><div className="ui-empty-icon"><Ticket /></div><h3>Événement introuvable</h3><p>Cet événement n’existe plus ou vous n’avez pas accès à sa gestion.</p></div>
       </div>
     );
   }
 
   return (
-    <div>
-
-      <h1 className="text-3xl font-bold mb-8">
-        Détail événement
-      </h1>
+    <div className="apple-page">
+      <Link className="apple-back" to="/organizer/events"><ArrowLeft size={16} /> Tous les événements</Link>
+      <section className="apple-detail-hero">
+        <span>{event.category || "Événement"} · {event.status || "Brouillon"}</span>
+        <h1>{event.title}</h1>
+        <p>{new Date(event.date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} · {event.location}</p>
+      </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
         <StatCard
@@ -106,166 +105,20 @@ function EventDetails() {
       </div>
 
 
-      
-
-      <div className="bg-white rounded-xl p-6 shadow">
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
-            <p className="text-sm text-gray-500">Places restantes</p>
-            <p className="text-2xl font-bold mt-1 flex items-center gap-2">
-              <Users size={20} />
-              {remainingTickets}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50">
-            <p className="text-sm text-gray-500">Prix du ticket</p>
-            <p className="text-2xl font-bold mt-1">{formatCurrency(event.price)}</p>
-          </div>
-
-          <div className="rounded-2xl border border-gray-100 p-4 bg-orange-50 flex items-center justify-center">
-  <Link
-    to={`/organizer/events/${id}/billets`}
-    className="
-      flex items-center gap-2
-      bg-gray-600
-      text-white
-      px-5 py-3
-      rounded-lg
-      hover:bg-gray-700
-      transition
-    "
-  >
-    <UsersRound size={20} />
-    Voir les billets
-  </Link>
-</div>
+      <div className="ui-card p-6">
+        <div className="apple-detail-grid">
+          <div className="apple-detail-item"><small><CalendarDays size={14} /> Date</small><strong>{new Date(event.date).toLocaleDateString("fr-FR")}</strong></div>
+          <div className="apple-detail-item"><small><Clock3 size={14} /> Horaires</small><strong>{event.startTime || "—"} — {event.endTime || "—"}</strong></div>
+          <div className="apple-detail-item"><small><MapPin size={14} /> Lieu</small><strong>{event.location || "À confirmer"}</strong></div>
+          <div className="apple-detail-item"><small><Ticket size={14} /> Billetterie</small><strong>{formatCurrency(event.price)} · {event.capacity} places</strong></div>
         </div>
-
-        <div className="space-y-4">
-
-          <p>
-            <strong>Titre :</strong>
-            {" "}
-            {event.title}
-          </p>
-
-          <p>
-            <strong>Date :</strong>
-            {" "}
-            {new Date(event.date).toLocaleDateString("fr-FR")}
-          </p>
-
-
-          <p>
-            <strong>Heure de début :</strong>
-            {" "}
-            {event.startTime}
-          </p>
-
-          <p>
-            <strong>Heure de fin :</strong>
-            {" "}
-            {event.endTime}
-          </p>
-
-          <p>
-            <strong>Lieu :</strong>
-            {" "}
-            {event.location}
-          </p>
-
-          <p>
-            <strong>Capacité :</strong>
-            {" "}
-            {event.capacity}
-          </p>
-
-          <p>
-            <strong>Catégorie :</strong>
-            {" "}
-            {event.category}
-          </p>
-
-          <p>
-            <strong>Prix :</strong>
-            {" "}
-            {event.price} FCFA
-          </p>
-
-          <p>
-            <strong>Description :</strong>
-            {" "}
-            {event.description}
-          </p>
-
-          {event.coordinates && (
-            <p>
-              <strong>Coordonnées :</strong>
-              {" "}
-              {event.coordinates.latitude}, {event.coordinates.longitude}
-            </p>
-          )}
-
-          <p>
-            <strong>Capacité restante :</strong>
-            {" "}
-            {remainingTickets}
-          </p>
-
+        <div className="mt-6"><span className="text-xs uppercase tracking-widest text-orange-500 font-bold">Description</span><p className="mt-3 text-sm leading-7 text-gray-600 whitespace-pre-line">{event.description || "Aucune description renseignée."}</p></div>
+        <div className="apple-action-row">
+          <Link to={`/organizer/events/${id}/edit`} className="bg-orange-500 text-white"><Pencil size={15} /> Modifier</Link>
+          <Link to={`/organizer/events/${id}/billets`} className="bg-gray-800 text-white"><UsersRound size={15} /> Billets et participants</Link>
+          <button onClick={async () => { if (window.confirm("Supprimer définitivement cet événement ?")) { await deleteEvent(id); navigate("/organizer/events", { replace: true }); } }} className="bg-red-50 text-red-600"><Trash2 size={15} /> Supprimer</button>
         </div>
-
-        <div className="flex flex-wrap gap-4 mt-8">
-
-  <Link
-    to={`/organizer/events/${id}/edit`}
-    className="
-      bg-orange-500
-      text-white
-      px-4 py-2
-      rounded-lg
-      hover:bg-orange-600
-    "
-  >
-    Modifier
-  </Link>
-
-  <Link
-    to={`/organizer/events/${id}/billets`}
-    className="
-      bg-gray-600
-      text-white
-      px-4 py-2
-      rounded-lg
-      hover:bg-gray-700
-    "
-  >
-    Billets
-  </Link>
-
-  <button
-    onClick={async () => {
-      if (window.confirm("Supprimer définitivement cet événement ?")) {
-        await deleteEvent(id);
-        navigate("/organizer/events", { replace: true });
-      }
-    }}
-    className="
-      bg-red-500
-      text-white
-      px-4 py-2
-      rounded-lg
-      hover:bg-red-600
-    "
-  >
-    Supprimer
-  </button>
-
-</div>
-
       </div>
-
     </div>
   );
 }

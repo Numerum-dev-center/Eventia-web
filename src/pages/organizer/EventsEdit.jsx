@@ -187,13 +187,13 @@ function EventsEdit() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto text-gray-500">Chargement...</div>
+      <div className="apple-page apple-form-page max-w-5xl mx-auto text-gray-500">Chargement...</div>
     );
   }
 
   if (!currentEvent) {
     return (
-      <div className="max-w-5xl mx-auto">
+      <div className="apple-page apple-form-page max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">
           Modifier l'événement
         </h1>
@@ -208,7 +208,7 @@ function EventsEdit() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="apple-page apple-form-page max-w-5xl mx-auto">
 
       <h1 className="text-3xl font-bold mb-8">
         Modifier l'événement

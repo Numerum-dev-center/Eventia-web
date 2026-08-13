@@ -9,7 +9,7 @@ function Stats() {
   const { id } = useParams();
 
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <Link
         to={`/organizer/events/${id}`}
         className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500"

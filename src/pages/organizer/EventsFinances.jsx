@@ -32,7 +32,7 @@ function EventsFinances() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <Link
         to={`/organizer/events/${id}`}
         className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500"
@@ -59,7 +59,7 @@ function EventsFinances() {
           description="Le détail des transactions apparaîtra ici dès que des billets seront réservés."
         />
       ) : (
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
+        <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>

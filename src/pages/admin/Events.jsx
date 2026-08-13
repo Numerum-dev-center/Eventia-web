@@ -57,7 +57,7 @@ function Events() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <PageHeader
         title="Gestion des événements"
         subtitle="Modération et supervision des événements de la plateforme."
@@ -70,7 +70,7 @@ function Events() {
           description="Les événements créés par les organisateurs apparaîtront ici."
         />
       ) : (
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
+        <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>

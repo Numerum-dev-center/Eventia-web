@@ -44,7 +44,7 @@ function EventsList() {
   };
 
   return (
-    <div>
+    <div className="apple-page">
       <PageHeader
         title="Mes événements"
         action={
@@ -73,7 +73,7 @@ function EventsList() {
           }
         />
       ) : (
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
+        <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>

@@ -40,7 +40,7 @@ function EventParticipants() {
   }
 
   return (
-    <div>
+    <div className="apple-page">
       <Link
         to={`/organizer/events/${id}`}
         className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500 mb-4"
@@ -66,7 +66,7 @@ function EventParticipants() {
           description="Les réservations effectuées depuis la page publique de l'événement apparaîtront ici."
         />
       ) : (
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
+        <div className="apple-table-card">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>

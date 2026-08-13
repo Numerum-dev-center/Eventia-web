@@ -6,7 +6,7 @@ import Button from "../../components/ui/Button";
 
 function Finances() {
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <PageHeader title="Finances" subtitle="Suivez les revenus et les reversements générés par vos événements." eyebrow="Pilotage financier" />
       <EmptyState
         icon={WalletCards}

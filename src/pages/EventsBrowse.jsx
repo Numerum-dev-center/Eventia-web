@@ -1,116 +1,98 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { CalendarDays, Loader2, MapPin, Search, Sparkles } from "lucide-react";
-
-import NavBar from "../components/landing/NavBar";
-import Footer from "../components/landing/Footer";
+import { ArrowRight, CalendarDays, LoaderCircle, MapPin, Search, SlidersHorizontal, Ticket, X } from "lucide-react";
+import PublicHeader from "../components/public/PublicHeader";
 import { fetchPublishedEvents } from "../services/eventsApiService";
+import concert from "../assets/landing/events/concert.jpg";
+import conference from "../assets/landing/events/conference.jpg";
+import festival from "../assets/landing/events/festival.jpg";
+import wedding from "../assets/landing/events/wedding.jpg";
+import "../styles/marketplace.css";
 
-const formatDate = (value) =>
-  new Date(value).toLocaleDateString("fr-FR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+const FALLBACK_IMAGES = [concert, conference, festival, wedding];
+const ALL = "Tous";
+const formatDate = (date) => new Date(`${date}T00:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+const formatPrice = (price) => Number(price || 0) === 0 ? "Gratuit" : `${Number(price).toLocaleString("fr-FR")} FCFA`;
 
 function EventsBrowse() {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [category, setCategory] = useState(ALL);
+  const [sort, setSort] = useState("date");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchPublishedEvents()
-      .then(setEvents)
+      .then((data) => { setEvents(Array.isArray(data) ? data : []); setError(""); })
+      .catch(() => { setEvents([]); setError("Impossible de charger les événements pour le moment."); })
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return events;
-    return events.filter(
-      (event) =>
-        event.title.toLowerCase().includes(q) ||
-        event.location.toLowerCase().includes(q) ||
-        event.category.toLowerCase().includes(q)
-    );
-  }, [events, query]);
+  const availableEvents = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return events.filter((event) => {
+      const eventDate = event.date ? new Date(`${event.date}T00:00:00`) : null;
+      return eventDate && eventDate >= today && Number(event.remaining) > 0;
+    });
+  }, [events]);
+
+  const categories = useMemo(() => [ALL, ...new Set(availableEvents.map((event) => event.category).filter(Boolean))], [availableEvents]);
+  const visibleEvents = useMemo(() => {
+    const search = query.trim().toLowerCase();
+    const filtered = availableEvents.filter((event) => {
+      const matchesSearch = !search || [event.title, event.location, event.category].some((value) => value?.toLowerCase().includes(search));
+      return matchesSearch && (category === ALL || event.category === category);
+    });
+    return [...filtered].sort((a, b) => sort === "price" ? Number(a.price) - Number(b.price) : new Date(a.date) - new Date(b.date));
+  }, [availableEvents, query, category, sort]);
+
+  const clearFilters = () => { setQuery(""); setCategory(ALL); setSort("date"); };
 
   return (
-    <div className="min-h-screen bg-[#EEF1F6]">
-      <NavBar />
+    <div className="transaction-page">
+      <PublicHeader />
+      <main>
+        <section className="transaction-hero">
+          <h1>Quel événement<br /><em>allez-vous vivre ?</em></h1>
+          <p>Choisissez une expérience, réservez vos billets et recevez immédiatement vos codes d’accès.</p>
+          <label className="transaction-search">
+            <Search size={21} />
+            <span className="sr-only">Rechercher un événement</span>
+            <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Événement, ville ou catégorie…" />
+            {query && <button type="button" onClick={() => setQuery("")} aria-label="Effacer la recherche"><X size={17} /></button>}
+          </label>
+        </section>
 
-      <div className="max-w-6xl mx-auto px-6 pt-32 pb-20">
-        <span className="inline-flex items-center gap-2 text-orange-500 font-semibold uppercase tracking-wider text-sm">
-          <Sparkles size={16} />
-          Événements
-        </span>
-        <h1 className="mt-3 text-3xl lg:text-4xl font-bold text-gray-900">
-          Tous les événements
-        </h1>
-        <p className="mt-3 text-gray-500 max-w-2xl">
-          Parcourez les événements publiés par nos organisateurs et réservez votre place.
-        </p>
-
-        <div className="mt-8 flex items-center gap-2 bg-white border border-gray-200 rounded-2xl px-4 py-3 max-w-lg">
-          <Search size={18} className="text-gray-400 shrink-0" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Rechercher par nom, lieu ou catégorie"
-            className="w-full outline-none text-sm placeholder:text-gray-400"
-          />
-        </div>
-
-        {loading ? (
-          <div className="mt-16 flex items-center justify-center gap-2 text-gray-500">
-            <Loader2 size={18} className="animate-spin" />
-            Chargement des événements...
+        <section className="transaction-catalog" aria-labelledby="catalog-title">
+          <div className="transaction-toolbar">
+            <div className="transaction-categories">{categories.map((item) => <button type="button" key={item} onClick={() => setCategory(item)} className={item === category ? "is-active" : ""}>{item}</button>)}</div>
+            <label className="transaction-sort"><SlidersHorizontal size={14} /><span className="sr-only">Trier les événements</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="date">Dates les plus proches</option><option value="price">Prix croissant</option></select></label>
           </div>
-        ) : filtered.length === 0 ? (
-          <div className="mt-16 text-center text-gray-500 bg-white rounded-2xl p-12 border border-dashed border-gray-200">
-            Aucun événement ne correspond à votre recherche.
-          </div>
-        ) : (
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((event) => (
-              <Link
-                key={event.id}
-                to={`/events/${event.id}`}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
-              >
-                <div className="h-44 overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-5">
-                  <span className="inline-block bg-orange-50 text-orange-600 text-xs font-semibold px-2.5 py-1 rounded-full">
-                    {event.category}
-                  </span>
-                  <h3 className="mt-3 font-bold text-gray-900 text-lg">{event.title}</h3>
-                  <p className="mt-2 flex items-center gap-2 text-sm text-gray-500">
-                    <CalendarDays size={15} />
-                    {formatDate(event.date)}
-                  </p>
-                  <p className="mt-1 flex items-center gap-2 text-sm text-gray-500">
-                    <MapPin size={15} />
-                    {event.location}
-                  </p>
-                  <p className="mt-4 font-semibold text-orange-600">
-                    À partir de {Number(event.price).toLocaleString("fr-FR")} FCFA
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
 
-      <Footer />
+          <div className="transaction-heading"><div><span>Billetterie publique</span><h2 id="catalog-title">Événements disponibles</h2></div>{!loading && <strong>{visibleEvents.length} événement{visibleEvents.length > 1 ? "s" : ""}</strong>}</div>
+
+          {loading ? (
+            <div className="transaction-state"><LoaderCircle className="transaction-spinner" size={29} /><h2>Chargement des événements…</h2><p>Nous vérifions les billets encore disponibles.</p></div>
+          ) : error ? (
+            <div className="transaction-state"><Ticket size={29} /><h2>Événements indisponibles</h2><p>{error}</p><button type="button" onClick={() => window.location.reload()}>Réessayer</button></div>
+          ) : visibleEvents.length === 0 ? (
+            <div className="transaction-state"><Search size={29} /><h2>Aucun événement ouvert ne correspond</h2><p>Modifiez votre recherche ou effacez les filtres.</p><button type="button" onClick={clearFilters}>Effacer les filtres</button></div>
+          ) : (
+            <div className="transaction-grid">
+              {visibleEvents.map((event, index) => (
+                <Link to={`/events/${event.id}`} className="transaction-card" key={event.id}>
+                  <div className="transaction-image"><img src={event.image || FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]} alt={event.title} /><span>{event.category || "Événement"}</span><i>{event.remaining} places</i></div>
+                  <div className="transaction-card-body"><h2>{event.title}</h2><p><CalendarDays size={14} /> {formatDate(event.date)} · {event.startTime}</p><p><MapPin size={14} /> {event.location}</p><div><span><small>À partir de</small><strong>{formatPrice(event.price)}</strong></span><em>Voir et réserver <ArrowRight size={15} /></em></div></div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+      <footer className="transaction-footer"><span>Eventia</span><p>© {new Date().getFullYear()} · Billetterie événementielle</p></footer>
     </div>
   );
 }

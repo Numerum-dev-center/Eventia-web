@@ -26,7 +26,7 @@ function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <PageHeader
         title="Tableau de bord administrateur"
         subtitle="Vue d'ensemble de la plateforme Eventia."

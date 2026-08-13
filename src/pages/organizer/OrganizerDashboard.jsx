@@ -53,7 +53,7 @@ function Dashboard() {
   }
 
   return (
-    <div>
+    <div className="apple-page">
       <PageHeader
         title="Tableau de bord"
         subtitle="Vue d'ensemble de vos événements et de vos ventes."

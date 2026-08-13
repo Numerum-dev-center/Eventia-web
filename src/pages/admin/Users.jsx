@@ -55,14 +55,14 @@ function UsersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <PageHeader
         title="Gestion des utilisateurs"
         subtitle="Administrateurs, organisateurs et clients de la plateforme."
       />
 
       {error && (
-        <div className="rounded-xl bg-red-50 text-red-700 p-3 text-sm">{error}</div>
+        <div className="apple-alert">{error}</div>
       )}
 
       <Card padding="p-0">
@@ -80,7 +80,7 @@ function UsersPage() {
             />
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="apple-table-card">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase tracking-wide text-gray-400 border-b border-gray-100">

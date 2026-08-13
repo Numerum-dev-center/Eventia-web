@@ -12,7 +12,7 @@ const REPORTS = [
 
 function Reports() {
   return (
-    <div className="space-y-6">
+    <div className="apple-page space-y-6">
       <PageHeader
         title="Rapports"
         subtitle="Rapports générés par la plateforme."
