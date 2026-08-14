@@ -45,7 +45,8 @@ function Login() {
       else if (role === "organisateur") navigate("/organizer/dashboard", { replace: true });
       else setError(`Rôle non reconnu : ${role}`);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || requestError.message || "Impossible de vous connecter.");
+      const backendMessage = requestError.response?.data?.message;
+      setError((Array.isArray(backendMessage) ? backendMessage.join(" ") : backendMessage) || requestError.message || "Impossible de vous connecter.");
     } finally {
       setLoading(false);
     }

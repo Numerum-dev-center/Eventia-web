@@ -62,3 +62,10 @@
 @media(max-width:900px){.transaction-grid{grid-template-columns:repeat(2,1fr)}.public-organize{display:none}}
 @media(max-width:680px){.public-header{padding:8px 9px 0}.public-nav{min-height:60px;border-radius:19px}.public-actions{display:none}.public-menu-button,.public-mobile-menu{display:flex}.public-menu-button{display:grid}.transaction-hero{padding:65px 18px 43px}.transaction-hero h1{font-size:clamp(3rem,14vw,4.5rem)}.transaction-hero>p{font-size:14px}.transaction-search{min-height:61px;padding-left:16px;border-radius:18px}.transaction-search input{font-size:12px}.transaction-catalog{width:calc(100% - 28px);padding-top:24px}.transaction-toolbar{align-items:flex-start;flex-direction:column}.transaction-categories{width:100%}.transaction-sort{align-self:flex-end}.transaction-heading{align-items:flex-start;flex-direction:column}.transaction-grid{grid-template-columns:1fr}.transaction-image{height:265px}.transaction-footer{align-items:flex-start;flex-direction:column;gap:8px}}
 @media(prefers-reduced-motion:reduce){.transaction-page *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+/* Evi mascot — public marketplace */
+.transaction-hero { position:relative; overflow:hidden; }
+.transaction-evi { position:absolute; right:max(3vw,20px); bottom:-44px; width:clamp(190px,24vw,330px); height:clamp(190px,24vw,330px); z-index:0; }
+.transaction-hero > h1,.transaction-hero > p,.transaction-hero > label { position:relative; z-index:1; }
+.transaction-state-evi { width:130px; height:130px; margin-bottom:-12px; }
+.transaction-state-evi + svg { display:none; }
+@media(max-width:760px){.transaction-evi{width:155px;height:155px;right:-22px;bottom:-20px;opacity:.24}}

@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarDays, Check, Clock3, FilePenLine, X, Loader2 } from "lucide-react";
+import { CalendarCheck, CalendarDays, Check, FilePenLine, History, X, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -11,14 +11,14 @@ import { fetchAllEventsAdmin, setEventStatusAdmin } from "../../services/eventsA
 
 const STATUS_TONE = {
   PUBLISHED: "ok",
-  PENDING: "warn",
+  TERMINE: "neutral",
   DRAFT: "muted",
   CANCELLED: "danger",
 };
 
 const STATUS_LABEL = {
   PUBLISHED: "Validé",
-  PENDING: "En attente",
+  TERMINE: "Terminé",
   DRAFT: "Brouillon",
   CANCELLED: "Rejeté",
 };
@@ -53,7 +53,7 @@ function Events() {
     }
   };
 
-  const statusChart = Object.entries(events.reduce((acc, event) => ({ ...acc, [event.status]: (acc[event.status] || 0) + 1 }), {})).map(([status, value]) => ({ name: STATUS_LABEL[status] || status, value, color: { PUBLISHED: "#34c759", PENDING: "#ff9f0a", DRAFT: "#8e8e93", CANCELLED: "#ff453a" }[status] || "#64d2ff" }));
+  const statusChart = Object.entries(events.reduce((acc, event) => ({ ...acc, [event.status]: (acc[event.status] || 0) + 1 }), {})).map(([status, value]) => ({ name: STATUS_LABEL[status] || status, value, color: { PUBLISHED: "#34c759", TERMINE: "#af52de", DRAFT: "#8e8e93", CANCELLED: "#ff453a" }[status] || "#64d2ff" }));
   const categoryChart = Object.entries(events.reduce((acc, event) => ({ ...acc, [event.category || "Autre"]: (acc[event.category || "Autre"] || 0) + 1 }), {})).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
   if (loading) {
@@ -76,7 +76,7 @@ function Events() {
       <div className="admin-page-kpis">
         <StatCard title="Total" value={events.length} icon={<CalendarDays size={22} />} />
         <StatCard title="Publiés" value={events.filter((event) => event.status === "PUBLISHED").length} icon={<CalendarCheck size={22} />} />
-        <StatCard title="En attente" value={events.filter((event) => event.status === "PENDING").length} icon={<Clock3 size={22} />} />
+        <StatCard title="Terminés" value={events.filter((event) => event.status === "TERMINE").length} icon={<History size={22} />} />
         <StatCard title="Brouillons" value={events.filter((event) => event.status === "DRAFT").length} icon={<FilePenLine size={22} />} />
       </div>
 

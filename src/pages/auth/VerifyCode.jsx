@@ -23,7 +23,8 @@ function VerifyCode() {
       await verifyResetCode({ email, code: code.trim() });
       navigate("/reset-password", { state: { email, code: code.trim() } });
     } catch (requestError) {
-      setError(requestError?.response?.data?.message || "Le code est incorrect ou expiré.");
+      const backendMessage = requestError?.response?.data?.message;
+      setError((Array.isArray(backendMessage) ? backendMessage.join(" ") : backendMessage) || "Le code est incorrect ou expiré.");
     } finally { setLoading(false); }
   };
 

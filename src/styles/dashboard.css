@@ -94,6 +94,7 @@
 .ui-badge--muted { color: #716b65; background: #eeebe7; }
 .ui-empty { min-height: 360px; padding: 50px 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px dashed #d8d1c9; border-radius: 25px; background: rgba(255,255,255,.65); }
 .ui-empty-icon { width: 58px; height: 58px; margin-bottom: 20px; display: grid; place-items: center; color: var(--db-orange); border-radius: 19px; background: #fff0eb; box-shadow: 0 10px 25px rgba(255,92,53,.1); }
+.ui-empty-mascot { width:118px; height:118px; margin-bottom:-5px; }
 .ui-empty h3 { margin: 0; font: 700 19px/1.2 "Manrope", sans-serif; letter-spacing: -.035em; }
 .ui-empty p { max-width: 430px; margin: 9px 0 0; color: var(--db-muted); font-size: 11px; line-height: 1.65; }
 .ui-empty-action { margin-top: 22px; }

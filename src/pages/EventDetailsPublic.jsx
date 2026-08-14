@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CalendarDays, Check, CheckCircle2, Clock, LoaderCircle, Mail, MapPin, Minus, Phone, Plus, ShieldCheck, Ticket, UserRound } from "lucide-react";
 import PublicHeader from "../components/public/PublicHeader";
+import EviMascot from "../components/brand/EviMascot";
 import { fetchEventById, reserverBillets } from "../services/eventsApiService";
 import { getStoredAuth } from "../services/authSession";
 import fallbackImage from "../assets/landing/events/concert.jpg";
@@ -16,6 +17,7 @@ function EventDetailsPublic() {
   const auth = getStoredAuth();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [buyerName, setBuyerName] = useState("");
   const [buyerEmail, setBuyerEmail] = useState(auth?.user?.email || "");
@@ -25,19 +27,41 @@ function EventDetailsPublic() {
   const [confirmation, setConfirmation] = useState(null);
 
   useEffect(() => {
-    fetchEventById(id).then(setEvent).catch(() => setEvent(null)).finally(() => setLoading(false));
+    fetchEventById(id)
+      .then((ev) => {
+        setEvent(ev);
+        // Présélectionne la première catégorie encore disponible (sinon la première tout court).
+        const firstAvailable = ev.categories?.find((c) => c.remaining > 0) || ev.categories?.[0];
+        setSelectedCategoryId(firstAvailable?.id ?? null);
+      })
+      .catch(() => setEvent(null))
+      .finally(() => setLoading(false));
   }, [id]);
 
-  const changeQuantity = (next) => setQuantity(Math.max(1, Math.min(Number(event?.remaining || 1), next)));
+  const selectedCategory = event?.categories?.find((c) => c.id === selectedCategoryId) || null;
+  const hasMultipleCategories = (event?.categories?.length ?? 0) > 1;
+
+  const maxQuantity = (() => {
+    const remainingStock = Number(selectedCategory?.remaining ?? event?.remaining ?? 1);
+    const perPersonLimit = Number(selectedCategory?.perPersonLimit ?? event?.perPersonLimit) || null;
+    return Math.max(1, perPersonLimit ? Math.min(remainingStock, perPersonLimit) : remainingStock);
+  })();
+  const changeQuantity = (next) => setQuantity(Math.max(1, Math.min(maxQuantity, next)));
+
+  const handleSelectCategory = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    setQuantity(1);
+  };
 
   const handleReserve = async (submitEvent) => {
     submitEvent.preventDefault();
     setError("");
+    if (!selectedCategory) { setError("Choisissez une catégorie de billet."); return; }
     if (!buyerName.trim() || !buyerEmail.trim()) { setError("Renseignez votre nom et votre adresse email."); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) { setError("L’adresse email indiquée n’est pas valide."); return; }
     setSubmitting(true);
     try {
-      const result = await reserverBillets({ categorieTicketId: event.categorieTicketId, quantite: quantity, buyerName: buyerName.trim(), buyerEmail: buyerEmail.trim(), buyerTelephone: buyerPhone.trim() || undefined });
+      const result = await reserverBillets({ categorieTicketId: selectedCategory.id, quantite: quantity, buyerName: buyerName.trim(), buyerEmail: buyerEmail.trim(), buyerTelephone: buyerPhone.trim() || undefined });
       setConfirmation(result);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (requestError) {
@@ -46,16 +70,20 @@ function EventDetailsPublic() {
   };
 
   if (loading) return <div className="transaction-page"><PublicHeader /><div className="event-page-state"><LoaderCircle className="event-spinner" size={30} /><h1>Chargement de l’événement…</h1><p>Nous vérifions les dernières disponibilités.</p></div></div>;
-  if (!event) return <div className="transaction-page"><PublicHeader /><div className="event-page-state"><Ticket size={30} /><h1>Événement introuvable</h1><p>Cette page n’existe plus ou l’événement n’est pas public.</p><Link to="/">Voir les événements</Link></div></div>;
+  if (!event) return <div className="transaction-page"><PublicHeader /><div className="event-page-state"><EviMascot variant="help" className="event-state-evi" alt="Evi vous aide à retrouver un événement" /><Ticket size={30} /><h1>Événement introuvable</h1><p>Cette page n’existe plus ou l’événement n’est pas public.</p><Link to="/">Voir les événements</Link></div></div>;
+  // Le endpoint public renvoie l'événement quel que soit son statut (brouillon, annulé, terminé) ;
+  // seul un événement Publié doit être présenté comme réservable.
+  if (event.status !== "PUBLISHED") return <div className="transaction-page"><PublicHeader /><div className="event-page-state"><EviMascot variant="help" className="event-state-evi" alt="Evi vous aide à retrouver un événement" /><Ticket size={30} /><h1>Événement indisponible</h1><p>Cet événement n’est plus ouvert à la réservation.</p><Link to="/">Voir les événements</Link></div></div>;
 
-  const remaining = Number(event.remaining || 0);
-  const total = Number(event.price || 0) * quantity;
+  const displayPrice = selectedCategory?.price ?? event.price;
+  const total = Number(displayPrice || 0) * quantity;
 
   if (confirmation) {
     return (
       <div className="transaction-page"><PublicHeader />
         <main className="confirmation-page">
           <section className="confirmation-card">
+            <EviMascot variant="success" className="confirmation-evi" alt="Evi célèbre votre réservation" />
             <div className="confirmation-icon"><CheckCircle2 size={34} /></div>
             <span className="confirmation-label">Réservation confirmée</span>
             <h1>Vos billets sont prêts.</h1>
@@ -87,15 +115,34 @@ function EventDetailsPublic() {
           </div>
 
           <aside className="booking-card">
-            <div className="booking-head"><div><small>Prix par billet</small><strong>{formatPrice(event.price)}</strong></div><span>{remaining > 0 ? `${remaining} disponibles` : "Complet"}</span></div>
-            {remaining > 0 ? <form onSubmit={handleReserve}>
+            <div className="booking-head"><div><small>{hasMultipleCategories ? "À partir de" : "Prix par billet"}</small><strong>{formatPrice(hasMultipleCategories ? event.price : displayPrice)}</strong></div><span>{event.remaining > 0 ? `${event.remaining} disponibles` : "Complet"}</span></div>
+            {event.remaining > 0 ? <form onSubmit={handleReserve}>
               {error && <div className="booking-error" role="alert">{error}</div>}
-              <div className="booking-quantity"><div><span>Nombre de billets</span><small>Maximum {remaining}</small></div><div><button type="button" onClick={() => changeQuantity(quantity - 1)} disabled={quantity <= 1} aria-label="Retirer un billet"><Minus size={15} /></button><strong>{quantity}</strong><button type="button" onClick={() => changeQuantity(quantity + 1)} disabled={quantity >= remaining} aria-label="Ajouter un billet"><Plus size={15} /></button></div></div>
+              {hasMultipleCategories && (
+                <div className="booking-categories" role="radiogroup" aria-label="Catégorie de billet">
+                  {event.categories.map((cat) => (
+                    <label key={cat.id} className={`booking-category-option${cat.id === selectedCategoryId ? " is-selected" : ""}${cat.remaining <= 0 ? " is-soldout" : ""}`}>
+                      <input
+                        type="radio"
+                        name="categorie-billet"
+                        value={cat.id}
+                        checked={cat.id === selectedCategoryId}
+                        disabled={cat.remaining <= 0}
+                        onChange={() => handleSelectCategory(cat.id)}
+                      />
+                      <span className="booking-category-name">{cat.name}</span>
+                      <span className="booking-category-meta">{cat.remaining > 0 ? `${cat.remaining} restants` : "Épuisé"}</span>
+                      <strong className="booking-category-price">{formatPrice(cat.price)}</strong>
+                    </label>
+                  ))}
+                </div>
+              )}
+              <div className="booking-quantity"><div><span>Nombre de billets</span><small>Maximum {maxQuantity}</small></div><div><button type="button" onClick={() => changeQuantity(quantity - 1)} disabled={quantity <= 1} aria-label="Retirer un billet"><Minus size={15} /></button><strong>{quantity}</strong><button type="button" onClick={() => changeQuantity(quantity + 1)} disabled={quantity >= maxQuantity || !selectedCategory} aria-label="Ajouter un billet"><Plus size={15} /></button></div></div>
               <label className="booking-field"><span>Nom complet</span><div><UserRound size={16} /><input value={buyerName} onChange={(changeEvent) => setBuyerName(changeEvent.target.value)} placeholder="Votre nom" autoComplete="name" /></div></label>
               <label className="booking-field"><span>Adresse email</span><div><Mail size={16} /><input type="email" value={buyerEmail} onChange={(changeEvent) => setBuyerEmail(changeEvent.target.value)} placeholder="vous@exemple.com" autoComplete="email" /></div></label>
               <label className="booking-field"><span>Téléphone <em>optionnel</em></span><div><Phone size={16} /><input value={buyerPhone} onChange={(changeEvent) => setBuyerPhone(changeEvent.target.value)} placeholder="+228…" autoComplete="tel" /></div></label>
               <div className="booking-total"><span>Total</span><strong>{formatPrice(total)}</strong></div>
-              <button className="event-primary-button" type="submit" disabled={submitting}>{submitting ? "Réservation en cours…" : <>Réserver maintenant <ArrowRight size={17} /></>}</button>
+              <button className="event-primary-button" type="submit" disabled={submitting || !selectedCategory || selectedCategory.remaining <= 0}>{submitting ? "Réservation en cours…" : <>Réserver maintenant <ArrowRight size={17} /></>}</button>
               <p className="booking-secure"><ShieldCheck size={14} /> Confirmation immédiate et billet sécurisé</p>
             </form> : <div className="booking-soldout"><Ticket size={25} /><strong>Événement complet</strong><p>Il n’y a actuellement plus de billets disponibles.</p><Link to="/">Voir d’autres événements</Link></div>}
           </aside>

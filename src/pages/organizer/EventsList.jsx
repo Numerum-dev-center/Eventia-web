@@ -31,6 +31,7 @@ function EventsList() {
       PENDING: "bg-yellow-100 text-yellow-700",
       PUBLISHED: "bg-green-100 text-green-700",
       CANCELLED: "bg-red-100 text-red-700",
+      TERMINE: "bg-blue-100 text-blue-700",
     };
 
     const labels = {
@@ -38,6 +39,7 @@ function EventsList() {
       PENDING: "En attente",
       PUBLISHED: "Publié",
       CANCELLED: "Annulé",
+      TERMINE: "Terminé",
     };
 
     return (

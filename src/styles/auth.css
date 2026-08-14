@@ -142,3 +142,8 @@
 @media (prefers-reduced-motion: reduce) {
   .auth-page *, .auth-page *::before, .auth-page *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+/* Evi mascot — authentication */
+.auth-evi { position:absolute; z-index:4; right:-18px; bottom:-20px; width:190px; height:190px; }
+.auth-status-evi { width:145px; height:145px; margin:-30px auto -12px; }
+.auth-status-evi + .auth-status-icon { display:none; }
+@media(max-width:900px){.auth-evi{width:130px;height:130px;right:5px;bottom:-8px}}

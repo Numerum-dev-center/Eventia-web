@@ -36,8 +36,8 @@ import {
 
 const money = (value) => `${Number(value || 0).toLocaleString("fr-FR")} FCFA`;
 const compactMoney = (value) => new Intl.NumberFormat("fr-FR", { notation: "compact", maximumFractionDigits: 1 }).format(Number(value || 0));
-const STATUS_LABEL = { PUBLISHED: "Publiés", DRAFT: "Brouillons", PENDING: "En attente", CANCELLED: "Annulés" };
-const STATUS_COLORS = { PUBLISHED: "#34c759", DRAFT: "#8e8e93", PENDING: "#ff9f0a", CANCELLED: "#ff453a" };
+const STATUS_LABEL = { PUBLISHED: "Publiés", DRAFT: "Brouillons", TERMINE: "Terminés", CANCELLED: "Annulés" };
+const STATUS_COLORS = { PUBLISHED: "#34c759", DRAFT: "#8e8e93", TERMINE: "#af52de", CANCELLED: "#ff453a" };
 
 function ChartTooltip({ active, payload, label, formatter = money }) {
   if (!active || !payload?.length) return null;
@@ -80,10 +80,21 @@ function AdminDashboard() {
     return acc;
   }, {})).map(([status, value]) => ({ name: STATUS_LABEL[status] || status, value, color: STATUS_COLORS[status] || "#64d2ff" }));
 
+  // /admin/reversements-orga renvoie un total par organisateur (profilOrganisateurId),
+  // pas par événement : il n'y a pas de champ "titre". On résout le nom de
+  // l'organisateur via les événements admin (profilOrganisateur.nomEntreprise).
+  const organizerNames = {};
+  events.forEach((event) => {
+    if (event.organizerId) organizerNames[event.organizerId] = event.organizerName;
+  });
+
   const revenueData = [...reversements]
     .sort((a, b) => Number(b.revenue || 0) - Number(a.revenue || 0))
     .slice(0, 7)
-    .map((item) => ({ name: item.titre?.length > 18 ? `${item.titre.slice(0, 18)}…` : item.titre || "Événement", revenue: Number(item.revenue || 0) }));
+    .map((item) => {
+      const label = organizerNames[item.profilOrganisateurId] || "Organisateur";
+      return { name: label.length > 18 ? `${label.slice(0, 18)}…` : label, revenue: Number(item.revenue || 0) };
+    });
 
   const recentEvents = [...events]
     .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
@@ -109,7 +120,7 @@ function AdminDashboard() {
 
       <section className="admin-chart-layout">
         <article className="admin-panel admin-revenue-panel">
-          <header className="admin-panel-head"><div><span>Performance financière</span><h2>Revenus par événement</h2><p>Classement des événements selon les ventes enregistrées.</p></div><CircleDollarSign size={22} /></header>
+          <header className="admin-panel-head"><div><span>Performance financière</span><h2>Revenus par organisateur</h2><p>Classement des organisateurs selon les ventes enregistrées.</p></div><CircleDollarSign size={22} /></header>
           {revenueData.length ? (
             <ResponsiveContainer width="100%" height={310}>
               <BarChart data={revenueData} margin={{ top: 18, right: 6, left: -12, bottom: 0 }}>

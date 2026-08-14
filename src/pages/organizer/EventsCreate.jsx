@@ -140,6 +140,7 @@ function EventsCreate() {
       title,
       date,
       location: resolvedLocation.formattedAddress,
+      address: resolvedLocation.formattedAddress,
       coordinates: {
         latitude: resolvedLocation.latitude,
         longitude: resolvedLocation.longitude,

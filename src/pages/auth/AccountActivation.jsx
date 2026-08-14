@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, LoaderCircle, ShieldAlert } from "lucide-react";
 import { AuthStatus } from "../../components/auth/AuthShell";
 import api from "../../services/api/axios";
-import { setStoredAuth } from "../../services/authSession";
+import { getUserId, setStoredAuth } from "../../services/authSession";
 
 function AccountActivation() {
   const navigate = useNavigate();
@@ -16,14 +16,39 @@ function AccountActivation() {
       const token = searchParams.get("token");
       try {
         if (accessToken) {
+          // The JWT itself carries no role claim (only { sub, email }), and the
+          // backend's Google sign-up defaults brand-new accounts to the Client
+          // role (only allow-listed admin emails get Admin — never Organisateur
+          // automatically). Blindly sending everyone to /organizer/dashboard was
+          // wrong for that common case, so fetch the real role before routing.
           setStoredAuth({ token: accessToken, user: {} });
+          const userId = getUserId();
+          if (userId) {
+            try {
+              const { data: userDetails } = await api.get(`/utilisateur/details/${userId}`);
+              const authState = setStoredAuth({
+                token: accessToken,
+                user: { email: userDetails.email, role: userDetails.role },
+              });
+              const role = authState.user.role?.trim().toLowerCase();
+              if (role === "admin") { navigate("/admin/dashboard", { replace: true }); return; }
+              if (role === "organisateur") { navigate("/organizer/dashboard", { replace: true }); return; }
+              navigate("/", { replace: true });
+              return;
+            } catch {
+              // Couldn't confirm the role — fall through to the default below.
+            }
+          }
           navigate("/organizer/dashboard", { replace: true });
           return;
         }
         if (token) {
-          const response = await api.get(`/auth/activate?token=${token}`);
-          setStoredAuth({ token: response.data.accessToken, user: response.data.user || {} });
-          navigate("/organizer/dashboard", { replace: true });
+          // The backend's GET /auth/activate endpoint does not return JSON — it
+          // sets httpOnly cookies and issues an HTTP redirect straight to the
+          // dashboard (or an error page) on the backend origin. It must be hit
+          // with a real browser navigation, not parsed as an AJAX/JSON response.
+          const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4090";
+          window.location.replace(`${apiUrl}/auth/activate?token=${token}`);
           return;
         }
         setError("Lien d’activation invalide ou incomplet.");
