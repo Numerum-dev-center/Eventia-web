@@ -7,7 +7,6 @@ import {
   CalendarDays,
   Clock3,
   Gauge,
-  Loader2,
   MapPin,
   Pencil,
   ShoppingCart,
@@ -22,6 +21,7 @@ import {
   fetchEventFinance,
 } from "../../services/eventsApiService";
 import StatCard from "../../components/organizer/StatCard";
+import Skeleton from "../../components/ui/Skeleton";
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat("fr-FR").format(value) + " FCFA";
@@ -63,9 +63,49 @@ function EventDetails() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement...
+      <div className="apple-page space-y-6">
+        <Link className="apple-back" to="/organizer/events"><ArrowLeft size={16} /> Tous les événements</Link>
+        <section className="apple-detail-hero">
+          <span><Skeleton width="130px" height="8px" /></span>
+          <h1><Skeleton width="72%" height="58px" /></h1>
+          <p><Skeleton width="62%" height="12px" /></p>
+        </section>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={`detail-kpi-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="110px" height="8px" />
+                <Skeleton width="82%" height="24px" style={{ marginTop: 12 }} />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="28px" height="28px" />
+            </div>
+          ))}
+        </div>
+
+        <div className="ui-card p-6">
+          <div className="apple-detail-grid">
+            <div className="apple-detail-item"><small><Skeleton width="46px" height="10px" /></small><Skeleton width="86%" height="18px" /></div>
+            <div className="apple-detail-item"><small><Skeleton width="56px" height="10px" /></small><Skeleton width="86%" height="18px" /></div>
+            <div className="apple-detail-item"><small><Skeleton width="35px" height="10px" /></small><Skeleton width="86%" height="18px" /></div>
+            <div className="apple-detail-item"><small><Skeleton width="57px" height="10px" /></small><Skeleton width="86%" height="18px" /></div>
+          </div>
+          <div className="mt-6" style={{ display: "grid", gap: 11 }}>
+            <Skeleton width="100%" height="22px" />
+            <Skeleton width="100%" height="12px" />
+            <Skeleton width="100%" height="12px" />
+          </div>
+          <div className="mt-6" style={{ display: "grid", gap: 12 }}>
+            <Skeleton className="evi-skeleton" width="100%" height="18px" />
+            <Skeleton className="evi-skeleton" width="100%" height="18px" />
+            <Skeleton className="evi-skeleton" width="100%" height="18px" />
+          </div>
+          <div className="mt-8" style={{ display: "flex", gap: "12px" }}>
+            <Skeleton className="evi-skeleton-chip" width="116px" height="36px" />
+            <Skeleton className="evi-skeleton-chip" width="152px" height="36px" />
+            <Skeleton className="evi-skeleton-chip" width="146px" height="36px" />
+          </div>
+        </div>
       </div>
     );
   }

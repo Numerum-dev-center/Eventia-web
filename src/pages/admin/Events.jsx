@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarDays, Check, FilePenLine, History, X, Loader2 } from "lucide-react";
+import { CalendarCheck, CalendarDays, Check, FilePenLine, History, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -8,6 +8,7 @@ import Badge from "../../components/ui/Badge";
 import DataToolbar from "../../components/ui/DataToolbar";
 import StatCard from "../../components/organizer/StatCard";
 import { fetchAllEventsAdmin, setEventStatusAdmin } from "../../services/eventsApiService";
+import Skeleton from "../../components/ui/Skeleton";
 
 const STATUS_TONE = {
   PUBLISHED: "ok",
@@ -58,9 +59,85 @@ function Events() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement des événements...
+      <div className="apple-page space-y-6">
+        <PageHeader
+          eyebrow="Supervision du catalogue"
+          title="Gestion des événements"
+          subtitle="Modération et supervision des événements de la plateforme."
+        />
+        <div className="admin-page-kpis">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <article key={`stat-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="86px" height="8px" />
+                <Skeleton width="60%" height="44px" style={{ marginTop: 14 }} />
+                <Skeleton width="92px" height="10px" />
+              </div>
+              <div className="db-stat-icon">
+                <Skeleton className="evi-skeleton-circle" width="24px" height="24px" />
+              </div>
+            </article>
+          ))}
+        </div>
+        <section className="admin-page-charts">
+          <article className="admin-panel admin-mini-chart">
+            <header className="admin-panel-head"><div><Skeleton className="evi-skeleton-chip" width="112px" height="8px" /><Skeleton width="190px" height="20px" /></div></header>
+            <div className="admin-mini-chart-body">
+              <div className="admin-mini-donut">
+                <div className="evi-skeleton evi-skeleton-panel" style={{ width: "160px", height: "160px", borderRadius: "999px", margin: "auto" }} />
+              </div>
+              <div className="admin-legend">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <span key={`legend-${index}`}>
+                    <Skeleton className="evi-skeleton-circle" width="7px" height="7px" />
+                    <Skeleton width="60px" height="10px" />
+                    <Skeleton width="18px" height="10px" />
+                  </span>
+                ))}
+              </div>
+            </div>
+          </article>
+          <article className="admin-panel">
+            <header className="admin-panel-head"><div><Skeleton className="evi-skeleton-chip" width="132px" height="8px" /><Skeleton width="150px" height="20px" /></div></header>
+            <div className="admin-category-bars">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={`cat-${index}`}>
+                  <span><Skeleton width="80px" height="8px" /><Skeleton width="22px" height="10px" /></span>
+                  <Skeleton className="evi-skeleton" height="8px" />
+                </div>
+              ))}
+            </div>
+          </article>
+        </section>
+        <div className="apple-table-card">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="90px" height="12px" /></th>
+                <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="74px" height="12px" /></th>
+                <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="42px" height="12px" /></th>
+                <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="46px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="53px" height="12px" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <tr key={`row-${index}`} className="border-b">
+                  <td className="px-6 py-4"><Skeleton width="62%" height="12px" /></td>
+                  <td className="px-6 py-4"><Skeleton width="42%" height="12px" /></td>
+                  <td className="px-6 py-4"><Skeleton width="74px" height="12px" /></td>
+                  <td className="px-6 py-4"><Skeleton width="86px" height="20px" /></td>
+                  <td className="px-6 py-4">
+                    <div className="flex justify-end gap-3">
+                      <Skeleton className="evi-skeleton-chip" width="74px" height="28px" />
+                      <Skeleton className="evi-skeleton-chip" width="78px" height="28px" />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

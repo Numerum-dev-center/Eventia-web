@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { BarChart3, CalendarDays, FileText, Loader2, Ticket, TrendingUp, Users, Wallet } from "lucide-react";
+import { BarChart3, CalendarDays, FileText, Ticket, TrendingUp, Users, Wallet } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import PageHeader from "../../components/ui/PageHeader";
 import StatCard from "../../components/organizer/StatCard";
+import Skeleton from "../../components/ui/Skeleton";
 import { fetchAdminReports } from "../../services/eventsApiService";
 
 const REPORTS = [
@@ -21,7 +22,67 @@ function Reports() {
     fetchAdminReports().then(setReport).catch(() => setReport(null)).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="db-loading"><Loader2 size={18} className="animate-spin" /> Préparation des rapports…</div>;
+  if (loading) {
+    return (
+      <div className="apple-page space-y-6">
+        <PageHeader
+          eyebrow="Analyse consolidée"
+          title="Rapports"
+          subtitle="Préchargement des indicateurs globaux en cours."
+          action={<span className="admin-live-pill"><i /> Synthèse</span>}
+        />
+
+        <div className="admin-page-kpis">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={`report-kpi-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="100px" height="8px" />
+                <Skeleton width="85%" height="46px" style={{ marginTop: 14 }} />
+                <Skeleton width="82px" height="10px" />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="24px" height="24px" />
+            </div>
+          ))}
+        </div>
+
+        <section className="admin-report-charts">
+          <article className="admin-panel">
+            <header className="admin-panel-head">
+              <div>
+                <Skeleton className="evi-skeleton-chip" width="130px" height="8px" />
+                <Skeleton width="195px" height="20px" />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="21px" height="21px" />
+            </header>
+            <div className="evi-skeleton" style={{ height: "285px" }} />
+          </article>
+          <article className="admin-panel admin-checkin-panel">
+            <header className="admin-panel-head">
+              <div>
+                <Skeleton className="evi-skeleton-chip" width="92px" height="8px" />
+                <Skeleton width="180px" height="20px" />
+              </div>
+            </header>
+            <Skeleton className="admin-gauge" width="190px" height="190px" />
+            <p className="admin-report-note"><Skeleton width="100%" height="13px" /></p>
+          </article>
+        </section>
+
+        <section className="apple-report-grid">
+          {Array.from({ length: REPORTS.length }).map((_, index) => (
+            <article key={`report-card-${index}`} className="apple-report-card">
+              <Skeleton className="evi-skeleton-card" style={{ width: "43px", height: "43px" }} />
+              <div>
+                <Skeleton width="63%" height="15px" style={{ marginTop: 10 }} />
+                <Skeleton width="95%" height="11px" style={{ marginTop: 8 }} />
+              </div>
+              <Skeleton width="58px" height="9px" style={{ marginTop: 18 }} />
+            </article>
+          ))}
+        </section>
+      </div>
+    );
+  }
 
   const activityData = [
     { name: "Utilisateurs", value: Number(report?.utilisateurs || 0), color: "#1d1d1f" },

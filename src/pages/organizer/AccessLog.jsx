@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, ClipboardList, Loader2, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ClipboardList, XCircle } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import Button from "../../components/ui/Button";
 import DataToolbar from "../../components/ui/DataToolbar";
 import { fetchAccessLog } from "../../services/eventsApiService";
+import Skeleton from "../../components/ui/Skeleton";
 
 function AccessLog() {
   const { id } = useParams();
@@ -47,9 +48,42 @@ function AccessLog() {
       />
 
       {loading ? (
-        <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
-          <Loader2 size={18} className="animate-spin" />
-          Chargement...
+        <div className="space-y-5">
+          <div className="apple-table-card" style={{ padding: 14 }}>
+            <div className="apple-data-toolbar">
+              <Skeleton className="evi-skeleton-toolbar" width="170px" height="36px" />
+              <div className="apple-data-toolbar-meta" style={{ gap: 8 }}>
+                <Skeleton className="evi-skeleton-chip" width="78px" height="12px" />
+                <Skeleton className="evi-skeleton-chip" width="95px" height="12px" />
+              </div>
+            </div>
+            <div className="admin-checkin-panel" style={{ marginTop: 14 }}>
+              <Skeleton width="100%" height="14px" />
+            </div>
+          </div>
+
+          <div className="apple-table-card">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="74px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="54px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="76px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="40px" height="12px" /></th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <tr key={`scan-skeleton-${index}`} className="border-b">
+                    <td className="px-6 py-4"><Skeleton width="74px" height="14px" /></td>
+                    <td className="px-6 py-4"><Skeleton width="86%" height="14px" /></td>
+                    <td className="px-6 py-4"><Skeleton width="64px" height="14px" /></td>
+                    <td className="px-6 py-4"><Skeleton width="96px" height="14px" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : scans.length === 0 ? (
         <EmptyState

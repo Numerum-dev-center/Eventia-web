@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import Skeleton from "../../components/ui/Skeleton";
 import { fetchEventById, updateEvent } from "../../services/eventsApiService";
 
 import {
@@ -196,7 +197,62 @@ function EventsEdit() {
 
   if (loading) {
     return (
-      <div className="apple-page apple-form-page max-w-5xl mx-auto text-gray-500">Chargement...</div>
+      <div className="apple-page apple-form-page max-w-5xl mx-auto">
+        <header className="event-editor-header"><span>
+          <Skeleton className="evi-skeleton-chip" width="126px" height="10px" />
+        </span>
+          <h1><Skeleton width="290px" height="64px" /></h1>
+          <p><Skeleton width="66%" height="15px" /></p>
+        </header>
+
+        <form className="event-editor-card p-6 space-y-5">
+          <div className="grid md:grid-cols-2 gap-5">
+            <div>
+              <Skeleton width="120px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+            <div>
+              <Skeleton width="42px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+            <div>
+              <Skeleton width="58px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+            <div>
+              <Skeleton width="64px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+            <div>
+              <Skeleton width="58px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+            <div>
+              <Skeleton width="92px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+            <div className="md:col-span-2">
+              <Skeleton width="80px" height="11px" />
+              <Skeleton width="100%" height="50px" style={{ marginTop: 8 }} />
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <Skeleton width="118px" height="11px" />
+            <Skeleton width="100%" height="52px" style={{ marginTop: 8 }} />
+          </div>
+
+          <div className="mt-1">
+            <Skeleton width="76px" height="11px" />
+            <Skeleton className="evi-skeleton" width="100%" height="160px" style={{ marginTop: 8, borderRadius: "14px" }} />
+          </div>
+
+          <div className="flex gap-4 mt-2">
+            <Skeleton className="evi-skeleton-chip" width="100%" height="48px" />
+            <Skeleton className="evi-skeleton-chip" width="100%" height="48px" />
+          </div>
+        </form>
+      </div>
     );
   }
 

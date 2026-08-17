@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowRight, CalendarDays, LoaderCircle, MapPin, Search, SlidersHorizontal, Ticket, X } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPin, Search, SlidersHorizontal, Ticket, X } from "lucide-react";
 import PublicHeader from "../components/public/PublicHeader";
 import EviMascot from "../components/brand/EviMascot";
+import Skeleton from "../components/ui/Skeleton";
 import { fetchPublishedEvents } from "../services/eventsApiService";
 import concert from "../assets/landing/events/concert.jpg";
 import conference from "../assets/landing/events/conference.jpg";
@@ -77,7 +78,37 @@ function EventsBrowse() {
           <div className="transaction-heading"><div><span>Billetterie publique</span><h2 id="catalog-title">Événements disponibles</h2></div>{!loading && <strong>{visibleEvents.length} événement{visibleEvents.length > 1 ? "s" : ""}</strong>}</div>
 
           {loading ? (
-            <div className="transaction-state"><LoaderCircle className="transaction-spinner" size={29} /><h2>Chargement des événements…</h2><p>Nous vérifions les billets encore disponibles.</p></div>
+            <>
+              <div className="transaction-heading" style={{ marginBottom: 18 }}>
+                <div className="transaction-skeleton-toolbar">
+                  <Skeleton className="evi-skeleton-toolbar" width="64px" height="39px" />
+                  <Skeleton className="evi-skeleton-toolbar" width="64px" height="39px" />
+                  <Skeleton className="evi-skeleton-toolbar" width="64px" height="39px" />
+                  <Skeleton className="evi-skeleton-toolbar" width="64px" height="39px" />
+                </div>
+              </div>
+              <div className="transaction-grid transaction-skeleton-grid">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <article key={`skeleton-event-${index}`} className="transaction-skeleton-card">
+                    <div className="transaction-image">
+                      <Skeleton className="evi-skeleton" style={{ width: "100%", height: "100%" }} />
+                    </div>
+                    <div className="transaction-card-body">
+                      <Skeleton width="88%" height="24px" />
+                      <Skeleton width="96%" height="10px" style={{ marginTop: 10 }} />
+                      <Skeleton width="82%" height="10px" style={{ marginTop: 7 }} />
+                      <div style={{ marginTop: 20, paddingTop: 17, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 15, borderTop: "1px solid var(--tx-line)" }}>
+                        <div>
+                          <Skeleton width="95px" height="8px" />
+                          <Skeleton width="72px" height="16px" style={{ marginTop: 8 }} />
+                        </div>
+                        <Skeleton width="106px" height="16px" />
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           ) : error ? (
             <div className="transaction-state"><EviMascot variant="help" className="transaction-state-evi" alt="Evi vous aide" /><Ticket size={29} /><h2>Événements indisponibles</h2><p>{error}</p><button type="button" onClick={() => window.location.reload()}>Réessayer</button></div>
           ) : visibleEvents.length === 0 ? (

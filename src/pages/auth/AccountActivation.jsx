@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowRight, LoaderCircle, ShieldAlert } from "lucide-react";
+import { ArrowRight, ShieldAlert } from "lucide-react";
 import { AuthStatus } from "../../components/auth/AuthShell";
 import api from "../../services/api/axios";
 import { getUserId, setStoredAuth } from "../../services/authSession";
+import Skeleton from "../../components/ui/Skeleton";
 
 function AccountActivation() {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ function AccountActivation() {
   }
 
   return (
-    <AuthStatus icon={<LoaderCircle className="auth-spinner" size={34} />} tone="orange" title="Activation en cours.">
+    <AuthStatus icon={<Skeleton className="evi-skeleton-circle" width="34px" height="34px" />} tone="orange" title="Activation en cours.">
       Nous sécurisons votre compte et préparons votre espace Eventia. Cela ne prendra qu’un instant.
     </AuthStatus>
   );

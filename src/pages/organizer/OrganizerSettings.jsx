@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import Card from "../../components/ui/Card";
@@ -8,9 +7,10 @@ import Button from "../../components/ui/Button";
 import ChangePasswordForm from "../../components/settings/ChangePasswordForm";
 import { getUserId } from "../../services/authSession";
 import { getUserDetails, updateOrganizerProfile } from "../../services/userService";
+import Skeleton from "../../components/ui/Skeleton";
 
 function OrganizerSettings() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => Boolean(getUserId()));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -25,10 +25,7 @@ function OrganizerSettings() {
 
   useEffect(() => {
     const userId = getUserId();
-    if (!userId) {
-      setLoading(false);
-      return;
-    }
+    if (!userId) return;
 
     getUserDetails(userId)
       .then((user) => {
@@ -78,9 +75,41 @@ function OrganizerSettings() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement du profil...
+      <div className="apple-page apple-settings-page space-y-6 max-w-xl">
+        <PageHeader
+          title="Paramètres"
+          subtitle="Chargement du profil organisateur."
+        />
+
+        <Card>
+          <div className="space-y-5">
+            <Skeleton className="evi-skeleton-chip" width="120px" height="12px" />
+            <Skeleton className="evi-skeleton-chip" width="94px" height="8px" />
+
+            <div className="grid grid-cols-2 gap-4">
+              <Skeleton width="100%" height="50px" />
+              <Skeleton width="100%" height="50px" />
+            </div>
+
+            <Skeleton width="100%" height="50px" />
+            <Skeleton width="100%" height="50px" />
+            <Skeleton width="100%" height="50px" />
+
+            <div className="flex justify-end">
+              <Skeleton className="evi-skeleton-chip" width="132px" height="44px" />
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <Skeleton className="evi-skeleton-chip" width="130px" height="12px" />
+          <div className="space-y-4 mt-4">
+            <Skeleton width="100%" height="44px" />
+            <Skeleton width="100%" height="44px" />
+            <Skeleton width="100%" height="44px" />
+            <Skeleton width="44%" height="44px" />
+          </div>
+        </Card>
       </div>
     );
   }

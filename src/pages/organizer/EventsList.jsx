@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Eye, Pencil, CalendarDays, Loader2 } from "lucide-react";
+import { Plus, Eye, Pencil, CalendarDays } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import Button from "../../components/ui/Button";
 import EmptyState from "../../components/ui/EmptyState";
 import DataToolbar from "../../components/ui/DataToolbar";
+import Skeleton from "../../components/ui/Skeleton";
 import { fetchMyEvents } from "../../services/eventsApiService";
 
 function EventsList() {
@@ -66,9 +67,46 @@ function EventsList() {
       />
 
       {loading ? (
-        <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
-          <Loader2 size={18} className="animate-spin" />
-          Chargement...
+        <div className="apple-table-card">
+          <div style={{ padding: "18px 20px" }}>
+            <div className="apple-data-toolbar" style={{ marginBottom: 0 }}>
+              <div className="apple-data-search" style={{ width: "100%" }}>
+                <Skeleton className="evi-skeleton" width="100%" height="20px" />
+              </div>
+              <Skeleton className="evi-skeleton-chip" width="148px" height="36px" />
+            </div>
+          </div>
+          <div>
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="44px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="34px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="38px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="58px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="44px" height="12px" /></th>
+                  <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="58px" height="12px" /></th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={`event-row-${index}`} className="border-b">
+                    <td className="px-6 py-4"><Skeleton width="84%" height="12px" /></td>
+                    <td className="px-6 py-4"><Skeleton width="52px" height="12px" /></td>
+                    <td className="px-6 py-4"><Skeleton width="88px" height="12px" /></td>
+                    <td className="px-6 py-4"><Skeleton width="58px" height="12px" /></td>
+                    <td className="px-6 py-4"><Skeleton className="evi-skeleton-chip" width="72px" height="24px" /></td>
+                    <td className="px-6 py-4">
+                      <span style={{ display: "inline-flex", gap: "7px", alignItems: "center" }}>
+                        <Skeleton className="evi-skeleton-circle" width="36px" height="36px" />
+                        <Skeleton className="evi-skeleton-circle" width="36px" height="36px" />
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : events.length === 0 ? (
         <EmptyState

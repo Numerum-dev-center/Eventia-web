@@ -8,6 +8,7 @@
 .event-cover>div:last-child { position:absolute; left:38px; right:38px; bottom:34px; }
 .event-cover small { color:#ffb764; font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
 .event-cover h1 { max-width:900px; margin-top:10px; font:700 clamp(2.7rem,6vw,5.5rem)/.96 "Manrope",sans-serif; letter-spacing:-.07em; }
+.event-cover-skeleton { height:100%; border-radius:31px; background:linear-gradient(180deg,rgba(10,8,7,.12) 0%,rgba(24,18,14,.92) 100%); }
 .event-detail-layout { margin-top:24px; display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:24px; align-items:start; }
 .event-main-column { min-width:0; display:flex; flex-direction:column; gap:22px; }
 .event-facts { padding:22px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; border:1px solid var(--tx-line); border-radius:24px; background:rgba(255,255,255,.9); box-shadow:0 12px 34px rgba(51,36,24,.045); }
@@ -55,6 +56,8 @@
 .booking-field>div { height:48px; padding:0 13px; display:flex; align-items:center; gap:9px; color:#99918a; border:1px solid #ddd6cf; border-radius:14px; background:white; transition:border .2s,box-shadow .2s; }
 .booking-field>div:focus-within { color:var(--tx-orange); border-color:var(--tx-orange); box-shadow:0 0 0 4px rgba(247,147,32,.1); }
 .booking-field input { min-width:0; flex:1; color:var(--tx-ink); border:0; outline:0; background:transparent; font-size:10px; }
+.event-detail-skeleton-grid { display:grid; gap:22px; }
+.event-detail-skeleton-row { border-radius:24px; }
 .booking-total { padding:16px 0 3px; display:flex; align-items:flex-end; justify-content:space-between; border-top:1px solid var(--tx-line); }
 .booking-total span { color:#746d66; font-size:10px; }
 .booking-total strong { font:700 21px/1 "Manrope",sans-serif; letter-spacing:-.04em; }
