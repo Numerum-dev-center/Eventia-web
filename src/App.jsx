@@ -151,7 +151,7 @@ function App() {
         <Route
           path="/organizer"
           element={
-            <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+            <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
               <OrganizerLayout />
             </ProtectedRoute>
           }
@@ -161,7 +161,7 @@ function App() {
           <Route
             path="dashboard"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -171,7 +171,7 @@ function App() {
           <Route
             path="events"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <EventsList />
               </ProtectedRoute>
             }
@@ -181,7 +181,7 @@ function App() {
           <Route
             path="events/create"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <EventsCreate />
               </ProtectedRoute>
             }
@@ -191,7 +191,7 @@ function App() {
           <Route
             path="events/:id"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <EventsDetails />
               </ProtectedRoute>
             }
@@ -201,7 +201,7 @@ function App() {
           <Route
             path="events/:id/edit"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <EventsEdit />
               </ProtectedRoute>
             }
@@ -210,7 +210,7 @@ function App() {
           <Route
             path="events/:id/participants"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <Participants />
               </ProtectedRoute>
             }
@@ -218,7 +218,7 @@ function App() {
           <Route
             path="events/:id/billets"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <EventsParticipants />
               </ProtectedRoute>
             }
@@ -227,7 +227,7 @@ function App() {
           <Route
             path="events/:id/sessions"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <Sessions />
               </ProtectedRoute>
             }
@@ -236,7 +236,7 @@ function App() {
           <Route
             path="events/:id/stats"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <Stats />
               </ProtectedRoute>
             }
@@ -245,7 +245,7 @@ function App() {
           <Route
             path="events/:id/finance"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <EventsFinances />
               </ProtectedRoute>
             }
@@ -254,7 +254,7 @@ function App() {
           <Route
             path="events/:id/scan"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <Scan />
               </ProtectedRoute>
             }
@@ -263,7 +263,7 @@ function App() {
           <Route
             path="events/:id/access"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <AccessLog />
               </ProtectedRoute>
             }
@@ -273,7 +273,7 @@ function App() {
           <Route
             path="finance"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <OrganizerFinances />
               </ProtectedRoute>
             }
@@ -282,7 +282,7 @@ function App() {
           <Route
             path="settings"
             element={
-              <ProtectedRoute allowedRoles={["admin", "Organisateur"]}>
+              <ProtectedRoute allowedRoles={["admin", "Organizer"]}>
                 <OrganizerSettings />
               </ProtectedRoute>
             }
