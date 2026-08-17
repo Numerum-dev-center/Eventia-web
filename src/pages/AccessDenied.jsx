@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ShieldX } from "lucide-react";
+import EviMascot from "../components/brand/EviMascot";
 
 function AccessDenied() {
   return (
     <main className="apple-access-page">
       <section className="apple-access-card">
+        <EviMascot variant="help" className="access-evi" alt="Evi vous aide à retrouver votre chemin" />
         <div className="apple-access-icon"><ShieldX size={30} /></div>
         <span>Accès refusé</span>
         <h1>Cette zone n’est pas accessible.</h1>

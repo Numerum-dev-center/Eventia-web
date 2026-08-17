@@ -27,7 +27,8 @@ function ResetPassword() {
       setSuccess(true);
       setTimeout(() => navigate("/login"), 1500);
     } catch (requestError) {
-      setError(requestError?.response?.data?.message || "Impossible de réinitialiser le mot de passe. Réessayez.");
+      const backendMessage = requestError?.response?.data?.message;
+      setError((Array.isArray(backendMessage) ? backendMessage.join(" ") : backendMessage) || "Impossible de réinitialiser le mot de passe. Réessayez.");
     } finally { setLoading(false); }
   };
 

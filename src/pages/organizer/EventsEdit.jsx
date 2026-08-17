@@ -39,7 +39,15 @@ function EventsEdit() {
         setTitle(ev.title || "");
         setDate(ev.date || "");
         setLocation(ev.location || "");
-        setLocationDetails(ev);
+        setLocationDetails(
+          ev.location
+            ? {
+                formattedAddress: ev.location,
+                latitude: ev.coordinates?.latitude,
+                longitude: ev.coordinates?.longitude,
+              }
+            : null
+        );
         setTickets(ev.capacity || "");
         setPrice(ev.price || "");
         setCategory(ev.category || "");
@@ -162,6 +170,7 @@ function EventsEdit() {
         title,
         date,
         location: resolvedLocation.formattedAddress,
+        address: resolvedLocation.formattedAddress,
         coordinates: {
           latitude: resolvedLocation.latitude,
           longitude: resolvedLocation.longitude,

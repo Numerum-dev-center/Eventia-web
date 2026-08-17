@@ -1,11 +1,26 @@
 import api from "./api/axios";
 
+const mapCategory = (c) => ({
+  id: c.id,
+  name: c.nom,
+  price: Number(c.prix),
+  capacity: c.quantiteTotale,
+  remaining: c.quantiteDisponible,
+  perPersonLimit: c.limiteParPersonne ?? null,
+});
+
 // Traduit un événement backend (titre/dateDebut/.../categoriesTickets[])
 // vers le format "plat" que les pages web utilisent déjà (title/date/price/capacity...).
-// Chaque événement créé depuis le web n'a qu'une seule catégorie de billet
-// ("Standard"), donc cette simplification reste fidèle à la réalité créée ici.
+// Un événement peut avoir PLUSIEURS catégories de billets (Standard/VIP/Early Bird...) :
+// - `categories` porte la liste complète, pour les pages qui doivent laisser
+//   choisir une catégorie précise (réservation publique) ou en détailler le suivi.
+// - Les champs plats restent fournis pour compatibilité (cartes, listes, colonnes) :
+//   `price` = prix le plus bas ("à partir de"), `capacity`/`remaining` = somme sur
+//   toutes les catégories, `categorieTicketId` = première catégorie (utilisé par le
+//   formulaire d'édition simple, qui ne gère qu'une seule catégorie "Standard").
 const mapEvent = (ev) => {
-  const categorie = ev.categoriesTickets?.[0];
+  const categories = (ev.categoriesTickets ?? []).map(mapCategory);
+  const premiere = categories[0];
   const start = ev.dateDebut ? new Date(ev.dateDebut) : null;
   const end = ev.dateFin ? new Date(ev.dateFin) : null;
 
@@ -25,11 +40,21 @@ const mapEvent = (ev) => {
     endTime: end ? end.toISOString().slice(11, 16) : "",
     image: ev.imageBanniere,
     status:
-      ev.statut === "Publié" ? "PUBLISHED" : ev.statut === "Annulé" ? "CANCELLED" : "DRAFT",
-    price: categorie ? Number(categorie.prix) : 0,
-    capacity: categorie ? categorie.quantiteTotale : 0,
-    remaining: categorie ? categorie.quantiteDisponible : 0,
-    categorieTicketId: categorie?.id ?? null,
+      ev.statut === "Publié"
+        ? "PUBLISHED"
+        : ev.statut === "Annulé"
+        ? "CANCELLED"
+        : ev.statut === "Terminé"
+        ? "TERMINE"
+        : "DRAFT",
+    categories,
+    price: categories.length ? Math.min(...categories.map((c) => c.price)) : 0,
+    capacity: categories.reduce((sum, c) => sum + c.capacity, 0),
+    remaining: categories.reduce((sum, c) => sum + c.remaining, 0),
+    perPersonLimit: premiere?.perPersonLimit ?? null,
+    categorieTicketId: premiere?.id ?? null,
+    organizerId: ev.profilOrganisateur?.id ?? null,
+    organizerName: ev.profilOrganisateur?.nomEntreprise ?? null,
   };
 };
 

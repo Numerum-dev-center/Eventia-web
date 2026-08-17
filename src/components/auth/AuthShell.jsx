@@ -2,6 +2,7 @@ import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import eventImage from "../../assets/organizer/im-land.jpg";
 import BrandLogo from "../brand/BrandLogo";
+import EviMascot from "../brand/EviMascot";
 import "../../styles/auth.css";
 
 export function AuthBrand() {
@@ -30,6 +31,8 @@ function AuthVisual() {
           <small>24 août · Lomé</small>
         </div>
       </div>
+
+      <EviMascot variant="security" className="auth-evi" alt="Evi protège votre espace Eventia" />
 
       <div className="auth-visual-proof"><ShieldCheck size={15} /> Paiements et données sécurisés</div>
     </aside>
@@ -70,12 +73,14 @@ export function AuthShell({
 }
 
 export function AuthStatus({ icon, tone = "orange", title, children, action, secondary }) {
+  const mascotVariant = tone === "green" || tone === "success" ? "success" : tone === "red" || tone === "danger" ? "help" : "security";
   return (
     <main className="auth-page auth-page--status">
       <div className="auth-ambient auth-ambient--one" />
       <div className="auth-ambient auth-ambient--two" />
       <header className="auth-topbar"><AuthBrand /></header>
       <section className="auth-status-card">
+        <EviMascot variant={mascotVariant} className="auth-status-evi" alt="Evi vous accompagne" />
         <div className={`auth-status-icon auth-status-icon--${tone}`}>{icon}</div>
         <h1>{title}</h1>
         <div className="auth-status-copy">{children}</div>

@@ -1,8 +1,7 @@
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { eventsData } from "../../data/eventsData";
 
-export default function EventCard({ event = eventsData[0] }) {
+export default function EventCard({ event = {} }) {
   return (
     <article className="db-event-card">
       <div className="db-event-image">

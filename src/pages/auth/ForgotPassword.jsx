@@ -22,7 +22,8 @@ function ForgotPassword() {
       setSuccess("Un code de vérification vient de vous être envoyé.");
       setTimeout(() => navigate("/verify-code", { state: { email: normalizedEmail } }), 1200);
     } catch (requestError) {
-      setError(requestError?.response?.data?.message || "Impossible d’envoyer l’email pour le moment. Réessayez plus tard.");
+      const backendMessage = requestError?.response?.data?.message;
+      setError((Array.isArray(backendMessage) ? backendMessage.join(" ") : backendMessage) || "Impossible d’envoyer l’email pour le moment. Réessayez plus tard.");
     } finally { setLoading(false); }
   };
 

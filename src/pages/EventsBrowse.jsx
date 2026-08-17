@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowRight, CalendarDays, LoaderCircle, MapPin, Search, SlidersHorizontal, Ticket, X } from "lucide-react";
 import PublicHeader from "../components/public/PublicHeader";
+import EviMascot from "../components/brand/EviMascot";
 import { fetchPublishedEvents } from "../services/eventsApiService";
 import concert from "../assets/landing/events/concert.jpg";
 import conference from "../assets/landing/events/conference.jpg";
@@ -56,6 +57,7 @@ function EventsBrowse() {
       <PublicHeader />
       <main>
         <section className="transaction-hero">
+          <EviMascot variant="welcome" className="transaction-evi" alt="Evi vous accueille sur Eventia" />
           <h1>Quel événement<br /><em>allez-vous vivre ?</em></h1>
           <p>Choisissez une expérience, réservez vos billets et recevez immédiatement vos codes d’accès.</p>
           <label className="transaction-search">
@@ -77,9 +79,9 @@ function EventsBrowse() {
           {loading ? (
             <div className="transaction-state"><LoaderCircle className="transaction-spinner" size={29} /><h2>Chargement des événements…</h2><p>Nous vérifions les billets encore disponibles.</p></div>
           ) : error ? (
-            <div className="transaction-state"><Ticket size={29} /><h2>Événements indisponibles</h2><p>{error}</p><button type="button" onClick={() => window.location.reload()}>Réessayer</button></div>
+            <div className="transaction-state"><EviMascot variant="help" className="transaction-state-evi" alt="Evi vous aide" /><Ticket size={29} /><h2>Événements indisponibles</h2><p>{error}</p><button type="button" onClick={() => window.location.reload()}>Réessayer</button></div>
           ) : visibleEvents.length === 0 ? (
-            <div className="transaction-state"><Search size={29} /><h2>Aucun événement ouvert ne correspond</h2><p>Modifiez votre recherche ou effacez les filtres.</p><button type="button" onClick={clearFilters}>Effacer les filtres</button></div>
+            <div className="transaction-state"><EviMascot variant="help" className="transaction-state-evi" alt="Evi vous aide à rechercher" /><Search size={29} /><h2>Aucun événement ouvert ne correspond</h2><p>Modifiez votre recherche ou effacez les filtres.</p><button type="button" onClick={clearFilters}>Effacer les filtres</button></div>
           ) : (
             <div className="transaction-grid">
               {visibleEvents.map((event, index) => (

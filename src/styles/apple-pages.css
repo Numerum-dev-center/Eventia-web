@@ -10,9 +10,18 @@
   --apple-shadow: 0 18px 55px rgba(46, 35, 27, .08);
 }
 
+.evi-mascot { display:block; object-fit:contain; user-select:none; pointer-events:none; filter:drop-shadow(0 16px 24px rgba(42,30,22,.12)); }
+.evi-dock { position:fixed; z-index:28; right:20px; bottom:18px; min-height:66px; padding:7px 15px 7px 7px; display:flex; align-items:center; gap:9px; border:1px solid rgba(255,255,255,.88); border-radius:22px; background:rgba(255,255,255,.76); box-shadow:0 16px 45px rgba(38,30,24,.12); backdrop-filter:blur(28px) saturate(180%); }
+.evi-dock .evi-mascot { width:54px; height:54px; filter:drop-shadow(0 8px 12px rgba(42,30,22,.12)); }
+.evi-dock > span { display:flex; flex-direction:column; gap:2px; }
+.evi-dock strong { font-size:10px; }
+.evi-dock small { color:var(--apple-secondary); font-size:8px; }
+
 body { color: var(--apple-ink); background: #f5f5f7; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif; }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid rgba(0,122,255,.48); outline-offset:3px; }
+@supports (font: -apple-system-body) { body { font: -apple-system-body; } h1,h2,h3,strong { letter-spacing:-.02em; } }
 
 .apple-page { width: 100%; animation: apple-page-in .32s ease both; }
 .apple-page > .ui-page-header:first-child { margin-top: 2px; }
@@ -187,6 +196,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .apple-access-page { min-height: 100vh; padding: 24px; display: grid; place-items: center; background: radial-gradient(circle at 50% 0, rgba(255,90,31,.13), transparent 36%), #f5f5f7; }
 .apple-access-card { width: min(560px,100%); padding: 46px; text-align: center; border: 1px solid rgba(255,255,255,.9); border-radius: 30px; background: rgba(255,255,255,.82); box-shadow: 0 26px 70px rgba(40,34,29,.11); backdrop-filter: blur(24px); }
+.access-evi { width:160px; height:160px; margin:-12px auto -8px; }
+.access-evi + .apple-access-icon,.ui-empty-mascot + .ui-empty-icon { display:none; }
 .apple-access-icon { width: 66px; height: 66px; margin: 0 auto 22px; display:grid; place-items:center; color:var(--apple-orange); border-radius:21px; background:rgba(255,90,31,.1); }
 .apple-access-card > span { color:var(--apple-orange); font-size:9px; font-weight:750; letter-spacing:.1em; text-transform:uppercase; }
 .apple-access-card h1 { margin:12px 0 0; font:750 36px/1.05 -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif; letter-spacing:-.05em; }
@@ -198,6 +209,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 @keyframes apple-page-in { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
 @media (max-width: 720px) {
+  .evi-dock { right:10px; bottom:10px; padding:5px; border-radius:19px; }
+  .evi-dock .evi-mascot { width:48px; height:48px; }
+  .evi-dock > span { display:none; }
   .apple-table-card { margin-inline: -4px; border-radius: 20px; }
   .apple-data-toolbar { align-items:stretch; flex-direction:column; }
   .apple-data-search { width:100%; }
