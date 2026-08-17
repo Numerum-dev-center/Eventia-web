@@ -3,7 +3,6 @@ import {
   Wallet,
   BadgePercent,
   HandCoins,
-  Loader2,
   Landmark,
 } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -11,6 +10,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 import StatCard from "../../components/organizer/StatCard";
 import PageHeader from "../../components/ui/PageHeader";
 import DataToolbar from "../../components/ui/DataToolbar";
+import Skeleton from "../../components/ui/Skeleton";
 import { fetchAdminCommissions, fetchAdminReversements, fetchAllEventsAdmin } from "../../services/eventsApiService";
 
 function AdminFinances() {
@@ -55,9 +55,78 @@ function AdminFinances() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement des finances...
+      <div className="apple-page space-y-6">
+        <PageHeader
+          eyebrow="Pilotage financier"
+          title="Finances"
+          subtitle="Préchargement des données de régie."
+          action={<span className="admin-live-pill"><i /> En cours</span>}
+        />
+        <p className="text-xs text-gray-400 -mt-4">
+          Chargement du détail des revenus, commissions et reversements.
+        </p>
+
+        <div className="admin-page-kpis">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={`finance-kpi-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="90px" height="8px" />
+                <Skeleton width="78%" height="46px" style={{ marginTop: 14 }} />
+                <Skeleton width="84px" height="10px" />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="24px" height="24px" />
+            </div>
+          ))}
+        </div>
+
+        <section className="admin-finance-charts">
+          <article className="admin-panel">
+            <header className="admin-panel-head"><div><Skeleton className="evi-skeleton-chip" width="128px" height="8px" /><Skeleton width="182px" height="20px" /></div></header>
+            <div className="evi-skeleton evi-skeleton-panel" style={{ height: "285px" }} />
+          </article>
+          <article className="admin-panel">
+            <header className="admin-panel-head"><div><Skeleton className="evi-skeleton-chip" width="122px" height="8px" /><Skeleton width="168px" height="20px" /></div></header>
+            <div className="admin-mini-chart-body">
+              <div className="admin-mini-donut"><div className="evi-skeleton evi-skeleton-panel" style={{ width: "160px", height: "160px", borderRadius: "999px", margin: "auto" }} /></div>
+              <div className="admin-legend">
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <span key={`finance-legend-${index}`}>
+                    <Skeleton className="evi-skeleton-circle" width="7px" height="7px" />
+                    <Skeleton width="62px" height="10px" />
+                    <Skeleton width="20px" height="10px" />
+                  </span>
+                ))}
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <div className="apple-table-card">
+          <div className="px-6 py-4 flex items-center justify-between">
+            <Skeleton className="evi-skeleton-chip" width="200px" height="20px" />
+            <Skeleton className="evi-skeleton" width="220px" height="36px" />
+          </div>
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="90px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="64px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="74px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="88px" height="12px" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <tr key={`finance-row-${index}`} className="border-b">
+                  <td className="px-6 py-4"><Skeleton width="86%" height="13px" /></td>
+                  <td className="px-6 py-4"><Skeleton width="78px" height="13px" /></td>
+                  <td className="px-6 py-4"><Skeleton width="78px" height="13px" /></td>
+                  <td className="px-6 py-4 text-right"><Skeleton width="88px" height="13px" /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

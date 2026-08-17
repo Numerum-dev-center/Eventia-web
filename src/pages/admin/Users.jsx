@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CircleCheck, Loader2, ShieldCheck, Trash2, UserRoundCheck, Users as UsersIcon } from "lucide-react";
+import { CircleCheck, ShieldCheck, Trash2, UserRoundCheck, Users as UsersIcon } from "lucide-react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import PageHeader from "../../components/ui/PageHeader";
@@ -8,6 +8,7 @@ import Badge from "../../components/ui/Badge";
 import EmptyState from "../../components/ui/EmptyState";
 import DataToolbar from "../../components/ui/DataToolbar";
 import StatCard from "../../components/organizer/StatCard";
+import Skeleton from "../../components/ui/Skeleton";
 import { deleteUser, getUsers } from "../../services/adminService";
 
 const ROLE_TONE = {
@@ -64,10 +65,25 @@ function UsersPage() {
       />
 
       <div className="admin-page-kpis">
-        <StatCard title="Tous les comptes" value={users.length} icon={<UsersIcon size={22} />} />
-        <StatCard title="Comptes actifs" value={activeUsers} icon={<CircleCheck size={22} />} />
-        <StatCard title="Organisateurs" value={users.filter((user) => user.role === "Organisateur").length} icon={<UserRoundCheck size={22} />} />
-        <StatCard title="Administrateurs" value={users.filter((user) => user.role === "Admin").length} icon={<ShieldCheck size={22} />} />
+        {loading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <article key={`user-kpi-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="110px" height="8px" />
+                <Skeleton width="72%" height="44px" style={{ marginTop: 16 }} />
+                <Skeleton width="92px" height="10px" />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="24px" height="24px" />
+            </article>
+          ))
+        ) : (
+          <>
+            <StatCard title="Tous les comptes" value={users.length} icon={<UsersIcon size={22} />} />
+            <StatCard title="Comptes actifs" value={activeUsers} icon={<CircleCheck size={22} />} />
+            <StatCard title="Organisateurs" value={users.filter((user) => user.role === "Organisateur").length} icon={<UserRoundCheck size={22} />} />
+            <StatCard title="Administrateurs" value={users.filter((user) => user.role === "Admin").length} icon={<ShieldCheck size={22} />} />
+          </>
+        )}
       </div>
 
       {users.length > 0 && <section className="admin-page-charts admin-user-insights">
@@ -83,10 +99,33 @@ function UsersPage() {
 
       <Card padding="p-0">
         {loading ? (
-          <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
-            <Loader2 size={18} className="animate-spin" />
-            Chargement des utilisateurs...
-          </div>
+          <>
+            <div className="evi-skeleton-toolbar" style={{ margin: "14px", height: "52px" }} />
+            <div className="apple-table-card">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs uppercase tracking-wide text-gray-400 border-b border-gray-100">
+                    <th className="px-6 py-3 font-semibold"><Skeleton className="evi-skeleton-chip" width="84px" height="12px" /></th>
+                    <th className="px-6 py-3 font-semibold"><Skeleton className="evi-skeleton-chip" width="50px" height="12px" /></th>
+                    <th className="px-6 py-3 font-semibold"><Skeleton className="evi-skeleton-chip" width="41px" height="12px" /></th>
+                    <th className="px-6 py-3 font-semibold"><Skeleton className="evi-skeleton-chip" width="54px" height="12px" /></th>
+                    <th className="px-6 py-3 font-semibold text-right"><Skeleton className="evi-skeleton-chip" width="63px" height="12px" /></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: 7 }).map((_, index) => (
+                    <tr key={`user-row-${index}`} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/60">
+                      <td className="px-6 py-4"><Skeleton width="70%" height="12px" /></td>
+                      <td className="px-6 py-4"><Skeleton width="86%" height="12px" /></td>
+                      <td className="px-6 py-4"><Skeleton width="64px" height="24px" /></td>
+                      <td className="px-6 py-4"><Skeleton width="56px" height="24px" /></td>
+                      <td className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="86px" height="28px" /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         ) : users.length === 0 ? (
           <div className="p-6">
             <EmptyState

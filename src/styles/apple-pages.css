@@ -23,6 +23,43 @@ button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid rgba(0,122,255,.48); outline-offset:3px; }
 @supports (font: -apple-system-body) { body { font: -apple-system-body; } h1,h2,h3,strong { letter-spacing:-.02em; } }
 
+.evi-skeleton {
+  position: relative;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #ececec 0%, #f6f6f7 45%, #ececec 100%);
+  overflow: hidden;
+}
+
+.evi-skeleton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.65) 50%, transparent 100%);
+  animation: evi-skeleton-wave 1.5s infinite;
+}
+
+.evi-skeleton.no-animation::before {
+  display: none;
+}
+
+@keyframes evi-skeleton-wave {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.evi-skeleton-inline { display: inline-block; }
+.evi-skeleton-circle { border-radius: 999px; }
+.evi-skeleton-chip { border-radius: 999px; height: 1.75rem; }
+.evi-skeleton-card,
+.evi-skeleton-panel { border-radius: 22px; }
+
+.evi-skeleton-toolbar {
+  min-height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(60, 60, 67, .12);
+}
+
 .apple-page { width: 100%; animation: apple-page-in .32s ease both; }
 .apple-page > .ui-page-header:first-child { margin-top: 2px; }
 .apple-page .ui-page-header-copy > span { color: var(--apple-orange); }

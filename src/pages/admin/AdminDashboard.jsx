@@ -6,7 +6,6 @@ import {
   CalendarCheck,
   CalendarDays,
   CircleDollarSign,
-  Loader2,
   ShieldCheck,
   Ticket,
   UserRoundCheck,
@@ -28,6 +27,7 @@ import {
 
 import PageHeader from "../../components/ui/PageHeader";
 import StatCard from "../../components/organizer/StatCard";
+import Skeleton from "../../components/ui/Skeleton";
 import {
   fetchAdminDashboard,
   fetchAdminReversements,
@@ -61,7 +61,59 @@ function AdminDashboard() {
   }, []);
 
   if (loading) {
-    return <div className="db-loading"><Loader2 size={19} className="animate-spin" /> Préparation des indicateurs…</div>;
+    return (
+      <div className="apple-page admin-command-center">
+        <PageHeader
+          eyebrow="Centre de pilotage"
+          title="Vue d’ensemble"
+          subtitle="Suivez la santé de la plateforme, les ventes et l’activité de vos événements en temps réel."
+          action={<span className="admin-live-pill"><i /> <Skeleton className="evi-skeleton-chip" width="92px" height="20px" /></span>}
+        />
+        <section className="admin-kpi-grid">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <article className="db-stat-card" key={`kpi-${index}`}>
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="98px" height="8px" />
+                <Skeleton width="78%" height="40px" style={{ marginTop: 16 }} />
+                <Skeleton width="102px" height="10px" />
+              </div>
+              <div className="db-stat-icon">
+                <Skeleton className="evi-skeleton-circle" width="24px" height="24px" />
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section className="admin-chart-layout">
+          <article className="admin-panel admin-revenue-panel">
+            <header className="admin-panel-head">
+              <div>
+                <Skeleton className="evi-skeleton-chip" width="145px" height="8px" />
+                <Skeleton width="200px" height="20px" style={{ marginTop: 8 }} />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="22px" height="22px" />
+            </header>
+            <div className="evi-skeleton evi-skeleton-panel" style={{ height: "310px" }} />
+          </article>
+          <article className="admin-panel admin-checkin-panel">
+            <header className="admin-panel-head">
+              <div>
+                <Skeleton className="evi-skeleton-chip" width="108px" height="8px" />
+                <Skeleton width="175px" height="20px" style={{ marginTop: 8 }} />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="21px" height="21px" />
+            </header>
+            <div className="evi-skeleton evi-skeleton-panel" style={{ width: "190px", height: "190px", borderRadius: "50%", margin: "28px auto 16px" }} />
+            <div className="admin-gauge-note">
+              <Skeleton width="9px" height="9px" className="evi-skeleton-circle" />
+              <div>
+                <Skeleton width="150px" height="10px" />
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
+    );
   }
 
   const users = Number(dashboard?.utilisateurs || 0);

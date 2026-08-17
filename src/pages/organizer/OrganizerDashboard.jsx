@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-
 import PageHeader from "../../components/ui/PageHeader";
 import TicketPieChart from "../../components/organizer/TicketPieChart";
 import RevenueChart from "../../components/organizer/RevenueChart";
@@ -15,6 +13,7 @@ import {
 
 import StatCard from "../../components/organizer/StatCard";
 import EventCard from "../../components/organizer/EventsCard";
+import Skeleton from "../../components/ui/Skeleton";
 
 import { fetchMyEvents, fetchOrganizerDashboard } from "../../services/eventsApiService";
 
@@ -45,9 +44,72 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement du tableau de bord...
+      <div className="apple-page space-y-6">
+        <PageHeader
+          title="Tableau de bord"
+          subtitle="Aperçu de vos ventes et de vos évènements."
+        />
+        <div className="grid md:grid-cols-4 gap-6 mb-2">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={`org-kpi-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="88px" height="8px" />
+                <Skeleton width="84%" height="42px" style={{ marginTop: 16 }} />
+                <Skeleton width="104px" height="10px" />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="40px" height="40px" />
+            </div>
+          ))}
+        </div>
+
+        <p className="text-xs text-gray-400 -mt-2 mb-4">
+          Données en cours de préparation depuis votre espace organisateur.
+        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8 space-y-6">
+            <section className="grid md:grid-cols-2 gap-6">
+              <article className="admin-panel">
+                <header className="admin-panel-head">
+                  <div><Skeleton className="evi-skeleton-chip" width="142px" height="8px" /><Skeleton width="170px" height="21px" /></div>
+                </header>
+                <Skeleton className="evi-skeleton" style={{ height: "248px", borderRadius: "20px" }} />
+              </article>
+              <article className="admin-panel">
+                <header className="admin-panel-head">
+                  <div><Skeleton className="evi-skeleton-chip" width="126px" height="8px" /><Skeleton width="150px" height="21px" /></div>
+                </header>
+                <Skeleton className="evi-skeleton" style={{ height: "248px", borderRadius: "20px" }} />
+              </article>
+            </section>
+
+            <div className="space-y-4">
+              <div className="admin-panel-head">
+                <Skeleton className="evi-skeleton-chip" width="150px" height="8px" />
+              </div>
+              <div className="admin-page-kpis admin-page-charts">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <article key={`event-card-${index}`} className="admin-panel">
+                    <Skeleton className="evi-skeleton" style={{ height: "122px", borderRadius: "16px" }} />
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-4 space-y-6">
+            <article className="admin-panel">
+              <header className="admin-panel-head">
+                <div><Skeleton className="evi-skeleton-chip" width="118px" height="8px" /><Skeleton width="120px" height="24px" /></div>
+              </header>
+              <Skeleton className="evi-skeleton" style={{ minHeight: "220px", borderRadius: "20px" }} />
+            </article>
+            <article className="admin-panel">
+              <header className="admin-panel-head"><div><Skeleton className="evi-skeleton-chip" width="122px" height="8px" /><Skeleton width="130px" height="24px" /></div></header>
+              <Skeleton className="evi-skeleton" style={{ height: "252px", borderRadius: "20px" }} />
+            </article>
+          </div>
+        </div>
       </div>
     );
   }

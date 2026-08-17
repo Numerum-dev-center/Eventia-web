@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, HandCoins, Loader2, Wallet, WalletCards } from "lucide-react";
+import { ArrowRight, HandCoins, Wallet, WalletCards } from "lucide-react";
 
 import PageHeader from "../../components/ui/PageHeader";
 import EmptyState from "../../components/ui/EmptyState";
 import StatCard from "../../components/organizer/StatCard";
+import Skeleton from "../../components/ui/Skeleton";
 import { fetchOrganizerFinance } from "../../services/eventsApiService";
 
 function Finances() {
@@ -20,9 +21,55 @@ function Finances() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
-        <Loader2 size={18} className="animate-spin" />
-        Chargement...
+      <div className="apple-page space-y-6">
+        <PageHeader
+          title="Finances"
+          subtitle="Préchargement des chiffres d'ensemble."
+          eyebrow="Pilotage financier"
+        />
+
+        <div className="admin-page-kpis">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <article key={`finance-kpi-${index}`} className="db-stat-card">
+              <div className="db-stat-copy">
+                <Skeleton className="evi-skeleton-chip" width="112px" height="8px" />
+                <Skeleton width="82%" height="42px" style={{ marginTop: 16 }} />
+                <Skeleton width="76px" height="10px" />
+              </div>
+              <Skeleton className="evi-skeleton-circle" width="26px" height="26px" />
+            </article>
+          ))}
+        </div>
+
+        <section className="apple-table-card">
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--apple-line)" }}>
+            <Skeleton className="evi-skeleton-chip" width="238px" height="20px" />
+          </div>
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-6 py-4 text-left"><Skeleton className="evi-skeleton-chip" width="74px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="96px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="52px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="74px" height="12px" /></th>
+                <th className="px-6 py-4 text-right"><Skeleton className="evi-skeleton-chip" width="84px" height="12px" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <tr key={`org-fin-row-${index}`} className="border-b">
+                  <td className="px-6 py-4">
+                    <Skeleton width="84px" height="12px" />
+                  </td>
+                  <td className="px-6 py-4 text-right"><Skeleton width="36px" height="12px" /></td>
+                  <td className="px-6 py-4 text-right"><Skeleton width="84px" height="12px" /></td>
+                  <td className="px-6 py-4 text-right"><Skeleton width="84px" height="12px" /></td>
+                  <td className="px-6 py-4 text-right"><Skeleton width="84px" height="12px" /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
       </div>
     );
   }
