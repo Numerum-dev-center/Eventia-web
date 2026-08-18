@@ -125,37 +125,36 @@ function Dashboard() {
       <div className="grid md:grid-cols-4 gap-6 mb-8">
 
         <StatCard
-          title="Revenus"
-          value={`${dashboard.revenue.toLocaleString("fr-FR")} FCFA`}
-          icon={<Wallet />}
-          active={activeMetric === "revenue"}
-          onMouseEnter={() => setActiveMetric("revenue")}
-        />
+  title="Revenus"
+  value={`${(dashboard?.revenue ?? 0).toLocaleString("fr-FR")} FCFA`}
+  icon={<Wallet />}
+  active={activeMetric === "revenue"}
+  onMouseEnter={() => setActiveMetric("revenue")}
+/>
 
-        <StatCard
-          title="Acheteurs"
-          value={dashboard.users}
-          icon={<Users />}
-          active={activeMetric === "users"}
-          onMouseEnter={() => setActiveMetric("users")}
-        />
+<StatCard
+  title="Acheteurs"
+  value={dashboard?.users ?? 0}
+  icon={<Users />}
+  active={activeMetric === "users"}
+  onMouseEnter={() => setActiveMetric("users")}
+/>
 
-        <StatCard
-          title="Check-ins"
-          value={dashboard.checkins}
-          icon={<BadgeCheck />}
-          active={activeMetric === "checkins"}
-          onMouseEnter={() => setActiveMetric("checkins")}
-        />
+<StatCard
+  title="Check-ins"
+  value={dashboard?.checkins ?? 0}
+  icon={<BadgeCheck />}
+  active={activeMetric === "checkins"}
+  onMouseEnter={() => setActiveMetric("checkins")}
+/>
 
-        <StatCard
-          title="Billets vendus"
-          value={dashboard.tickets}
-          icon={<Ticket />}
-          active={activeMetric === "tickets"}
-          onMouseEnter={() => setActiveMetric("tickets")}
-        />
-
+<StatCard
+  title="Billets vendus"
+  value={dashboard?.tickets ?? 0}
+  icon={<Ticket />}
+  active={activeMetric === "tickets"}
+  onMouseEnter={() => setActiveMetric("tickets")}
+/>
       </div>
 
       <p className="text-xs text-gray-400 -mt-4 mb-6">
@@ -169,14 +168,14 @@ function Dashboard() {
 
           <div className="grid md:grid-cols-2 gap-6">
 
-            <TicketPieChart
-              data={dashboard.chart}
-            />
+  <TicketPieChart
+    data={dashboard?.chart ?? []}
+  />
 
-            <RevenueChart
-              data={dashboard.chart}
-              metric={activeMetric}
-            />
+  <RevenueChart
+    data={dashboard?.chart ?? []}
+    metric={activeMetric}
+  />
 
           </div>
 
