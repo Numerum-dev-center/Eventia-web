@@ -17,6 +17,16 @@ import Skeleton from "../../components/ui/Skeleton";
 
 import { fetchMyEvents, fetchOrganizerDashboard } from "../../services/eventsApiService";
 
+const emptyDashboard = {
+  revenue: 0,
+  users: 0,
+  checkins: 0,
+  tickets: 0,
+  chart: [
+    { month: "Actuel", revenue: 0, users: 0, checkins: 0, notes: 0 },
+  ],
+};
+
 function Dashboard() {
   const [dashboard, setDashboard] = useState(null);
   const [events, setEvents] = useState([]);
@@ -26,21 +36,29 @@ function Dashboard() {
 
 
   useEffect(() => {
-    Promise.all([fetchOrganizerDashboard(), fetchMyEvents()])
+    Promise.all([
+      fetchOrganizerDashboard().catch(() => null),
+      fetchMyEvents().catch(() => []),
+    ])
       .then(([dash, ev]) => {
+        const revenue = Number(dash?.revenue ?? 0);
+        const users = Number(dash?.inscrits ?? 0);
+        const checkins = Number(dash?.checkins ?? 0);
         setDashboard({
-          revenue: dash.revenue,
-          users: dash.inscrits,
-          checkins: dash.checkins,
-          tickets: dash.inscrits,
+          revenue,
+          users,
+          checkins,
+          tickets: users,
           chart: [
-            { month: "Actuel", revenue: dash.revenue, users: dash.inscrits, checkins: dash.checkins, notes: 0 },
+            { month: "Actuel", revenue, users, checkins, notes: 0 },
           ],
         });
-        setEvents(ev);
+        setEvents(Array.isArray(ev) ? ev : []);
       })
       .finally(() => setLoading(false));
   }, []);
+
+  const safeDashboard = dashboard ?? emptyDashboard;
 
   if (loading) {
     return (
@@ -126,7 +144,7 @@ function Dashboard() {
 
         <StatCard
           title="Revenus"
-          value={`${dashboard.revenue.toLocaleString("fr-FR")} FCFA`}
+          value={`${safeDashboard.revenue.toLocaleString("fr-FR")} FCFA`}
           icon={<Wallet />}
           active={activeMetric === "revenue"}
           onMouseEnter={() => setActiveMetric("revenue")}
@@ -134,7 +152,7 @@ function Dashboard() {
 
         <StatCard
           title="Acheteurs"
-          value={dashboard.users}
+          value={safeDashboard.users}
           icon={<Users />}
           active={activeMetric === "users"}
           onMouseEnter={() => setActiveMetric("users")}
@@ -142,7 +160,7 @@ function Dashboard() {
 
         <StatCard
           title="Check-ins"
-          value={dashboard.checkins}
+          value={safeDashboard.checkins}
           icon={<BadgeCheck />}
           active={activeMetric === "checkins"}
           onMouseEnter={() => setActiveMetric("checkins")}
@@ -150,7 +168,7 @@ function Dashboard() {
 
         <StatCard
           title="Billets vendus"
-          value={dashboard.tickets}
+          value={safeDashboard.tickets}
           icon={<Ticket />}
           active={activeMetric === "tickets"}
           onMouseEnter={() => setActiveMetric("tickets")}
@@ -170,11 +188,11 @@ function Dashboard() {
           <div className="grid md:grid-cols-2 gap-6">
 
             <TicketPieChart
-              data={dashboard.chart}
+              data={safeDashboard.chart}
             />
 
             <RevenueChart
-              data={dashboard.chart}
+              data={safeDashboard.chart}
               metric={activeMetric}
             />
 

@@ -1,5 +1,22 @@
 import api from "./api/axios";
 
+const emptyOrganizerDashboard = {
+  revenue: 0,
+  inscrits: 0,
+  checkins: 0,
+  evenements: 0,
+};
+
+const emptyFinance = {
+  revenue: 0,
+  commission: 0,
+  net: 0,
+  ticketsVendus: 0,
+  evenements: [],
+};
+
+const isMissingEndpoint = (error) => error?.response?.status === 404;
+
 const mapCategory = (c) => ({
   id: c.id,
   name: c.nom,
@@ -90,7 +107,10 @@ export const reserverBillets = async ({
 // --- Organisateur ---
 
 export const fetchMyEvents = async () => {
-  const { data } = await api.get("/organizer/events");
+  const { data } = await api.get("/organizer/events").catch((error) => {
+    if (isMissingEndpoint(error)) return { data: [] };
+    throw error;
+  });
   return data.map(mapEvent);
 };
 
@@ -154,22 +174,34 @@ export const deleteEvent = async (id) => {
 };
 
 export const fetchParticipants = async (eventId) => {
-  const { data } = await api.get(`/organizer/events/${eventId}/billets`);
+  const { data } = await api.get(`/organizer/events/${eventId}/billets`).catch((error) => {
+    if (isMissingEndpoint(error)) return { data: [] };
+    throw error;
+  });
   return data;
 };
 
 export const fetchEventFinance = async (eventId) => {
-  const { data } = await api.get(`/organizer/events/${eventId}/finance`);
+  const { data } = await api.get(`/organizer/events/${eventId}/finance`).catch((error) => {
+    if (isMissingEndpoint(error)) return { data: emptyFinance };
+    throw error;
+  });
   return data;
 };
 
 export const fetchOrganizerFinance = async () => {
-  const { data } = await api.get("/organizer/finance");
+  const { data } = await api.get("/organizer/finance").catch((error) => {
+    if (isMissingEndpoint(error)) return { data: emptyFinance };
+    throw error;
+  });
   return data;
 };
 
 export const fetchOrganizerDashboard = async () => {
-  const { data } = await api.get("/organizer/dashboard");
+  const { data } = await api.get("/organizer/dashboard").catch((error) => {
+    if (isMissingEndpoint(error)) return { data: emptyOrganizerDashboard };
+    throw error;
+  });
   return data;
 };
 
@@ -183,7 +215,10 @@ export const scanTicket = async ({ codeUniqueCrypto, evenementId, localisation }
 };
 
 export const fetchAccessLog = async (eventId) => {
-  const { data } = await api.get(`/organizer/events/${eventId}/acces`);
+  const { data } = await api.get(`/organizer/events/${eventId}/acces`).catch((error) => {
+    if (isMissingEndpoint(error)) return { data: [] };
+    throw error;
+  });
   return data;
 };
 
