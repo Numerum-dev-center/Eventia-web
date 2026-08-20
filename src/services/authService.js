@@ -42,7 +42,7 @@ export const forgotPassword = async (email) => {
 
 // Vérification du code de réinitialisation
 export const verifyResetCode = async ({ email, code }) => {
-  const response = await api.post("/utilisateur/verify-reset-code", { email, code });
+  const response = await api.post("/user/verify-reset-code", { email, code });
   return response.data;
 };
 
