@@ -136,24 +136,17 @@ function EventsCreate() {
     setLocation(resolvedLocation.formattedAddress);
     setLocationDetails(resolvedLocation);
 
-    const eventData = {
-      title,
-      date,
-      location: resolvedLocation.formattedAddress,
-      address: resolvedLocation.formattedAddress,
-      coordinates: {
-        latitude: resolvedLocation.latitude,
-        longitude: resolvedLocation.longitude,
-      },
-      capacity: Number(tickets),
-      tickets,
-      price,
-      category,
-      description,
-      startTime,
-      endTime,
-      publish: true,
-    };
+   const eventData = {
+  title: String(title).trim(),
+  date, // format YYYY-MM-DD
+  startTime, // format HH:mm
+  endTime, // format HH:mm
+  location: resolvedLocation.formattedAddress,
+  category,
+  capacity: Number(tickets),
+  ticketPrice: Number(price),
+  description,
+};
 
     setSubmitting(true);
 

@@ -54,11 +54,11 @@ function OrganizerSettings() {
 
     try {
       const payload = {
-        nom: form.nom || undefined,
-        prenoms: form.prenoms || undefined,
-        telephone: form.telephone || undefined,
-        profilOrganisateur: {
-          nomEntreprise: form.nomEntreprise || undefined,
+        firstName: form.nom || undefined,
+        lastName: form.lastName || undefined,
+        phoneNumber: form.telephone || undefined,
+        organizerProfile: {
+          societyName: form.nomEntreprise || undefined,
           description: form.description || undefined,
         },
       };

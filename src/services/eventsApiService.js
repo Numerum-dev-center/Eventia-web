@@ -96,23 +96,15 @@ export const fetchMyEvents = async () => {
 
 export const createEvent = async (payload) => {
   const { data: ev } = await api.post("/organizer/events", {
-    titre: payload.title,
+    title: payload.title,
     description: payload.description,
-    categorie: payload.category,
-    lieuNom: payload.location,
-    adresse: payload.address,
-    latitude: payload.coordinates?.latitude?.toString(),
-    longitude: payload.coordinates?.longitude?.toString(),
-    dateDebut: `${payload.date}T${payload.startTime || "00:00"}:00`,
-    dateFin: `${payload.date}T${payload.endTime || "23:59"}:00`,
-    imageBanniere: payload.image || undefined,
-  });
-
-  // Une seule catégorie de billet "Standard" par événement créé depuis le web
-  await api.post(`/organizer/events/${ev.id}/categories`, {
-    nom: "Standard",
-    prix: Number(payload.price) || 0,
-    quantiteTotale: Number(payload.tickets || payload.capacity) || 1,
+    category: payload.category,
+    location: payload.location,
+    date: payload.date,
+    startTime: payload.startTime,
+    endTime: payload.endTime,
+    capacity: Number(payload.capacity),
+    ticketPrice: Number(payload.ticketPrice),
   });
 
   if (payload.publish) {
@@ -124,17 +116,24 @@ export const createEvent = async (payload) => {
 
 export const updateEvent = async (id, payload) => {
   await api.patch(`/organizer/events/${id}`, {
-    titre: payload.title,
+    title: payload.title,
     description: payload.description,
-    categorie: payload.category,
-    lieuNom: payload.location,
-    adresse: payload.address,
-    latitude: payload.coordinates?.latitude?.toString(),
-    longitude: payload.coordinates?.longitude?.toString(),
-    dateDebut: payload.date ? `${payload.date}T${payload.startTime || "00:00"}:00` : undefined,
-    dateFin: payload.date ? `${payload.date}T${payload.endTime || "23:59"}:00` : undefined,
+    category: payload.category,
+    location: payload.location,
+    date: payload.date,
+    startTime: payload.startTime,
+    endTime: payload.endTime,
+    capacity:
+      payload.capacity !== undefined
+        ? Number(payload.capacity)
+        : undefined,
+    ticketPrice:
+      payload.ticketPrice !== undefined
+        ? Number(payload.ticketPrice)
+        : undefined,
   });
 
+  
   if (payload.categorieTicketId && (payload.price !== undefined || payload.capacity !== undefined)) {
     await api.patch(`/categorie-ticket/${payload.categorieTicketId}`, {
       prix: payload.price !== undefined ? Number(payload.price) : undefined,
