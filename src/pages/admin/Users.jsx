@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CircleCheck, ShieldCheck, Trash2, UserRoundCheck, Users as UsersIcon } from "lucide-react";
+import { Eye, CircleCheck, ShieldCheck, Trash2, UserRoundCheck, Users as UsersIcon } from "lucide-react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import PageHeader from "../../components/ui/PageHeader";
@@ -9,11 +9,13 @@ import EmptyState from "../../components/ui/EmptyState";
 import DataToolbar from "../../components/ui/DataToolbar";
 import StatCard from "../../components/organizer/StatCard";
 import Skeleton from "../../components/ui/Skeleton";
-import { deleteUser, getUsers } from "../../services/adminService";
+import { deleteUser, getAllUsers } from "../../services/adminService";
+
+import { useNavigate } from "react-router-dom";
 
 const ROLE_TONE = {
   Admin: "danger",
-  Organisateur: "neutral",
+  Organizer: "neutral",
   Client: "muted",
 };
 
@@ -23,6 +25,7 @@ function UsersPage() {
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState(null);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const visibleUsers = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("fr");
@@ -31,7 +34,7 @@ function UsersPage() {
   }, [users, search]);
 
   useEffect(() => {
-    getUsers()
+    getAllUsers()
       .then((data) => setUsers(Array.isArray(data) ? data : []))
       .catch((err) => setError(err?.response?.data?.message || "Impossible de charger la liste des utilisateurs."))
       .finally(() => setLoading(false));
@@ -78,11 +81,38 @@ function UsersPage() {
           ))
         ) : (
           <>
-            <StatCard title="Tous les comptes" value={users.length} icon={<UsersIcon size={22} />} />
-            <StatCard title="Comptes actifs" value={activeUsers} icon={<CircleCheck size={22} />} />
-            <StatCard title="Organisateurs" value={users.filter((user) => user.role === "Organisateur").length} icon={<UserRoundCheck size={22} />} />
-            <StatCard title="Administrateurs" value={users.filter((user) => user.role === "Admin").length} icon={<ShieldCheck size={22} />} />
-          </>
+  <StatCard
+    title="Tous les comptes"
+    value={users.length}
+    icon={<UsersIcon size={22} />}
+  />
+
+  <StatCard
+    title="Comptes actifs"
+    value={activeUsers}
+    icon={<CircleCheck size={22} />}
+  />
+
+  <StatCard
+    title="Organisateurs"
+    value={
+      users.filter(
+        (user) => user.role === "Organizer"
+      ).length
+    }
+    icon={<UserRoundCheck size={22} />}
+  />
+
+  <StatCard
+    title="Administrateurs"
+    value={
+      users.filter(
+        (user) => user.role === "Admin"
+      ).length
+    }
+    icon={<ShieldCheck size={22} />}
+  />
+</>
         )}
       </div>
 
@@ -148,30 +178,45 @@ function UsersPage() {
                   <th className="px-6 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {visibleUsers.map((user) => (
                   <tr key={user.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/60">
+                    
                     <td className="px-6 py-4 font-medium text-gray-800">
                       {[user.prenoms, user.nom].filter(Boolean).join(" ") || "—"}
                     </td>
+
                     <td className="px-6 py-4 text-gray-600">{user.email}</td>
                     <td className="px-6 py-4">
                       <Badge tone={ROLE_TONE[user.role] || "neutral"}>{user.role}</Badge>
+                      
                     </td>
+
+
                     <td className="px-6 py-4">
                       <Badge tone={user.estActif ? "ok" : "warn"}>
                         {user.estActif ? "Actif" : "Inactif"}
                       </Badge>
                     </td>
+
                     <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => handleDelete(user.id)}
-                        disabled={deletingId === user.id}
-                        className="inline-flex items-center gap-1.5 text-red-500 hover:text-red-600 text-sm font-medium disabled:opacity-50"
-                      >
-                        <Trash2 size={15} />
-                        {deletingId === user.id ? "Suppression..." : "Supprimer"}
+                     
+                     {/* VOIR DETAILS */}
+                     <button
+                     onClick={() => navigate(`/admin/users/${user.id}`)}
+                     className="inline-flex items-center gap-1.5 text-blue-500 hover:text-blue-600 text-sm font-medium">
+                      
+                      <Eye size={16} />
+                      Voir
                       </button>
+
+
+                      {/* SUPPRIMER */}
+                      
+                      
+
+
                     </td>
                   </tr>
                 ))}

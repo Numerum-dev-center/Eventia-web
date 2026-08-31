@@ -23,6 +23,8 @@ import Finances from "./pages/admin/AFinances";
 import Reports from "./pages/admin/Reports";
 import Settings from "./pages/admin/Settings";
 
+import UsersDetails from "./pages/admin/UsersDetails";
+
 import OrganizerFinances from "./pages/organizer/Finances";
 
 
@@ -116,6 +118,8 @@ function App() {
 
 
         <Route path="forbidden" element={<AccessDenied />} />
+
+        
 
 
 
@@ -297,6 +301,12 @@ function App() {
     </ProtectedRoute>
   }
 >
+
+
+  <Route
+  path="users/:id"
+  element={<UsersDetails />}
+/>
   <Route index element={<Navigate to="dashboard" replace />} />
 
   <Route path="dashboard" element={<AdminDashboard />} />

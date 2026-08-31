@@ -33,6 +33,7 @@ import {
   fetchAdminReversements,
   fetchAllEventsAdmin,
 } from "../../services/eventsApiService";
+import { getAllUsers } from "../../services/adminService";
 
 const money = (value) => `${Number(value || 0).toLocaleString("fr-FR")} FCFA`;
 const compactMoney = (value) => new Intl.NumberFormat("fr-FR", { notation: "compact", maximumFractionDigits: 1 }).format(Number(value || 0));
@@ -49,6 +50,7 @@ function AdminDashboard() {
   const [events, setEvents] = useState([]);
   const [reversements, setReversements] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     Promise.allSettled([fetchAdminDashboard(), fetchAllEventsAdmin(), fetchAdminReversements()])
@@ -116,11 +118,24 @@ function AdminDashboard() {
     );
   }
 
-  const users = Number(dashboard?.utilisateurs || 0);
-  const organizers = Number(dashboard?.organisateurs || 0);
-  const participants = Math.max(users - organizers, 0);
-  const checkinRate = Math.min(100, Math.max(0, Number(dashboard?.tauxCheckIn || 0)));
-  const published = Number(dashboard?.evenementsPublies || 0);
+
+  
+
+  const users = Number(dashboard?.totalUsers || 0);
+  const organizers = Number(dashboard?.totalOrganizers || 0);
+  const participants = Number(dashboard?.totalClients || 0);
+  const checkinRate = Math.min(100, Math.max(0, Number(dashboard?.checkinRate || 0)));
+  const published = Number(dashboard?.eventsPublished || 0);
+  
+
+
+
+
+
+
+
+
+
 
   const roleData = [
     { name: "Participants", value: participants, color: "#1d1d1f" },
@@ -152,6 +167,7 @@ function AdminDashboard() {
     .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
     .slice(0, 5);
 
+
   return (
     <div className="apple-page admin-command-center">
       <PageHeader
@@ -164,8 +180,8 @@ function AdminDashboard() {
       <section className="admin-kpi-grid">
         <StatCard title="Utilisateurs" value={users.toLocaleString("fr-FR")} icon={<Users size={24} />} />
         <StatCard title="Organisateurs" value={organizers.toLocaleString("fr-FR")} icon={<UserRoundCheck size={24} />} />
-        <StatCard title="Événements publiés" value={`${published} / ${dashboard?.evenements ?? 0}`} icon={<CalendarCheck size={24} />} />
-        <StatCard title="Billets vendus" value={Number(dashboard?.billetsVendus || 0).toLocaleString("fr-FR")} icon={<Ticket size={24} />} />
+        <StatCard title="Événements publiés" value={`${published} / ${dashboard?.eventsPublished ?? 0}`} icon={<CalendarCheck size={24} />} />
+        <StatCard title="Billets vendus" value={Number(dashboard?.ticketsSold || 0).toLocaleString("fr-FR")} icon={<Ticket size={24} />} />
         <StatCard title="Taux de check-in" value={`${checkinRate}%`} icon={<ShieldCheck size={24} />} />
         <StatCard title="Revenus générés" value={money(dashboard?.revenue)} icon={<Wallet size={24} />} />
       </section>

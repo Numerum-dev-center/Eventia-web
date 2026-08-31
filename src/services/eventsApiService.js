@@ -189,7 +189,7 @@ export const fetchAccessLog = async (eventId) => {
 // --- Admin ---
 
 export const fetchAllEventsAdmin = async () => {
-  const { data } = await api.get("/admin/events");
+  const { data } = await api.get("/administrator/events");
   return data.map(mapEvent);
 };
 
@@ -201,38 +201,38 @@ const ADMIN_STATUS_MAP = {
 };
 
 export const setEventStatusAdmin = async (id, statut) => {
-  await api.patch(`/admin/events/${id}/status`, {
+  await api.patch(`/administrator/events/${id}/statut`, {
     statut: ADMIN_STATUS_MAP[statut] || statut,
   });
 };
 
 export const fetchAdminDashboard = async () => {
-  const { data } = await api.get("/admin/dashboard");
+  const { data } = await api.get("/administrator/stats");
   return data;
 };
 
 export const fetchAdminReports = async () => {
-  const { data } = await api.get("/admin/reports");
+  const { data } = await api.get("/administrator/reports");
   return data;
 };
 
 export const fetchAdminCommissions = async () => {
-  const { data } = await api.get("/admin/commissions");
+  const { data } = await api.get("/administrator/commissions");
   return data;
 };
 
 export const fetchAdminReversements = async () => {
-  const { data } = await api.get("/admin/reversements-orga");
+  const { data } = await api.get("/administrator/financial");
   return data;
 };
 
 export const fetchAllTicketsAdmin = async () => {
-  const { data } = await api.get("/admin/billets");
+  const { data } = await api.get("/administrator/billets");
   return data;
 };
 
 export const fetchAuditLog = async (params = {}) => {
-  const { data } = await api.get("/admin/audit-log", { params });
+  const { data } = await api.get("/administrator/audit-log", { params });
   return data;
 };
 
